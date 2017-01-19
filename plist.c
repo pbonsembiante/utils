@@ -17,52 +17,58 @@
 #include <stdlib.h>
 #include "plist.h"
 
-struct plist_list {
+struct plist_list
+{
 	plist_linked_node *head;
 	int elements_count;
 };
 
 static void plist_link_element(plist_linked_node *previous,
-							  plist_linked_node *next);
+							   plist_linked_node *next);
 static plist_linked_node *plist_create_element(void *data);
 static plist_linked_node *plist_get_element(plist_list *self, int index);
 static plist_linked_node *plist_find_element(plist_list *self,
 		bool(*condition)(void *), int *index);
 
-plist_list *plist_create() {
+plist_list *plist_create()
+{
 	plist_list *list = malloc(sizeof(plist_list));
 	list->head = NULL;
 	list->elements_count = 0;
 	return list;
 }
 
-int plist_append(plist_list *self, void *data) {
+int plist_append(plist_list *self, void *data)
+{
 	plist_linked_node *new_element = plist_create_element(data);
 
 	if (self->elements_count == 0) {
 		self->head = new_element;
 	} else {
 		plist_link_element(plist_get_element(self, self->elements_count - 1),
-						  new_element);
+						   new_element);
 	}
 
 	self->elements_count++;
 	return self->elements_count - 1;
 }
 
-void plist_merge(plist_list *self, plist_list *other) {
+void plist_merge(plist_list *self, plist_list *other)
+{
 	void _add_in_list(void *element) {
 		plist_append(self, element);
 	}
 	plist_iterate(other, _add_in_list);
 }
 
-void *plist_get(plist_list *self, int index) {
+void *plist_get(plist_list *self, int index)
+{
 	plist_linked_node *element_in_index = plist_get_element(self, index);
 	return element_in_index != NULL ? element_in_index->data : NULL;
 }
 
-void plist_addElementByIndex(plist_list *self, int index, void *data) {
+void plist_addElementByIndex(plist_list *self, int index, void *data)
+{
 	plist_linked_node *next = NULL;
 	plist_linked_node *new_element = NULL;
 	plist_linked_node *previous = NULL;
@@ -84,7 +90,8 @@ void plist_addElementByIndex(plist_list *self, int index, void *data) {
 	}
 }
 
-void *plist_replace(plist_list *self, int index, void *data) {
+void *plist_replace(plist_list *self, int index, void *data)
+{
 	void *old_data = NULL;
 	plist_linked_node *element = plist_get_element(self, index);
 
@@ -97,17 +104,20 @@ void *plist_replace(plist_list *self, int index, void *data) {
 }
 
 void plist_replaceAndDestroyElement(plist_list *self, int num, void *data,
-									void(*element_destroyer)(void *)) {
+									void(*element_destroyer)(void *))
+{
 	void *old_data = plist_replace(self, num, data);
 	element_destroyer(old_data);
 }
 
-void *plist_find(plist_list *self, bool(*condition)(void *)) {
+void *plist_find(plist_list *self, bool(*condition)(void *))
+{
 	plist_linked_node *element = plist_find_element(self, condition, NULL);
 	return element != NULL ? element->data : NULL;
 }
 
-void plist_iterate(plist_list *self, void(*closure)(void *)) {
+void plist_iterate(plist_list *self, void(*closure)(void *))
+{
 	plist_linked_node *element = self->head;
 
 	while (element != NULL) {
@@ -116,7 +126,8 @@ void plist_iterate(plist_list *self, void(*closure)(void *)) {
 	}
 }
 
-void *plist_remove(plist_list *self, int index) {
+void *plist_remove(plist_list *self, int index)
+{
 	void *data = NULL;
 	plist_linked_node *aux_element = NULL;
 
@@ -139,7 +150,8 @@ void *plist_remove(plist_list *self, int index) {
 	return data;
 }
 
-void *plist_removeByCondition(plist_list *self, bool(*condition)(void *)) {
+void *plist_removeByCondition(plist_list *self, bool(*condition)(void *))
+{
 	int index = 0;
 	plist_linked_node *element = plist_find_element(self, condition, &index);
 
@@ -151,13 +163,15 @@ void *plist_removeByCondition(plist_list *self, bool(*condition)(void *)) {
 }
 
 void plist_removeAndDestroyElement(plist_list *self, int index,
-								   void(*element_destroyer)(void *)) {
+								   void(*element_destroyer)(void *))
+{
 	void *data = plist_remove(self, index);
 	element_destroyer(data);
 }
 
 void plist_removeAndDestroyByCondition(plist_list *self,
-									   bool(*condition)(void *), void(*element_destroyer)(void *)) {
+									   bool(*condition)(void *), void(*element_destroyer)(void *))
+{
 	void *data = plist_removeByCondition(self, condition);
 
 	if (data) {
@@ -165,15 +179,18 @@ void plist_removeAndDestroyByCondition(plist_list *self,
 	}
 }
 
-int plist_size(plist_list *list) {
+int plist_size(plist_list *list)
+{
 	return list->elements_count;
 }
 
-int plist_isEmpty(plist_list *list) {
+int plist_isEmpty(plist_list *list)
+{
 	return plist_size(list) == 0;
 }
 
-void plist_clean(plist_list *self) {
+void plist_clean(plist_list *self)
+{
 	plist_linked_node *element;
 
 	while (self->head != NULL) {
@@ -186,23 +203,27 @@ void plist_clean(plist_list *self) {
 }
 
 void plist_cleanAndDestroyElements(plist_list *self,
-								   void(*element_destroyer)(void *)) {
+								   void(*element_destroyer)(void *))
+{
 	plist_iterate(self, element_destroyer);
 	plist_clean(self);
 }
 
-void plist_detroy(plist_list *self) {
+void plist_detroy(plist_list *self)
+{
 	plist_clean(self);
 	free(self);
 }
 
 void plist_destroyListAndElements(plist_list *self,
-								  void(*element_destroyer)(void *)) {
+								  void(*element_destroyer)(void *))
+{
 	plist_cleanAndDestroyElements(self, element_destroyer);
 	free(self);
 }
 
-plist_list *plist_getElements(plist_list *self, int count) {
+plist_list *plist_getElements(plist_list *self, int count)
+{
 	plist_list *sublist = plist_create();
 	int i = 0;
 
@@ -214,7 +235,8 @@ plist_list *plist_getElements(plist_list *self, int count) {
 	return sublist;
 }
 
-plist_list *plist_getElementsAndRemove(plist_list *self, int count) {
+plist_list *plist_getElementsAndRemove(plist_list *self, int count)
+{
 	plist_list *sublist = plist_create();
 	int i = 0;
 
@@ -226,32 +248,31 @@ plist_list *plist_getElementsAndRemove(plist_list *self, int count) {
 	return sublist;
 }
 
-plist_list *plist_filter(plist_list *self, bool(*condition)(void *)) {
+plist_list *plist_filter(plist_list *self, bool(*condition)(void *))
+{
 	plist_list *filtered = plist_create();
-
 	void _add_if_apply(void *element) {
 		if (condition(element)) {
 			plist_append(filtered, element);
 		}
 	}
-
 	plist_iterate(self, _add_if_apply);
 	return filtered;
 }
 
-plist_list *plist_map(plist_list *self, void *(*transformer)(void *)) {
+plist_list *plist_map(plist_list *self, void *(*transformer)(void *))
+{
 	plist_list *mapped = plist_create();
-
 	void _add_after_transform(void *element) {
 		void *new_element = transformer(element);
 		plist_append(mapped, new_element);
 	}
-
 	plist_iterate(self, _add_after_transform);
 	return mapped;
 }
 
-void plist_sort(plist_list *self, bool (*comparator)(void *, void *)) {
+void plist_sort(plist_list *self, bool (*comparator)(void *, void *))
+{
 	// TODO: optimizar (usar un algoritmo mas copado)
 	int unsorted_elements = self->elements_count;
 
@@ -264,7 +285,7 @@ void plist_sort(plist_list *self, bool (*comparator)(void *, void *)) {
 
 	do {
 		plist_linked_node *previous_element = self->head,
-							*cursor = previous_element->next;
+						   *cursor = previous_element->next;
 		sorted = true;
 		int index = 0, last_changed = unsorted_elements;
 
@@ -286,38 +307,44 @@ void plist_sort(plist_list *self, bool (*comparator)(void *, void *)) {
 	} while(!sorted);
 }
 
-int plist_count(plist_list *self, bool(*condition)(void *)) {
+int plist_count(plist_list *self, bool(*condition)(void *))
+{
 	plist_list *satisfying = plist_filter(self, condition);
 	int result = satisfying->elements_count;
 	plist_detroy(satisfying);
 	return result;
 }
 
-bool plist_anyMatching(plist_list *self, bool(*condition)(void *)) {
+bool plist_anyMatching(plist_list *self, bool(*condition)(void *))
+{
 	return plist_count(self, condition) > 0;
 }
 
-bool list_allMatching(plist_list *self, bool(*condition)(void *)) {
+bool list_allMatching(plist_list *self, bool(*condition)(void *))
+{
 	return plist_count(self, condition) == self->elements_count;
 }
 
 /********* PRIVATE FUNCTIONS **************/
 
 static void plist_link_element(plist_linked_node *previous,
-							  plist_linked_node *next) {
+							   plist_linked_node *next)
+{
 	if (previous != NULL) {
 		previous->next = next;
 	}
 }
 
-static plist_linked_node *plist_create_element(void *data) {
+static plist_linked_node *plist_create_element(void *data)
+{
 	plist_linked_node *element = malloc(sizeof(plist_linked_node));
 	element->data = data;
 	element->next = NULL;
 	return element;
 }
 
-static plist_linked_node *plist_get_element(plist_list *self, int index) {
+static plist_linked_node *plist_get_element(plist_list *self, int index)
+{
 	int cont = 0;
 
 	if ((self->elements_count > index) && (index >= 0)) {
@@ -335,7 +362,8 @@ static plist_linked_node *plist_get_element(plist_list *self, int index) {
 }
 
 static plist_linked_node *plist_find_element(plist_list *self,
-		bool(*condition)(void *), int *index) {
+		bool(*condition)(void *), int *index)
+{
 	plist_linked_node *element = self->head;
 	int position = 0;
 
