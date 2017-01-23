@@ -1,2 +1,2 @@
 all:
-	@$(MAKE) -C src -f makefile
+	@$(MAKE) -C src -f makefile.mk
