@@ -22,8 +22,12 @@ plist: $(OBJ)
 .PHONY: clean
 
 clean:
+<<<<<<< HEAD
 	rm -f $(ODIR)/*.o
 	rmdir $(ODIR)
 	
 install: 
 	mkdir obj
+=======
+	rm -f $(ODIR)/*.o *~ core $(INCDIR)/*~ 
+>>>>>>> 7aa2cdae3cc53fb7bce9dfb57de19afca48011b5
