@@ -16,7 +16,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include "include/plist.h"
+#include "plist.h"
 
 int main(void)
 {

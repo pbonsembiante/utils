@@ -15,7 +15,7 @@
  ***************************************************************************/
 
 #include <stdlib.h>
-#include "include/plist.h"
+#include "plist.h"
 
 struct plist_list
 {
