@@ -51,7 +51,7 @@ void plist_iterate(plist_list *, void(*closure)(void *));
 void *plist_find(plist_list *, bool(*closure)(void *));
 size_t plist_size(plist_list *);
 size_t plist_isEmpty(plist_list *);
-void plist_sort(plist_list *, bool (*comparator)(void *, void *));
+void plist_sort(plist_list *, _Bool (*comparator)(const void *, const void *));
 int plist_countMatching(plist_list *self, bool(*condition)(void *));
 bool plist_any_match(plist_list *self, bool(*condition)(void *));
 bool list_all_match(plist_list *self, bool(*condition)(void *));

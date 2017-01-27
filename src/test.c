@@ -15,25 +15,13 @@
  ***************************************************************************/
 
 #include <stdlib.h>
+#include <string.h>
 #include <stdio.h>
 #include "plist.h"
 
 int main(void)
 {
-	plist_list *lista;
-	int *pepe = calloc(100, sizeof(int));
-	lista = plist_create();
 
-	for( size_t i = 0; i < 100; ++i) {
-		pepe[i] = i;
-		plist_append(lista, pepe + i);
-	}
 
-	for(size_t i = 0; i < 100; ++i) {
-		printf("%d", *(int *)plist_get(lista, i));
-	}
-
-	plist_detroy(lista);
-	free(pepe);
 	return 0;
 }

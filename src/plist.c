@@ -28,7 +28,15 @@ static void plist_link_nodes(plist_linked_node *previous,
 static plist_linked_node *plist_create_node(void *data);
 static plist_linked_node *plist_get_node(plist_list *self, size_t index);
 static plist_linked_node *plist_find_node(plist_list *self,
-		bool(*condition)(void *), size_t *index);
+		_Bool (*condition)(void *), size_t *index);
+static void plist_merge_sort(plist_linked_node** headref,
+							 _Bool (*comparator)(const void*, const void*));
+static plist_linked_node* plist_sorted_merge(plist_linked_node* a,
+											 plist_linked_node* b,
+								_Bool (*comparator)(const void*, const void*));
+static void plist_front_back_split(plist_linked_node* source,
+								   plist_linked_node** frontRef,
+								plist_linked_node** backRef);
 
 plist_list *plist_create()
 {
@@ -54,11 +62,13 @@ int plist_append(plist_list *self, void *data)
 
 void plist_merge(plist_list *self, plist_list *other)
 {
-	//FIXME: No portable, solo para GCC.
-	void _add_in_list(void *element) {
-		plist_append(self, element);
+	plist_linked_node *node = other->head;
+
+	while (node){
+		plist_append(self, node->data);
+		node = node->next;
 	}
-	plist_iterate(other, _add_in_list);
+
 }
 
 void *plist_get(plist_list *self, size_t index)
@@ -272,40 +282,9 @@ plist_list *plist_map(plist_list *self, void *(*transformer)(void *))
 	return mapped;
 }
 
-void plist_sort(plist_list *self, bool (*comparator)(void *, void *))
+void plist_sort(plist_list *self, _Bool (*comparator)(const void *, const void *))
 {
-	// TODO: optimizar (usar un algoritmo mas copado)
-	int unsorted_elements = self->elements_count;
-
-	if(unsorted_elements < 2) {
-		return;
-	}
-
-	plist_linked_node *auxiliar = NULL;
-	bool sorted = true;
-
-	do {
-		plist_linked_node *previous_element = self->head,
-						   *cursor = previous_element->next;
-		sorted = true;
-		int index = 0, last_changed = unsorted_elements;
-
-		while(index < unsorted_elements && cursor != NULL) {
-			if(!comparator(previous_element->data, cursor->data)) {
-				auxiliar = cursor->data;
-				cursor->data = previous_element->data;
-				previous_element->data = auxiliar;
-				last_changed = index;
-				sorted = false;
-			}
-
-			previous_element = cursor;
-			cursor = cursor->next;
-			index++;
-		}
-
-		unsorted_elements = last_changed;
-	} while(!sorted);
+	plist_merge_sort(&self->head, comparator);
 }
 
 size_t plist_count(plist_list *self, bool(*condition)(void *))
@@ -377,4 +356,88 @@ static plist_linked_node *plist_find_node(plist_list *self,
 	}
 
 	return element;
+}
+
+/* sorts the linked list by changing next pointers (not data) */
+static void plist_merge_sort(plist_linked_node** headref,
+							 _Bool (*comparator)(const void *, const void *))
+{
+  plist_linked_node* head = *headref;
+  plist_linked_node* a;
+  plist_linked_node* b;
+
+  /* Base case -- length 0 or 1 */
+  if ((head == 0) || (head->next == 0))
+  {
+	return;
+  }
+
+  /* Split head into 'a' and 'b' sublists */
+  plist_front_back_split(head, &a, &b);
+
+  /* Recursively sort the sublists */
+  plist_merge_sort(&a, comparator);
+  plist_merge_sort(&b, comparator);
+
+  /* answer = merge the two sorted lists together */
+  *headref = plist_sorted_merge(a, b, comparator);
+}
+
+static plist_linked_node* plist_sorted_merge(plist_linked_node* a,
+											 plist_linked_node* b,
+							_Bool (*comparator)(const void *, const void *))
+{
+  plist_linked_node* result = NULL;
+
+  /* Base cases */
+  if (a == NULL)
+	 return(b);
+  else if (b==NULL)
+	 return(a);
+
+  /* Pick either a or b, and recur */
+  if (comparator(a->data, b->data)){
+	 result = a;
+	 result->next = plist_sorted_merge(a->next, b, comparator);
+  } else {
+	 result = b;
+	 result->next = plist_sorted_merge(a, b->next, comparator);
+  }
+
+  return(result);
+}
+
+static void plist_front_back_split(plist_linked_node* source,
+		  plist_linked_node** frontRef, plist_linked_node** backRef)
+{
+  plist_linked_node* fast;
+  plist_linked_node* slow;
+  if (source==0 || source->next==0)
+  {
+	/* length < 2 cases */
+	*frontRef = source;
+	*backRef = 0;
+  }
+  else
+  {
+	slow = source;
+	fast = source->next;
+
+	/* Advance 'fast' two nodes, and advance 'slow' one node */
+	while (fast != 0)
+	{
+	  fast = fast->next;
+	  if (fast != 0)
+	  {
+		slow = slow->next;
+		fast = fast->next;
+	  }
+	}
+
+	/* 'slow' is before the midpoint in the list, so split it in two
+	  at that point. */
+	*frontRef = source;
+	*backRef = slow->next;
+	slow->next = 0;
+  }
 }
