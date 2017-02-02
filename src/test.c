@@ -21,7 +21,36 @@
 
 int main(void)
 {
+	plist_list *lista = 0;
+	plist_list *tmp = 0;
 
+	lista = plist_create();
+	tmp = plist_create();
+
+	plist_append(lista, "1");
+	plist_append(lista, "2");
+	plist_append(lista, "3");
+	plist_append(lista, "4");
+	plist_append(lista, "5");
+	plist_append(lista, "6");
+	plist_append(lista, "7");
+
+	plist_append(tmp, "8");
+	plist_append(tmp, "9");
+	plist_append(tmp, "10");
+	plist_append(tmp, "11");
+	plist_append(tmp, "12");
+	plist_append(tmp, "13");
+	plist_append(tmp, "14");
+
+	plist_merge(lista, tmp);
+
+	for(size_t i = 0; i < plist_size(lista); ++i){
+		printf("%s\n", (char*)plist_get(lista,i));
+	}
+
+	plist_destroy(lista);
+	plist_destroy(tmp);
 
 	return 0;
 }

@@ -3,4 +3,5 @@ sudo: required
 language: c
 compiler:
   - gcc
+  - clang
 script: make
