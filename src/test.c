@@ -19,38 +19,33 @@
 #include <stdio.h>
 #include "plist.h"
 
+_Bool compare(const void *a, const void *b){
+	const char *_a = a;
+	const char *_b = b;
+
+	return ((_a - '0') > (_b - '0'));
+}
+
 int main(void)
 {
 	plist_list *lista = 0;
-	plist_list *tmp = 0;
 
 	lista = plist_create();
-	tmp = plist_create();
 
+	plist_append(lista, "0");
 	plist_append(lista, "1");
 	plist_append(lista, "2");
 	plist_append(lista, "3");
 	plist_append(lista, "4");
 	plist_append(lista, "5");
 	plist_append(lista, "6");
-	plist_append(lista, "7");
 
-	plist_append(tmp, "8");
-	plist_append(tmp, "9");
-	plist_append(tmp, "10");
-	plist_append(tmp, "11");
-	plist_append(tmp, "12");
-	plist_append(tmp, "13");
-	plist_append(tmp, "14");
+	plist_add(lista, 1, "3.5");
 
-	plist_merge(lista, tmp);
-
-	for(size_t i = 0; i < plist_size(lista); ++i){
+	for(size_t i = 0; i < plist_size(lista); ++i)
 		printf("%s\n", (char*)plist_get(lista,i));
-	}
 
 	plist_destroy(lista);
-	plist_destroy(tmp);
 
 	return 0;
 }

@@ -33,8 +33,8 @@ static plist_linked_node *plist_find_node(plist_list *self,
 static void plist_merge_sort(plist_linked_node **headref,
 							 _Bool (*comparator)(const void *, const void *));
 static plist_linked_node *plist_sorted_merge(plist_linked_node *a,
-											 plist_linked_node *b,
-							_Bool (*comparator)(const void *, const void *));
+		plist_linked_node *b,
+		_Bool (*comparator)(const void *, const void *));
 static void plist_front_back_split(plist_linked_node *source,
 								   plist_linked_node **frontRef,
 								   plist_linked_node **backRef);
@@ -90,9 +90,8 @@ void plist_add(plist_list *self, size_t index, void *data)
 		} else {
 			plist_linked_node *previous = 0;
 			plist_linked_node *next = 0;
-
-			next = plist_get_node(self, index);
 			previous = plist_get_node(self, index - 1);
+			next = previous->next;
 			plist_link_nodes(previous, new_element);
 			plist_link_nodes(new_element, next);
 		}
@@ -372,16 +371,14 @@ static void plist_merge_sort(plist_linked_node **headref,
 	}
 
 	plist_front_back_split(head, &a, &b);
-
 	plist_merge_sort(&a, comparator);
 	plist_merge_sort(&b, comparator);
-
 	*headref = plist_sorted_merge(a, b, comparator);
 }
 
 static plist_linked_node *plist_sorted_merge(plist_linked_node *a,
-											 plist_linked_node *b,
-				  _Bool (*comparator)(const void *, const void *))
+		plist_linked_node *b,
+		_Bool (*comparator)(const void *, const void *))
 {
 	plist_linked_node *result = NULL;
 

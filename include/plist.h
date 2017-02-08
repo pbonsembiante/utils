@@ -179,23 +179,38 @@ void *plist_get(plist_list *self, size_t index);
 plist_list *plist_get_elements(plist_list *self, size_t count);
 
 /*!
- * \brief plist_get_removing_elements
- * \param self
- * \param count
- * \return
+ * \brief Returns a list of the first \count n elements in the list and removes
+ * those elements from it.
+ * \param self: A pinter to the original list
+ * \param count: The amount of elements to retrieve.
+ * \return: A pointer to a newly allocated list, with \count count elements form
+ * \self self.
+ *
+ * __Detail:__
+ *
+ * Same behaviour as [@ref plist_get_elements] but removes the selected elements
+ * from the original list.
+ *
  */
 plist_list *plist_get_removing_elements(plist_list *self, size_t count);
 
 /*!
- * \brief plist_filter
- * \param self
- * \return
+ * \brief: Creates a new list with the elements that match a given condition.
+ * \param self: A pointer to the list to filter.
+ * \param condition: The condition that should be matched against.
+ * \return: A newly allocated list, containing the elements of \self self that
+ * matched the \condition condition.
+ *
+ * __Detail:__
+ *
+ *
  */
 plist_list *plist_filter(plist_list *self, _Bool(*condition)(void *));
 
 /*!
  * \brief plist_map
  * \param self
+ * \param transformer
  * \return
  */
 plist_list *plist_map(plist_list *self, void *(*transformer)(void *));
@@ -214,6 +229,7 @@ void *plist_replace(plist_list *self, size_t index, void *element);
  * \param self
  * \param index
  * \param element
+ * \param element_detroyer
  */
 void plist_replace_and_destroy(plist_list *self, int index, void *element,
 							   void(*element_destroyer)(void *));
@@ -230,6 +246,7 @@ void *plist_remove(plist_list *self, size_t index);
  * \brief plist_remove_and_destroy
  * \param self
  * \param index
+ * \param element_destroyer
  */
 void plist_remove_and_destroy(plist_list *self, size_t index,
 							  void(*element_destroyer)(void *));
@@ -237,6 +254,7 @@ void plist_remove_and_destroy(plist_list *self, size_t index,
 /*!
  * \brief plist_remove_selected
  * \param self
+ * \param condition
  * \return
  */
 void *plist_remove_selected(plist_list *self, _Bool(*condition)(void *));
@@ -244,6 +262,8 @@ void *plist_remove_selected(plist_list *self, _Bool(*condition)(void *));
 /*!
  * \brief plist_remove_destroying_selected
  * \param self
+ * \param condition
+ * \param element_destroyer
  */
 void plist_remove_destroying_selected(plist_list *self,
 									  _Bool(*condition)(void *),
@@ -258,6 +278,7 @@ void plist_clean(plist_list *self);
 /*!
  * \brief plist_clean_destroying_data
  * \param self
+ * \param data_destroyer
  */
 void plist_clean_destroying_data(plist_list *self,
 								 void(*data_destroyer)(void *));
@@ -265,12 +286,14 @@ void plist_clean_destroying_data(plist_list *self,
 /*!
  * \brief plist_iterate
  * \param self
+ * \param closure
  */
 void plist_iterate(plist_list *self, void(*closure)(void *));
 
 /*!
  * \brief plist_find
  * \param self
+ * \param closure
  * \return
  */
 void *plist_find(plist_list *self, _Bool(*closure)(void *));
@@ -292,6 +315,7 @@ size_t plist_is_empty(plist_list *self);
 /*!
  * \brief plist_sort
  * \param self
+ * \param comparator
  */
 void plist_sort(plist_list *self, _Bool (*comparator)(const void *,
 				const void *));
@@ -299,6 +323,7 @@ void plist_sort(plist_list *self, _Bool (*comparator)(const void *,
 /*!
  * \brief plist_count_matching
  * \param self
+ * \param condition
  * \return
  */
 int plist_count_matching(plist_list *self, _Bool(*condition)(void *));
@@ -306,6 +331,7 @@ int plist_count_matching(plist_list *self, _Bool(*condition)(void *));
 /*!
  * \brief plist_any_match
  * \param self
+ * \param condition
  * \return
  */
 _Bool plist_any_match(plist_list *self, _Bool(*condition)(void *));
@@ -313,6 +339,7 @@ _Bool plist_any_match(plist_list *self, _Bool(*condition)(void *));
 /*!
  * \brief plist_all_match
  * \param self
+ * \param condition
  * \return
  */
 _Bool plist_all_match(plist_list *self, _Bool(*condition)(void *));
