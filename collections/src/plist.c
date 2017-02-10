@@ -26,15 +26,21 @@ struct plist_list
 
 static void plist_link_nodes(plist_linked_node *previous,
 							 plist_linked_node *next);
+
 static plist_linked_node *plist_create_node(void *data);
+
 static plist_linked_node *plist_get_node(plist_list *self, size_t index);
+
 static plist_linked_node *plist_find_node(plist_list *self,
 		_Bool (*condition)(void *), size_t *index);
+
 static void plist_merge_sort(plist_linked_node **headref,
 							 _Bool (*comparator)(const void *, const void *));
-static plist_linked_node *plist_sorted_merge(plist_linked_node *a,
-		plist_linked_node *b,
+
+static plist_linked_node *plist_sorted_merge(plist_linked_node *self,
+		plist_linked_node *other,
 		_Bool (*comparator)(const void *, const void *));
+
 static void plist_front_back_split(plist_linked_node *source,
 								   plist_linked_node **frontRef,
 								   plist_linked_node **backRef);
@@ -376,26 +382,25 @@ static void plist_merge_sort(plist_linked_node **headref,
 	*headref = plist_sorted_merge(a, b, comparator);
 }
 
-static plist_linked_node *plist_sorted_merge(plist_linked_node *a,
-		plist_linked_node *b,
+static plist_linked_node *plist_sorted_merge(plist_linked_node *self,
+		plist_linked_node *other,
 		_Bool (*comparator)(const void *, const void *))
 {
 	plist_linked_node *result = NULL;
 
 	/* Base cases */
-	if (a == NULL) {
-		return(b);
-	} else if (b == NULL) {
-		return(a);
+	if (!self) {
+		return(other);
+	} else if (!other) {
+		return(self);
 	}
 
-	/* Pick either a or b, and recur */
-	if (comparator(a->data, b->data)) {
-		result = a;
-		result->next = plist_sorted_merge(a->next, b, comparator);
+	if (comparator(self->data, other->data)) {
+		result = self;
+		result->next = plist_sorted_merge(self->next, other, comparator);
 	} else {
-		result = b;
-		result->next = plist_sorted_merge(a, b->next, comparator);
+		result = other;
+		result->next = plist_sorted_merge(self, other->next, comparator);
 	}
 
 	return(result);
