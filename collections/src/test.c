@@ -40,7 +40,7 @@ int main(void)
 	plist_append(lista, "5");
 	plist_append(lista, "6");
 
-	plist_add(lista, 1, "3.5");
+	plist_add(lista, 4, "3.5");
 
 	for(size_t i = 0; i < plist_size(lista); ++i)
 		printf("%s\n", (char*)plist_get(lista,i));
