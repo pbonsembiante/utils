@@ -1,5 +1,5 @@
 all:
-	@$(MAKE) -C collections/src -f Makefile install
-	@$(MAKE) -C collections/src -f Makefile
-	@$(MAKE) -C collections/src -f Makefile clean
+	@$(MAKE) -C collections -f Makefile install
+	@$(MAKE) -C collections -f Makefile
+	@$(MAKE) -C collections -f Makefile clean
 

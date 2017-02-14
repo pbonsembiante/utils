@@ -1,8 +1,8 @@
-IDIR =../include
-CFLAGS=-I$(IDIR) -std=c11 -Wall -Wextra
+IDIR = ./include
+CFLAGS= -I$(IDIR) -std=c11 -Wall -Wextra
 
-ODIR=obj
-LDIR =../../lib
+ODIR= obj
+LDIR = ../lib
 
 LIBS=-lm
 
@@ -12,7 +12,7 @@ DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS))
 _OBJ = plist.o test.o 
 OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
 
-$(ODIR)/%.o: %.c $(DEPS)
+$(ODIR)/%.o: src/%.c $(DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS)
 
 plist: $(OBJ)
