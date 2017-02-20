@@ -4,5 +4,5 @@ language: c
 compiler:
   - gcc
   - clang
-script: autoreconf -fi && make && sudo make install 
+script: autoreconf -fi && ./configure && make && sudo make install 
 

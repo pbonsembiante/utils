@@ -6,8 +6,11 @@ AC_CONFIG_HEADERS([config.h])
 # Checks for programs.
 AC_PROG_CC
 
+# auxiliary files folder
+AC_CONFIG_AUX_DIR([build-aux])
+
 # m4 separate folder
-AC_CONFIG_MACRO_DIRS([m4])
+AC_CONFIG_MACRO_DIR([m4])
 
 # Add call to automake
 AM_INIT_AUTOMAKE([foreign subdir-objects -Wall -Werror])
