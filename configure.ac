@@ -1,13 +1,19 @@
 AC_PREREQ([2.69])
 AC_INIT([putils], [0.1.1], [pbonsembiante@gmail.com])
-AC_CONFIG_SRCDIR([include/collections/pnode.h])
+
+# auxiliary files folder
+AC_CONFIG_AUX_DIR([build-aux])
+
+AC_CONFIG_SRCDIR([src/plist.c])
 AC_CONFIG_HEADERS([config.h])
 
 # Checks for programs.
 AC_PROG_CC
-
-# auxiliary files folder
-AC_CONFIG_AUX_DIR([build-aux])
+AC_PROG_AWK
+AC_PROG_CPP
+AC_PROG_INSTALL
+AC_PROG_LN_S
+AC_PROG_MAKE_SET
 
 # m4 separate folder
 AC_CONFIG_MACRO_DIR([m4])
