@@ -11,22 +11,22 @@ This library contains a few utilities and common functions, data structure imple
 
 So far we have: 
 
-	* Lists (Single Linked List)  
-	* Dictionary
-	* Exceptions (pexCept, pex for the friends) 
+* Lists (Single Linked List)
+* Dictionary
+* Exceptions (pexCept, pex for the friends) 
 
 Soon to have:
 
-    * Lists (Double linked lists, Circular lists) 
-	* Logger
-	* String handling
-	* Configuration files
+* Lists (Double linked lists, Circular lists) 
+* Logger
+* String handling
+* Configuration files
 
 Nice to have: 
 
-	* Trees -> BST, Red/Black, Balanced trees, etc
-	* Sets
-	*  
+* Trees -> BST, Red/Black, Balanced trees, etc
+* Sets
+
 
 ## Code Example
 WIP
@@ -42,11 +42,10 @@ WIP
 
 ## Tests
 WIP
-Describe and show how to run the tests with code examples.
 
 ## Contributors
 
-    *Phanatos (Patricio Bonsembiante)
+* Phanatos (Patricio Bonsembiante)
 
 ## License
 WIP
