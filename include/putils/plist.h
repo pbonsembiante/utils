@@ -23,13 +23,17 @@
  * library. No internal or implementation details are provided in this headers.
  *
  */
-
 #ifndef PLISTS_H
 #define PLISTS_H
 
 #include <stdbool.h>
 #include <stdlib.h>
 #include "pnode.h"
+
+typedef bool (*plist_comparator)(const void *, const void *);
+typedef bool (*plist_evaluator)(void *);
+typedef void (*plist_destroyer)(void *);
+typedef void (*plist_closure)(void *);
 
 /*!
  * \typedef plist_list
@@ -95,7 +99,7 @@ void plist_destroy(plist_list *self);
  *
  */
 void plist_destroy_all(plist_list *self,
-					   void(*element_destroyer)(void *));
+                       plist_destroyer destroyer);
 
 /*!
  * \brief Add the given data as a new node to the end of the list.
@@ -205,7 +209,7 @@ plist_list *plist_get_removing_elements(plist_list *self, size_t count);
  *
  *
  */
-plist_list *plist_filter(plist_list *self, _Bool(*condition)(void *));
+plist_list *plist_filter(plist_list *self, plist_evaluator condition);
 
 /*!
  * \brief plist_map
@@ -222,7 +226,7 @@ plist_list *plist_map(plist_list *self, void *(*transformer)(void *));
  * \param element
  * \return
  */
-void *plist_replace(plist_list *self, size_t index, void *element);
+void *plist_replace(plist_list *self, size_t index, void *data);
 
 /*!
  * \brief plist_replace_and_destroy
@@ -231,8 +235,8 @@ void *plist_replace(plist_list *self, size_t index, void *element);
  * \param element
  * \param element_detroyer
  */
-void plist_replace_and_destroy(plist_list *self, int index, void *element,
-							   void(*element_destroyer)(void *));
+void plist_replace_and_destroy(plist_list *self, int index, void *data,
+                               plist_destroyer destroyer);
 
 /*!
  * \brief plist_remove
@@ -249,7 +253,7 @@ void *plist_remove(plist_list *self, size_t index);
  * \param element_destroyer
  */
 void plist_remove_and_destroy(plist_list *self, size_t index,
-							  void(*element_destroyer)(void *));
+                              plist_destroyer destroyer);
 
 /*!
  * \brief plist_remove_selected
@@ -257,7 +261,7 @@ void plist_remove_and_destroy(plist_list *self, size_t index,
  * \param condition
  * \return
  */
-void *plist_remove_selected(plist_list *self, _Bool(*condition)(void *));
+void *plist_remove_selected(plist_list *self, plist_evaluator condition);
 
 /*!
  * \brief plist_remove_destroying_selected
@@ -266,8 +270,8 @@ void *plist_remove_selected(plist_list *self, _Bool(*condition)(void *));
  * \param element_destroyer
  */
 void plist_remove_destroying_selected(plist_list *self,
-									  _Bool(*condition)(void *),
-									  void(*element_destroyer)(void *));
+                                      plist_evaluator condition,
+                                      plist_destroyer destroyer);
 
 /*!
  * \brief plist_clean
@@ -288,7 +292,7 @@ void plist_clean_destroying_data(plist_list *self,
  * \param self
  * \param closure
  */
-void plist_iterate(plist_list *self, void(*closure)(void *));
+void plist_iterate(plist_list *self, plist_closure closure);
 
 /*!
  * \brief plist_find
@@ -296,7 +300,7 @@ void plist_iterate(plist_list *self, void(*closure)(void *));
  * \param closure
  * \return
  */
-void *plist_find(plist_list *self, _Bool(*closure)(void *));
+void *plist_find(plist_list *self, plist_evaluator condition);
 
 /*!
  * \brief plist_size
@@ -317,8 +321,7 @@ size_t plist_is_empty(plist_list *self);
  * \param self
  * \param comparator
  */
-void plist_sort(plist_list *self, _Bool (*comparator)(const void *,
-				const void *));
+void plist_sort(plist_list *self, plist_comparator comparator);
 
 /*!
  * \brief plist_count_matching
@@ -326,7 +329,7 @@ void plist_sort(plist_list *self, _Bool (*comparator)(const void *,
  * \param condition
  * \return
  */
-int plist_count_matching(plist_list *self, _Bool(*condition)(void *));
+int plist_count_matching(plist_list *self, plist_evaluator condition);
 
 /*!
  * \brief plist_any_match
@@ -334,7 +337,7 @@ int plist_count_matching(plist_list *self, _Bool(*condition)(void *));
  * \param condition
  * \return
  */
-_Bool plist_any_match(plist_list *self, _Bool(*condition)(void *));
+_Bool plist_any_match(plist_list *self, plist_evaluator condition);
 
 /*!
  * \brief plist_all_match
@@ -342,6 +345,6 @@ _Bool plist_any_match(plist_list *self, _Bool(*condition)(void *));
  * \param condition
  * \return
  */
-_Bool plist_all_match(plist_list *self, _Bool(*condition)(void *));
+_Bool plist_all_match(plist_list *self, plist_evaluator condition);
 
 #endif // PLISTS_H

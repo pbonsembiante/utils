@@ -1,5 +1,5 @@
 AC_PREREQ([2.69])
-AC_INIT([putils], [0.1.1], [pbonsembiante@gmail.com])
+AC_INIT([putils], [0.2.0], [pbonsembiante@gmail.com])
 
 # auxiliary files folder
 AC_CONFIG_AUX_DIR([build-aux])
