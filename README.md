@@ -38,15 +38,17 @@ WIP
 WIP
 
 ## Installation
-To build the library run the following: 
 
-git clone git@github.com:Phanatos-/utils.git ./putils
-autoreconf -fi && ./configure
-make 
+To build the library run the following: 
+    
+    > git clone git@github.com:Phanatos-/utils.git ./putils
+    > autoreconf -fi
+    > ./configure
+    > make 
 
 If you want to install the library you must have the required permisions:
 
-sudo make install
+    > sudo make install
 
 ## API Reference
 WIP
