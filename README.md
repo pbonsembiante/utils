@@ -39,7 +39,7 @@ WIP
 
 ## Installation
 
-To build the library run the following: 
+To build the library run the following (you will need to have installed libtool): 
     
     > git clone git@github.com:Phanatos-/utils.git
     > autoreconf -fi
