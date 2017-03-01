@@ -41,7 +41,7 @@ WIP
 
 To build the library run the following: 
     
-    > git clone git@github.com:Phanatos-/utils.git ./putils
+    > git clone git@github.com:Phanatos-/utils.git
     > autoreconf -fi
     > ./configure
     > make 
