@@ -1,3 +1,6 @@
+#ifndef _PQUEUE_H_
+#define _PQUEUE_H_
+
 /*
  * Copyright (C) 2012 Sistemas Operativos - UTN FRBA. All rights reserved.
  *
@@ -17,9 +20,6 @@
  * \file pqueue.h
  * \brief Header for Queue handling lib.
  */
-
-#ifndef _PQUEUE_H_
-#define _PQUEUE_H_
 
 #include <stdbool.h>
 #include <stdlib.h>
