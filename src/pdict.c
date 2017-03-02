@@ -20,7 +20,7 @@
 
 struct pdict_dictionary
 {
-	plist_hashmap_node **elements;
+	phashmap_node **elements;
 	int table_max_size;
 	int table_current_size;
 	int elements_count;
@@ -30,15 +30,15 @@ static unsigned int pdict_hash(char *key, int key_len);
 
 static void pdict_resize(pdict_dictionary *, int new_max_size);
 
-static plist_hashmap_node *pdict_create_element(char *key,
+static phashmap_node *pdict_create_element(char *key,
         unsigned int key_hash,
         void *data);
 
-static plist_hashmap_node *pdict_get_element(pdict_dictionary *self, char *key);
+static phashmap_node *pdict_get_element(pdict_dictionary *self, char *key);
 
 static void *pdict_remove_element(pdict_dictionary *self, char *key);
 
-static void pdict_destroy_element(plist_hashmap_node *element,
+static void pdict_destroy_element(phashmap_node *element,
                                   void(*data_destroyer)(void *));
 
 static void internal_dictionary_clean_and_destroy_elements(
@@ -49,7 +49,7 @@ pdict_dictionary *pdict_create()
 {
 	pdict_dictionary *self = calloc(1, sizeof(pdict_dictionary));
 	self->table_max_size = PDICT_INITIAL_SIZE;
-	self->elements = calloc(self->table_max_size, sizeof(plist_hashmap_node));
+	self->elements = calloc(self->table_max_size, sizeof(phashmap_node));
 	self->table_current_size = 0;
 	self->elements_count = 0;
 	return self;
@@ -60,9 +60,9 @@ void pdict_put(pdict_dictionary *self, char *key, void *data)
 	unsigned int key_hash = pdict_hash(key, strlen(key));
 	int index = key_hash % self->table_max_size;
     /* TODO: change strdup since no standard C */
-    plist_hashmap_node *new_element = pdict_create_element(strdup(key), key_hash,
+    phashmap_node *new_element = pdict_create_element(strdup(key), key_hash,
                                       data);
-	plist_hashmap_node *element = self->elements[index];
+	phashmap_node *element = self->elements[index];
 
 	if (!element) {
 		self->elements[index] = new_element;
@@ -84,7 +84,7 @@ void pdict_put(pdict_dictionary *self, char *key, void *data)
 
 void *pdict_get(pdict_dictionary *self, char *key)
 {
-	plist_hashmap_node *element = pdict_get_element(self, key);
+	phashmap_node *element = pdict_get_element(self, key);
 	return element ? element->data : 0;
 }
 
@@ -115,7 +115,7 @@ void pdict_iterator(pdict_dictionary *self, void(*closure)(char *, void *))
 	int table_index;
 
 	for (table_index = 0; table_index < self->table_max_size; table_index++) {
-		plist_hashmap_node *element = self->elements[table_index];
+		phashmap_node *element = self->elements[table_index];
 
 		while (element != 0) {
 			closure(element->key, element->data);
@@ -167,20 +167,20 @@ void pdict_destroy_and_destroy_elements(pdict_dictionary *self,
 
 static void pdict_resize(pdict_dictionary *self, int new_max_size)
 {
-    plist_hashmap_node **new_table = calloc(new_max_size,
-                                            sizeof(plist_hashmap_node *));
-	plist_hashmap_node **old_table = self->elements;
+    phashmap_node **new_table = calloc(new_max_size,
+                                            sizeof(phashmap_node *));
+	phashmap_node **old_table = self->elements;
 	self->table_current_size = 0;
 	int table_index;
 
 	for (table_index = 0; table_index < self->table_max_size; table_index++) {
-		plist_hashmap_node *old_element = old_table[table_index];
-		plist_hashmap_node *next_element;
+		phashmap_node *old_element = old_table[table_index];
+		phashmap_node *next_element;
 
 		while( old_element != 0) {
 			// new position
 			int new_index = old_element->hashcode % new_max_size;
-			plist_hashmap_node *new_element = new_table[new_index];
+			phashmap_node *new_element = new_table[new_index];
 
 			if (new_element == 0) {
 				new_table[new_index] = old_element;
@@ -211,8 +211,8 @@ static void internal_dictionary_clean_and_destroy_elements(
 	int table_index;
 
 	for (table_index = 0; table_index < self->table_max_size; table_index++) {
-		plist_hashmap_node *element = self->elements[table_index];
-		plist_hashmap_node *next_element = 0;
+		phashmap_node *element = self->elements[table_index];
+		phashmap_node *next_element = 0;
 
 		while (element != 0) {
 			next_element = element->next;
@@ -227,11 +227,11 @@ static void internal_dictionary_clean_and_destroy_elements(
 	self->elements_count = 0;
 }
 
-static plist_hashmap_node *pdict_create_element(char *key,
+static phashmap_node *pdict_create_element(char *key,
         unsigned int key_hash,
         void *data)
 {
-	plist_hashmap_node *element = malloc(sizeof(plist_hashmap_node));
+	phashmap_node *element = malloc(sizeof(phashmap_node));
 	element->key = key;
 	element->data = data;
 	element->hashcode = key_hash;
@@ -239,11 +239,11 @@ static plist_hashmap_node *pdict_create_element(char *key,
 	return element;
 }
 
-static plist_hashmap_node *pdict_get_element(pdict_dictionary *self, char *key)
+static phashmap_node *pdict_get_element(pdict_dictionary *self, char *key)
 {
 	unsigned int key_hash = pdict_hash(key, strlen(key));
 	int index = key_hash % self->table_max_size;
-	plist_hashmap_node *element = self->elements[index];
+	phashmap_node *element = self->elements[index];
 
 	if (element == 0) {
 		return 0;
@@ -262,7 +262,7 @@ static void *pdict_remove_element(pdict_dictionary *self, char *key)
 {
 	unsigned int key_hash = pdict_hash(key, strlen(key));
 	int index = key_hash % self->table_max_size;
-	plist_hashmap_node *element = self->elements[index];
+	phashmap_node *element = self->elements[index];
 
 	if (element == 0) {
 		return 0;
@@ -284,7 +284,7 @@ static void *pdict_remove_element(pdict_dictionary *self, char *key)
 	while (element->next != 0) {
 		if (element->next->hashcode == key_hash) {
 			void *data = element->next->data;
-			plist_hashmap_node *aux = element->next;
+			phashmap_node *aux = element->next;
 			element->next = element->next->next;
 			free(aux->key);
 			free(aux);
@@ -297,7 +297,7 @@ static void *pdict_remove_element(pdict_dictionary *self, char *key)
 	return 0;
 }
 
-static void pdict_destroy_element(plist_hashmap_node *element,
+static void pdict_destroy_element(phashmap_node *element,
                                   void(*data_destroyer)(void *))
 {
 	if (data_destroyer != 0) {

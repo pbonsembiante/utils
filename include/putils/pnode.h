@@ -1,28 +1,28 @@
 #ifndef _PNODE_H_
 #define _PNODE_H_
 
-typedef struct plist_linked_node plist_linked_node;
-struct plist_linked_node
+typedef struct plinked_node plinked_node;
+struct plinked_node
 {
 	void *data;
-	struct plist_linked_node *next;
+    struct plinked_node *next;
 };
 
-typedef struct plist_double_linked_node plist_double_linked_node;
-struct plist_double_linked_node
+typedef struct pdouble_linked_node pdouble_linked_node;
+struct pdouble_linked_node
 {
 	void *data;
-	struct plist_double_linked_node *previous;
-	struct plist_double_linked_node *next;
+    struct pdouble_linked_node *previous;
+    struct pdouble_linked_node *next;
 };
 
-typedef struct plist_hashmap_node plist_hashmap_node;
-struct plist_hashmap_node
+typedef struct phashmap_node phashmap_node;
+struct phashmap_node
 {
 	char *key;
 	unsigned int hashcode;
 	void *data;
-	struct plist_hashmap_node *next;
+    struct phashmap_node *next;
 };
 
 #endif /* _PNODE_H_ */
