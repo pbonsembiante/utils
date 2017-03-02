@@ -14,8 +14,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef DICTIONARY_H_
-#define DICTIONARY_H_
+#ifndef _DICTIONARY_H_
+#define _DICTIONARY_H_
 
 #define PDICT_INITIAL_SIZE 20
 
@@ -34,14 +34,14 @@ void *pdict_get(pdict_dictionary *self, char *key);
 void *pdict_remove(pdict_dictionary *self, char *key);
 
 void pdict_remove_and_destroy(pdict_dictionary *self, char *key,
-							  void(*data_destroyer)(void *));
+                              void(*data_destroyer)(void *));
 
 void pdict_iterator(pdict_dictionary *self, void(*closure)(char *, void *));
 
 void pdict_clean(pdict_dictionary *self);
 
 void pdict_clean_and_destroy_elements(pdict_dictionary *self,
-									  void(*destroyer)(void *));
+                                      void(*destroyer)(void *));
 
 bool pdict_has_key(pdict_dictionary *self, char *key);
 
@@ -52,6 +52,6 @@ int pdict_size(pdict_dictionary *self);
 void pdict_destroy(pdict_dictionary *self);
 
 void pdict_destroy_and_destroy_elements(pdict_dictionary *self,
-										void(*destroyer)(void *));
+                                        void(*destroyer)(void *));
 
-#endif /* DICTIONARY_H_ */
+#endif /* _DICTIONARY_H_ */

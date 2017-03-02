@@ -1,5 +1,5 @@
-#ifndef PNODE_H
-#define PNODE_H
+#ifndef _PNODE_H_
+#define _PNODE_H_
 
 typedef struct plist_linked_node plist_linked_node;
 struct plist_linked_node
@@ -25,4 +25,4 @@ struct plist_hashmap_node
 	struct plist_hashmap_node *next;
 };
 
-#endif // PNODE_H
+#endif /* _PNODE_H_ */

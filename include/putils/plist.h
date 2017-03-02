@@ -23,8 +23,8 @@
  * library. No internal or implementation details are provided in this headers.
  *
  */
-#ifndef PLISTS_H
-#define PLISTS_H
+#ifndef _PLISTS_H_
+#define _PLISTS_H_
 
 #include <stdbool.h>
 #include <stdlib.h>
@@ -466,4 +466,4 @@ bool plist_all_match(plist_list *self, plist_evaluator condition);
  */
 size_t plist_prepend(plist_list *self, void *data);
 
-#endif // PLISTS_H
+#endif /* _PLISTS_H_ */

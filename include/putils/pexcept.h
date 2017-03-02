@@ -1,5 +1,5 @@
-#ifndef _PEXCEPT_H
-#define _PEXCEPT_H
+#ifndef _PEXCEPT_H_
+#define _PEXCEPT_H_
 
 #include <setjmp.h>
 
@@ -96,4 +96,4 @@ void Throw(PEXCEPT_T ExceptionID);
 #endif
 
 /* *INDENT-ON* */
-#endif // _PEXCEPT_H
+#endif /* _PEXCEPT_H_ */
