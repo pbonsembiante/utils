@@ -1,10 +1,16 @@
+# At least autoconf v2.69
 AC_PREREQ([2.69])
-AC_INIT([putils], [0.2.0], [pbonsembiante@gmail.com])
 
-# auxiliary files folder
+# Call autoconf 
+AC_INIT([putils], [0.9.1], [pbonsembiante@gmail.com])
+
+# Put auxiliary files in AC_CONFIG_AUX_DIR, 'build-aux'.
 AC_CONFIG_AUX_DIR([build-aux])
 
+# Let autoconf know where it is
 AC_CONFIG_SRCDIR([src/plist.c])
+
+# config.h file (unused as of now)
 AC_CONFIG_HEADERS([config.h])
 
 # Checks for programs.
@@ -15,11 +21,13 @@ AC_PROG_INSTALL
 AC_PROG_LN_S
 AC_PROG_MAKE_SET
 
-# m4 separate folder
+# Put m4 macros in a separate folder
 AC_CONFIG_MACRO_DIR([m4])
 
 # Add call to automake
 AM_INIT_AUTOMAKE([foreign subdir-objects -Wall -Werror])
+
+# Set archiver (required for libtool)
 AM_PROG_AR
 
 # Call libtools to build a library
@@ -38,5 +46,8 @@ AC_TYPE_SIZE_T
 AC_FUNC_MALLOC
 AC_CHECK_FUNCS([strdup])
 
+# Which Makefiles should we consider? 
 AC_CONFIG_FILES([Makefile])
+
+# End
 AC_OUTPUT

@@ -30,9 +30,93 @@
 #include <stdlib.h>
 #include "pnode.h"
 
+/*!
+ * \typedef plist_comparator
+ * \brief User-defined function type to compare two objects.
+ *
+ * __Detail:__
+ *
+ * Mostly created to avoid using such an ugly syntax in function prototypes.
+ * We strongly prefer this:
+ * ~~~~~~~~~~~~~~~{.c}
+ * void plist_sort(plist_list *self, plist_comparator comparator);
+ * ~~~~~~~~~~~~~~~
+ *
+ * over this:
+ * ~~~~~~~~~~~~~~~{.c}
+ * void plist_sort(plist_list *self, bool (*comparator)(const void *, const void *));
+ * ~~~~~~~~~~~~~~~
+ */
 typedef bool (*plist_comparator)(const void *, const void *);
+
+/*!
+ * \typedef plist_evaluator
+ * \brief User-defined function type to use custom boolean evaluations on data elements.
+ *
+ * __Detail:__
+ *
+ * Mostly created to avoid using such an ugly syntax in function prototypes.
+ * We strongly prefer this:
+ * ~~~~~~~~~~~~~~~{.c}
+ * plist_list *plist_filter(plist_list *self, plist_evaluator condition);
+ * ~~~~~~~~~~~~~~~
+ *
+ * over this:
+ * ~~~~~~~~~~~~~~~{.c}
+ * plist_list *plist_filter(plist_list *self, bool (*condition)(void *));
+ * ~~~~~~~~~~~~~~~
+ */
 typedef bool (*plist_evaluator)(void *);
+
+/*!
+ * \typedef plist_transformer
+ * \brief User-defined function type to apply a modifier to all elements in the list.
+ *
+ * __Detail:__
+ *
+ * Mostly created to avoid using such an ugly syntax in function prototypes.
+ * We strongly prefer this:
+ * ~~~~~~~~~~~~~~~{.c}
+ * plist_list *plist_map(plist_list *self, plist_transformer transformer);
+ * ~~~~~~~~~~~~~~~
+ *
+ * over this:
+ * ~~~~~~~~~~~~~~~{.c}
+ * plist_list *plist_map(plist_list *self, void* (*plist_transformer)(void *));
+ * ~~~~~~~~~~~~~~~
+ *
+ */
+typedef void *(*plist_transformer)(void *);
+
+/*!
+ * \typedef plist_destroyer
+ * \brief User-defined function type to free data elements allocated in the list.
+ *
+ * __Detail:__
+ *
+ * Mostly created to avoid using such an ugly syntax in function prototypes.
+ * We strongly prefer this:
+ * ~~~~~~~~~~~~~~~{.c}
+ * void plist_destroy_all(plist_list *self, plist_destroyer destroyer);
+ * ~~~~~~~~~~~~~~~
+ *
+ * over this:
+ * ~~~~~~~~~~~~~~~{.c}
+ * void plist_destroy_all(plist_list *self, void (*destroyer)(void *));
+ * ~~~~~~~~~~~~~~~
+ *
+ */
 typedef void (*plist_destroyer)(void *);
+
+/*!
+ * \typedef plist_closure
+ * \brief User-defined function type.
+ *
+ * __Detail:__
+ *
+ * I'll probably remove this... or adapt old code to use it... who knows.
+ *
+ */
 typedef void (*plist_closure)(void *);
 
 /*!
@@ -74,7 +158,7 @@ plist_list *plist_create(void);
  *
  * The given list will be destroyed, freeing any node.
  * If the internal data of the list needs to be freed too, [plist_detroy_all]
- * (@ref plist_destroy_all) shoud be used instead.
+ * (@ref plist_destroy_all) should be used instead.
  *
  */
 void plist_destroy(plist_list *self);
@@ -98,8 +182,7 @@ void plist_destroy(plist_list *self);
  * ~~~~~~~~~~~~~~~
  *
  */
-void plist_destroy_all(plist_list *self,
-                       plist_destroyer destroyer);
+void plist_destroy_all(plist_list *self, plist_destroyer destroyer);
 
 /*!
  * \brief Add the given data as a new node to the end of the list.
@@ -131,8 +214,7 @@ void plist_add(plist_list *self, size_t index, void *data);
 
 /*!
  * \brief Merges two lists.
- * \param self: A pointer to the list that will receive the contents of the
- * other.
+ * \param self: A pointer to the list that will receive the contents of the other.
  * \param other: A pointer to the list to be merged.
  *
  * __Detail:__
@@ -199,43 +281,72 @@ plist_list *plist_get_elements(plist_list *self, size_t count);
 plist_list *plist_get_removing_elements(plist_list *self, size_t count);
 
 /*!
- * \brief: Creates a new list with the elements that match a given condition.
+ * \brief Creates a new list with the elements that match a given condition.
  * \param self: A pointer to the list to filter.
- * \param condition: The condition that should be matched against.
+ * \param condition: The condition that should be matched against to filter elements.
  * \return: A newly allocated list, containing the elements of \self self that
  * matched the \condition condition.
  *
  * __Detail:__
  *
+ * This function returns a new list containing all the elements in \self self
+ * that match the given \condition condition.
+ *
+ * If any element in \self self matches the condition, an empty list is returned.
+ * To avoid this, [@ref plist_any_match] or [@ref plist_count_matching] can be
+ * used, either to get how many items will the new list hold, or to know if it is
+ * not going to be empty.
  *
  */
 plist_list *plist_filter(plist_list *self, plist_evaluator condition);
 
 /*!
- * \brief plist_map
- * \param self
- * \param transformer
- * \return
+ * \brief Creates a new list with the elements of \self self mapped with \transformer transformer function.
+ * \param self: A pointer to the list to transform.
+ * \param transformer: A pointer to a function that will be applied to every element of the list.
+ * \return A pointer to a newly allocated list containing all the elements in \self self ran through \transformer transformer.
+ *
+ * __Detail:__
+ *
+ * This function returns a new list containing all the elements in \self self
+ * tran through \transformer transformer.
+ *
  */
-plist_list *plist_map(plist_list *self, void *(*transformer)(void *));
+plist_list *plist_map(plist_list *self, plist_transformer transformer);
 
 /*!
- * \brief plist_replace
- * \param self
- * \param index
- * \param element
- * \return
+ * \brief Replaces a data element of the list, with the new data provided.
+ * \param self: A pointer to the list to transform.
+ * \param index: Index of the element to be replaced.
+ * \param data: New data element to be replaced at \index index position:
+ * \return the old element at \index index in list.
+ *
+ * __Detail:__
+ *
+ * This function will replace the data in the \index index element of the list
+ * with the new data element provided.
+ *
+ * Once the old element is replaced, the function will return a pointer to it.
+ *
  */
 void *plist_replace(plist_list *self, size_t index, void *data);
 
 /*!
- * \brief plist_replace_and_destroy
- * \param self
- * \param index
- * \param element
- * \param element_detroyer
+ * \brief Replaces a data element of the list, and deletes the replaced element.
+ * \param self: A pointer to the list to transform.
+ * \param index:  Index of the element to be replaced.
+ * \param data: New data element to be replaced at \index index position:
+ * \param element_detroyer: A function to free the replaced element.
+ *
+ * __Detail:__
+ *
+ * This function will replace the data in the \index index element of the list
+ * with the new data element provided.
+ *
+ * Once the old element is replaced, the function will not return the removed
+ * element but apply the \destroyer destroyer function to it.
  */
-void plist_replace_and_destroy(plist_list *self, int index, void *data,
+void plist_replace_and_destroy(plist_list *self, size_t index, void *data,
                                plist_destroyer destroyer);
 
 /*!
@@ -285,7 +396,7 @@ void plist_clean(plist_list *self);
  * \param data_destroyer
  */
 void plist_clean_destroying_data(plist_list *self,
-								 void(*data_destroyer)(void *));
+                                 plist_destroyer destroyer);
 
 /*!
  * \brief plist_iterate
@@ -329,7 +440,7 @@ void plist_sort(plist_list *self, plist_comparator comparator);
  * \param condition
  * \return
  */
-int plist_count_matching(plist_list *self, plist_evaluator condition);
+size_t plist_count_matching(plist_list *self, plist_evaluator condition);
 
 /*!
  * \brief plist_any_match
@@ -337,7 +448,7 @@ int plist_count_matching(plist_list *self, plist_evaluator condition);
  * \param condition
  * \return
  */
-_Bool plist_any_match(plist_list *self, plist_evaluator condition);
+bool plist_any_match(plist_list *self, plist_evaluator condition);
 
 /*!
  * \brief plist_all_match
@@ -345,6 +456,14 @@ _Bool plist_any_match(plist_list *self, plist_evaluator condition);
  * \param condition
  * \return
  */
-_Bool plist_all_match(plist_list *self, plist_evaluator condition);
+bool plist_all_match(plist_list *self, plist_evaluator condition);
+
+/*!
+ * \brief plist_prepend
+ * \param self
+ * \param data
+ * \return
+ */
+size_t plist_prepend(plist_list *self, void *data);
 
 #endif // PLISTS_H

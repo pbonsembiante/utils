@@ -59,6 +59,7 @@ WIP
 ## Contributors
 
 * Phanatos (Patricio Bonsembiante)
+* Dipiert 
 
 ## License
 [The GNU General Public License v3](./COPYING)
