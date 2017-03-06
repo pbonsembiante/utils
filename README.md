@@ -16,6 +16,7 @@ So far we have:
 * Dictionaries 
 * Exceptions (simple and lightweight exception handling framework) 
 * Queue 
+* Stack
 
 Soon to have:
 
@@ -23,14 +24,12 @@ Soon to have:
 * Logger
 * String handling
 * Configuration files
-* Stack (Working on it, should be very simple) 
 
 Nice to have: 
 
 * Trees -> (BST, Red/Black, Balanced trees, etc)
 * Sets
 * Graphs 
-
 
 ## Code Example
 
