@@ -22,7 +22,7 @@
 
 #include <stdbool.h>
 #include <stdlib.h>
-#include "pnode.h"
+#include "plist.h"
 
 /*!
  * \typedef pqueue_queue
@@ -38,9 +38,11 @@
  */
 typedef struct pqueue_queue pqueue_queue;
 
+typedef void (*pqueue_destroyer)(void *);
+
 /*!
  * \brief pqueue_create
- * \returnreveal
+ * \return
  */
 pqueue_queue *pqueue_create(void);
 
@@ -48,8 +50,9 @@ pqueue_queue *pqueue_create(void);
  * \brief pqueue_enqueue
  * \param self
  * \param data
+ * \return
  */
-void pqueue_enqueue(pqueue_queue *self, void *data);
+size_t pqueue_enqueue(pqueue_queue *self, void *data);
 
 /*!
  * \brief pqueue_dequeue
@@ -73,10 +76,24 @@ size_t pqueue_size(pqueue_queue *self);
 bool pqueue_is_empty(pqueue_queue *self);
 
 /*!
+ * \brief pqueue_is_not_empty
+ * \param self
+ * \return
+ */
+bool pqueue_is_not_empty(pqueue_queue *self);
+
+/*!
  * \brief pqueue_destroy
  * \param self
  */
-void pqueue_destroy(pqueue_queue *self);
+bool pqueue_destroy(pqueue_queue *self);
+
+/*!
+ * \brief pqueue_destroy_all
+ * \param self
+ * \param destroyer
+ */
+void pqueue_destroy_all(pqueue_queue *self, pqueue_destroyer destroyer);
 
 
 #endif /* _PQUEUE_H_ */
