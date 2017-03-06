@@ -1,5 +1,7 @@
-/*
- * Copyright (C) 2012 Sistemas Operativos - UTN FRBA. All rights reserved.
+#ifndef _DICTIONARY_H_
+#define _DICTIONARY_H_
+/***************************************************************************
+ * Copyright (C) Patricio Bonsembiante - Phanatos. All rights reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -12,10 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
-#ifndef _DICTIONARY_H_
-#define _DICTIONARY_H_
+ ***************************************************************************/
 
 #define PDICT_INITIAL_SIZE 20
 

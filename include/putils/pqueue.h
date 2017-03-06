@@ -1,8 +1,7 @@
 #ifndef _PQUEUE_H_
 #define _PQUEUE_H_
-
-/*
- * Copyright (C) 2012 Sistemas Operativos - UTN FRBA. All rights reserved.
+/***************************************************************************
+ * Copyright (C) Patricio Bonsembiante - Phanatos. All rights reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+ ***************************************************************************/
 /*!
  * \file pqueue.h
  * \brief Header for Queue handling lib.
@@ -23,7 +22,7 @@
 
 #include <stdbool.h>
 #include <stdlib.h>
-#include <putils/pnode.h>
+#include "pnode.h"
 
 /*!
  * \typedef pqueue_queue

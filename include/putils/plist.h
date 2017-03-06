@@ -1,3 +1,5 @@
+#ifndef _PLISTS_H_
+#define _PLISTS_H_
 /***************************************************************************
  * Copyright (C) Patricio Bonsembiante - Phanatos. All rights reserved.
  *
@@ -23,9 +25,6 @@
  * library. No internal or implementation details are provided in this headers.
  *
  */
-#ifndef _PLISTS_H_
-#define _PLISTS_H_
-
 #include <stdbool.h>
 #include <stdlib.h>
 #include "pnode.h"
