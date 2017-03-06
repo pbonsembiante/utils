@@ -6,7 +6,7 @@
 __Copyleft (c) 2016 - 2017 Phanatos Utils Library by Patricio Bonsembiante (Phanatos)__
 
 ## Synopsis
-   ========
+
 
 This library contains a few utilities and common functions, data structure implementations, exception handling routines (very simple one), etc.
 
@@ -33,11 +33,11 @@ Nice to have:
 
 
 ## Code Example
-   ============
+
 WIP
 
 ## Motivation
-   ==========
+
 I've started this as an utilitary for another project which got dropped after a while. I've found some of the code and decided to upload it to share it and keep improving it over time. 
 
 I've learned (ok, still learning) how to use Autotools thanks to this little lib. Since I had no previous experience with it, any contributions are welcome. 
@@ -45,7 +45,7 @@ I've learned (ok, still learning) how to use Autotools thanks to this little lib
 Please, feel free to PR :)
 
 ## Installation
-   ============
+
 
 To build the library run the following (you will need to have installed libtool): 
     
@@ -59,11 +59,11 @@ If you want to install the library you must have the required permisions:
     > sudo make install
 
 ## API Reference
-   =============
+
 WIP
 
 ## Tests
-   =====
+
 Still working on the unit tests for the older code (Lists, Exceptions and Dictionaries).
 
 The new functionalities will always come with at least a basic unit test file in the test folder of the project. 
@@ -71,10 +71,10 @@ The new functionalities will always come with at least a basic unit test file in
 I'll be changing the unit tests to Unity framework soon, for a more efficient testing environment and flexibility.
 
 ## Contributors
-   ============
+
 * Phanatos (Patricio Bonsembiante)
 * Dipiert 
 
 ## License
-   =======
+
 I'm releasing this code under [The GNU General Public License v3](./COPYING) so everybody can use and contributy freely.
