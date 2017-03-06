@@ -21,8 +21,8 @@ Soon to have:
 * Logger
 * String handling
 * Configuration files
-* Stack
-* Queue
+* Stack (Working on it, should be very simple) 
+* Queue (Working on it, should be very simple)
 
 Nice to have: 
 
