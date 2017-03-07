@@ -94,7 +94,7 @@ bool pstack_is_empty(pstack_stack *self);
  * \param self
  * \return
  */
-bool pstack_destroy(pstack_stack *self);
+void pstack_destroy(pstack_stack *self);
 
 /*!
  * \brief pqueue_destroy_all

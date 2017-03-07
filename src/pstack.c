@@ -17,119 +17,48 @@
 
 struct pstack_stack
 {
-    plinked_node *top;
-    size_t elements_count;
+    plist_list *list;
 };
-
-static plinked_node *pstack_create_node(void *data);
-
-static void pstack_link_nodes(plinked_node *previous, plinked_node *next);
 
 pstack_stack *pstack_create()
 {
     pstack_stack *stack = calloc(1, sizeof(pstack_stack));
-    stack->top = 0;
-    stack->elements_count = 0;
+    stack->list = plist_create();
+
     return stack;
 }
 
 size_t pstack_push(pstack_stack *self, void *data)
 {
-    plinked_node *new_element = pstack_create_node(data);
-
-    if (new_element) {
-        pstack_link_nodes(new_element, self->top);
-        self->top = new_element;
-        self->elements_count++;
-    }
-
-    return self->elements_count;
+    return plist_prepend(self->list, data);
 }
 
 void *pstack_pop(pstack_stack *self)
 {
-    plinked_node *tmp = 0;
-    void *data = 0;
-
-    if (self->top) {
-        tmp = self->top;
-        data = tmp->data;
-        pstack_link_nodes(self->top, self->top->next);
-        self->elements_count--;
-        free(tmp);
-    }
-
-    return data;
+    return plist_remove(self->list, 0);
 }
 
 void *pstack_peek(pstack_stack *self)
 {
-    void *data = 0;
-
-    if (self->top) {
-        data = self->top->data;
-    }
-
-    return data;
+    return plist_get(self->list, 0);
 }
 
 size_t pstack_size(pstack_stack *self)
 {
-    return self->elements_count;
+    return plist_size(self->list);
 }
 
 bool pstack_is_empty(pstack_stack *self)
 {
-    return self->elements_count == 0;
+    return plist_size(self->list) == 0;
 }
 
-bool pstack_destroy(pstack_stack *self)
+void pstack_destroy(pstack_stack *self)
 {
-    bool can_be_freed = self->elements_count == 0;
-
-    if (can_be_freed) {
-        free(self);
-    }
-
-    return can_be_freed;
+    plist_destroy(self->list);
 }
 
 void pstack_destroy_all(pstack_stack *self, pstack_destroyer destroyer)
 {
-    for ( size_t i = 0; i < pstack_size(self); ++i) {
-        void *data = pstack_pop(self);
-
-        if(destroyer) {
-            destroyer(data);
-        }
-    }
-
-    free(self);
-}
-
-/**
- * Private Functions
- */
-
-static void pstack_link_nodes(plinked_node *previous, plinked_node *next)
-{
-    if (previous) {
-        previous->next = next;
-    }
-}
-
-static plinked_node *pstack_create_node(void *data)
-{
-    plinked_node *element = 0;
-
-    if (data) {
-        element = calloc(1, sizeof(plinked_node));
-
-        if (element) {
-            element->data = data;
-            element->next = 0;
-        }
-    }
-
-    return element;
+    plist_destroy_all(self->list, destroyer);
 }

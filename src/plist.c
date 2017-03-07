@@ -168,6 +168,7 @@ void *plist_remove(plist_list *self, size_t index)
 
     if (index == 0) {
         aux = self->head;
+        data = aux->data;
         self->head = aux->next;
 
         if (!self->head) {
