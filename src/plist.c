@@ -68,7 +68,8 @@ size_t plist_append(plist_list *self, void *data)
     }
 
     self->tail = new_element;
-    return self->elements_count++;
+    self->elements_count++;
+    return self->elements_count;
 }
 
 void plist_merge(plist_list *self, plist_list *other)
@@ -135,7 +136,9 @@ void plist_replace_and_destroy(plist_list *self, size_t index, void *data,
                                plist_destroyer destroyer)
 {
     void *old_data = plist_replace(self, index, data);
-    destroyer(old_data);
+    if (old_data) {
+        destroyer(old_data);
+    }
 }
 
 void *plist_find(plist_list *self, plist_evaluator condition)
@@ -158,23 +161,28 @@ void *plist_remove(plist_list *self, size_t index)
 {
     void *data = 0;
     plinked_node *aux = 0;
-    plinked_node *previous = 0;
-    previous = plist_get_node(self, index - 1);
 
-    if (!previous || !previous->next || !self->head) {
+    if (plist_is_empty(self)) {
         return 0;
     }
 
-    aux = previous->next;
-    data = aux->data;
-
     if (index == 0) {
+        aux = self->head;
         self->head = aux->next;
 
         if (!self->head) {
             self->tail = 0;
         }
     } else {
+        plinked_node *previous = 0;
+        previous = plist_get_node(self, index - 1);
+
+        if (!previous || !previous->next) {
+            return 0;
+        }
+
+        aux = previous->next;
+        data = aux->data;
         plist_link_nodes(previous, aux->next);
 
         if (aux->next == 0) {
@@ -183,7 +191,10 @@ void *plist_remove(plist_list *self, size_t index)
     }
 
     self->elements_count--;
-    free(aux);
+    if (aux) {
+        free(aux);
+    }
+
     return data;
 }
 
@@ -217,7 +228,7 @@ size_t plist_size(plist_list *self)
     return self->elements_count;
 }
 
-size_t plist_is_empty(plist_list *self)
+bool plist_is_empty(plist_list *self)
 {
     return plist_size(self) == 0;
 }
@@ -340,7 +351,8 @@ size_t plist_prepend(plist_list *self, void *data)
         self->tail = new_element;
     }
 
-    return self->elements_count++;
+    self->elements_count++;
+    return self->elements_count;
 }
 /********* PRIVATE FUNCTIONS **************/
 
@@ -369,11 +381,11 @@ static plinked_node *plist_get_node(plist_list *self, size_t index)
     plinked_node *element = 0;
     bool is_in_range = self->elements_count > index;
 
-    if( is_in_range && (self->elements_count - 1) == index) {
+    if (is_in_range && (self->elements_count - 1) == index) {
         element = self->tail;
     }
 
-    if( is_in_range && !element) {
+    if (is_in_range && !element) {
         size_t count = 0;
         element = self->head;
 
@@ -392,7 +404,11 @@ static plinked_node *plist_find_node(plist_list *self,
     plinked_node *element = self->head;
     size_t position = 0;
 
-    while(element && !condition(element->data)) {
+    if (!element || self->elements_count == 0) {
+        return 0;
+    }
+
+    while(!condition(element->data)) {
         element = element->next;
         position++;
     }

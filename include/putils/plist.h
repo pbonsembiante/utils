@@ -424,7 +424,7 @@ size_t plist_size(plist_list *self);
  * \param self
  * \return
  */
-size_t plist_is_empty(plist_list *self);
+bool plist_is_empty(plist_list *self);
 
 /*!
  * \brief plist_sort
