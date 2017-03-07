@@ -68,12 +68,3 @@ void test_pop_ShouldNotPopFromAnEmptyStack(void)
 
     pstack_destroy(q);
 }
-
-int main(void)
-{
-    test_create_ShouldCreateAnEmptyStack();
-    test_pop_ShouldNotPopFromAnEmptyStack();
-    test_pop_ShouldRemoveAnElementFromThestack();
-    test_push_ShouldPushNullElements();
-    test_push_ShouldPushAnElementToTheStack();
-}
