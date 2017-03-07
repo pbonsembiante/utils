@@ -22,8 +22,6 @@
 
 #include <stdbool.h>
 #include <stdlib.h>
-#include "plist.h"
-
 /*!
  * \typedef pqueue_queue
  * \brief Type definition for abstract Queue handler.

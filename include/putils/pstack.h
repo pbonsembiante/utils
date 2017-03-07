@@ -22,8 +22,6 @@
 
 #include <stdbool.h>
 #include <stdlib.h>
-#include "plist.h"
-
 /*!
  * \typedef pstack_stack
  * \brief Type definition for abstract Stack handler.

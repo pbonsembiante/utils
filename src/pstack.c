@@ -14,6 +14,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ***************************************************************************/
 #include "putils/pstack.h"
+#include "putils/plist.h"
 
 struct pstack_stack
 {
