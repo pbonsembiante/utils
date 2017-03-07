@@ -17,112 +17,54 @@
 
 struct pqueue_queue
 {
-    plinked_node *head;
-    plinked_node *tail;
-    size_t elements_count;
+    plist_list *list;
 };
-
-static plinked_node *pqueue_create_node(void *data);
 
 pqueue_queue *pqueue_create()
 {
     pqueue_queue *q = calloc(1, sizeof(pqueue_queue));
-    q->head = 0;
-    q->tail = 0;
-    q->elements_count = 0;
+    q->list = plist_create();
     return q;
 }
 
 size_t pqueue_enqueue(pqueue_queue *self, void *data)
 {
-    plinked_node *new_element = pqueue_create_node(data);
-
-    if (new_element) {
-        if (self->elements_count == 0) {
-            self->head = new_element;
-        } else {
-            self->tail->next = new_element;
-        }
-
-        self->tail = new_element;
-        self->elements_count++;
-    }
-
-    return self->elements_count;
+    return plist_append(self->list, data);
 }
 
 void *pqueue_dequeue(pqueue_queue *self)
 {
-    void *data = 0;
-    plinked_node *tmp = self->head;
-
-    if (self->head) {
-        if (self->elements_count == 1) {
-            self->tail = tmp->next;
-        }
-
-        self->head = tmp->next;
-        data = tmp->data;
-        free(tmp);
-        self->elements_count--;
-    }
-
-    return data;
+    return plist_remove(self->list, 0);
 }
 
 size_t pqueue_size(pqueue_queue *self)
 {
-    return self->elements_count;
+    return plist_size(self->list);
 }
 
 bool pqueue_is_empty(pqueue_queue *self)
 {
-    return self->elements_count == 0;
+    return plist_is_empty(self->list);
 }
 
-bool pqueue_is_not_empty(pqueue_queue *self)
+void pqueue_clean(pqueue_queue *self)
 {
-    return self->elements_count > 0;
+    plist_clean(self->list);
 }
 
-bool pqueue_destroy(pqueue_queue *self)
+void pqueue_clean_destroying_data(pqueue_queue *self, plist_destroyer destroyer)
 {
-    bool can_be_freed = self->elements_count == 0;
+    plist_clean_destroying_data(self->list, destroyer);
+}
 
-    if (can_be_freed) {
-        free(self);
-    }
-
-    return can_be_freed;
+void pqueue_destroy(pqueue_queue *self)
+{
+    plist_destroy(self->list);
+    free(self);
 }
 
 void pqueue_destroy_all(pqueue_queue *self, pqueue_destroyer destroyer)
 {
-    for ( size_t i = 0; i < pqueue_size(self); ++i) {
-        if(destroyer) {
-            destroyer(pqueue_dequeue(self));
-        }
-    }
-
+    plist_destroy_all(self->list, destroyer);
     free(self);
-}
-
-/**
- * Private Functions
- */
-
-static plinked_node *pqueue_create_node(void *data)
-{
-    plinked_node *element = 0;
-
-    if (data) {
-        element = calloc(1, sizeof(plinked_node));
-
-        if (element) {
-            element->data = data;
-            element->next = 0;
-        }
-    }
-
-    return element;
 }

@@ -76,17 +76,24 @@ size_t pqueue_size(pqueue_queue *self);
 bool pqueue_is_empty(pqueue_queue *self);
 
 /*!
- * \brief pqueue_is_not_empty
+ * \brief pqueue_clean
  * \param self
- * \return
  */
-bool pqueue_is_not_empty(pqueue_queue *self);
+void pqueue_clean(pqueue_queue *self);
+
+/*!
+ * \brief pqueue_clean_destroying_data
+ * \param self
+ * \param destroyer
+ */
+void pqueue_clean_destroying_data(pqueue_queue *self,
+                                  plist_destroyer destroyer);
 
 /*!
  * \brief pqueue_destroy
  * \param self
  */
-bool pqueue_destroy(pqueue_queue *self);
+void pqueue_destroy(pqueue_queue *self);
 
 /*!
  * \brief pqueue_destroy_all
