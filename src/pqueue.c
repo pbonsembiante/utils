@@ -37,6 +37,11 @@ void *pqueue_dequeue(pqueue_queue *self)
     return plist_remove(self->list, 0);
 }
 
+void *pqueue_peek(pqueue_queue *self)
+{
+    return plist_get(self->list, 0);
+}
+
 size_t pqueue_size(pqueue_queue *self)
 {
     return plist_size(self->list);

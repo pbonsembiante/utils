@@ -62,6 +62,13 @@ size_t pqueue_enqueue(pqueue_queue *self, void *data);
 void *pqueue_dequeue(pqueue_queue *self);
 
 /*!
+ * \brief pqueue_peek
+ * \param self
+ * \return
+ */
+void *pqueue_peek(pqueue_queue *self);
+
+/*!
  * \brief pqueue_size
  * \param self
  * \return

@@ -12,6 +12,18 @@ void test_create_ShouldCreateAnEmptyQueue(void)
     pqueue_destroy(q);
 }
 
+void test_create_ShouldNotCreateAZeroSizeQueue(void)
+{
+    pqueue_queue *q = 0;
+    size_t size = 0;
+    q = pqueue_create();
+    assert(q != 0);
+    size = pqueue_size(q);
+    assert(size == 0);
+
+    pqueue_destroy(q);
+}
+
 void test_enqueue_ShouldAppendAnElementToTheQueue(void)
 {
     pqueue_queue *q = pqueue_create();
@@ -46,7 +58,7 @@ void test_dequeue_ShouldRemoveAnElementFromTheQueue(void)
     pqueue_destroy(q);
 }
 
-void test_enqueue_ShouldNotEnqueueNullElements(void)
+void test_enqueue_ShouldEnqueueNullElements(void)
 {
     pqueue_queue *q = pqueue_create();
     char *test_string = 0;
@@ -54,7 +66,7 @@ void test_enqueue_ShouldNotEnqueueNullElements(void)
     size_t prev_size = pqueue_size(q);
     pqueue_enqueue(q, test_string);
 
-    assert(pqueue_size(q) == prev_size);
+    assert(pqueue_size(q) == prev_size + 1);
 
     pqueue_destroy(q);
 }
