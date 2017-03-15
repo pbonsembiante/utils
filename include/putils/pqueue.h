@@ -92,7 +92,7 @@ void pqueue_clean(pqueue_queue *self);
  * \param destroyer
  */
 void pqueue_clean_destroying_data(pqueue_queue *self,
-                                  plist_destroyer destroyer);
+                                  pqueue_destroyer destroyer);
 
 /*!
  * \brief pqueue_destroy
