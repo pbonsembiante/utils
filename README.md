@@ -53,6 +53,20 @@ To build the library run the following (you will need to have installed libtool)
     > ./configure
     > make 
 
+You should set a few flags (at least `-std=c11`) to do that use either:
+   
+    > ./configure CFLAGS='-std=c11'
+
+or 
+
+    > make CFLAGS='-std=c11'
+
+To run the tests run: 
+
+    > make check
+
+It will build and run all the tests for the library. 
+
 If you want to install the library you must have the required permisions:
 
     > sudo make install
@@ -65,9 +79,9 @@ WIP
 
 Still working on the unit tests for the older code (Lists, Exceptions and Dictionaries).
 
-The new functionalities will always come with at least a basic unit test file in the test folder of the project. 
+Finally added Unity for unit testing. 
 
-I'll be changing the unit tests to Unity framework soon, for a more efficient testing environment and flexibility.
+I'll be migrating the old tests soon to the new framework. 
 
 ## Contributors
 
