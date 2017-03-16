@@ -2,7 +2,7 @@
 AC_PREREQ([2.69])
 
 # Call autoconf 
-AC_INIT([putils], [0.9.1], [pbonsembiante@gmail.com])
+AC_INIT([putils], [0.4.1], [pbonsembiante@gmail.com])
 
 # Put auxiliary files in AC_CONFIG_AUX_DIR, 'build-aux'.
 AC_CONFIG_AUX_DIR([build-aux])
