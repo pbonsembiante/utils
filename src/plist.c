@@ -243,6 +243,7 @@ void plist_clean(plist_list *self)
         free(element);
     }
 
+    self->tail = self->head;
     self->elements_count = 0;
 }
 
