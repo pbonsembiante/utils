@@ -15,72 +15,84 @@
  ***************************************************************************/
 
 #include "putils/pstack.h"
+#include "unity.h"
+#include <stdbool.h>
 #include <string.h>
 #include <assert.h>
 
+pstack_stack *S = 0;
+
+void setUp(void)
+{
+    S = pstack_create();
+}
+
+void tearDown(void)
+{
+    pstack_destroy(S);
+}
+
 void test_create_ShouldCreateAnEmptyStack(void)
 {
-    pstack_stack *stack = 0;
-
-    stack = pstack_create();
-
-    assert(stack != 0);
-    assert(pstack_is_empty(stack) == 1 );
-
-    pstack_destroy(stack);
+    TEST_ASSERT_NOT_NULL(S);
+    TEST_ASSERT_EQUAL_UINT(true, pstack_is_empty(S));
 }
 
 void test_push_ShouldPushAnElementToTheStack(void)
 {
-    pstack_stack *stack = pstack_create();
-    size_t prev_size = pstack_size(stack);
-
+    size_t prev_size = pstack_size(S);
     char *test_string = calloc(11, sizeof(char));
+
     strncpy(test_string, "Test data!", 11);
-    pstack_push(stack, test_string);
+    pstack_push(S, test_string);
 
-    assert(pstack_size(stack) == prev_size + 1);
-
-    pstack_destroy_all(stack, free);
-}
-
-void test_pop_ShouldRemoveAnElementFromThestack(void)
-{
-    pstack_stack *q = pstack_create();
-
-    char *test_string = calloc(11, sizeof(char));
-    char *popped = 0;
-    strncpy(test_string, "Test data!", 11);
-
-    pstack_push(q, test_string);
-
-    size_t prev_size = pstack_size(q);
-    popped = pstack_pop(q);
-    assert(strcmp((const char *)popped, test_string) == 0);
-    assert(pstack_size(q) == prev_size - 1);
+    TEST_ASSERT_EQUAL_UINT(prev_size + 1, pstack_size(S));
 
     free(test_string);
-    pstack_destroy(q);
+}
+
+void test_pop_ShouldRemoveAnElementFromTheStack(void)
+{
+    char *test_string = calloc(11, sizeof(char));
+    char *popped = 0;
+    size_t prev_size = 0;
+
+    strncpy(test_string, "Test data!", 11);
+    pstack_push(S, test_string);
+    prev_size = pstack_size(S);
+
+    popped = pstack_pop(S);
+    TEST_ASSERT_EQUAL_STRING((const char *)popped, test_string);
+    TEST_ASSERT_EQUAL_UINT(prev_size - 1, pstack_size(S));
+
+    free(test_string);
 }
 
 void test_push_ShouldPushNullElements(void)
 {
-    pstack_stack *q = pstack_create();
     char *test_string = 0;
+    size_t prev_size = pstack_size(S);
 
-    size_t prev_size = pstack_size(q);
-    pstack_push(q, test_string);
+    pstack_push(S, test_string);
 
-    assert(pstack_size(q) == prev_size + 1);
-
-    pstack_destroy(q);
+    TEST_ASSERT_NULL(test_string);
+    TEST_ASSERT_EQUAL_UINT(prev_size + 1, pstack_size(S));
 }
 
 void test_pop_ShouldNotPopFromAnEmptyStack(void)
 {
-    pstack_stack *q = pstack_create();
+    TEST_ASSERT_NULL(pstack_pop(S));
+}
 
-    assert(pstack_pop(q) == 0);
+int main(void)
+{
+    UNITY_BEGIN();
 
-    pstack_destroy(q);
+    RUN_TEST(test_create_ShouldCreateAnEmptyStack);
+    RUN_TEST(test_pop_ShouldNotPopFromAnEmptyStack);
+    RUN_TEST(test_pop_ShouldRemoveAnElementFromTheStack);
+    RUN_TEST(test_push_ShouldPushAnElementToTheStack);
+    RUN_TEST(test_push_ShouldPushNullElements);
+
+    return UNITY_END();
 }

@@ -15,83 +15,87 @@
  ***************************************************************************/
 
 #include "putils/pqueue.h"
+#include "unity.h"
 #include <string.h>
 #include <assert.h>
 
-void test_create_ShouldCreateAnEmptyQueue(void)
-{
-    pqueue_queue *q = 0;
+pqueue_queue *Q = 0;
 
-    q = pqueue_create();
-    assert(q != 0);
-    assert(pqueue_is_empty(q) == 1 );
-    pqueue_destroy(q);
+void setUp(void)
+{
+    Q = pqueue_create();
 }
 
-void test_create_ShouldNotCreateAZeroSizeQueue(void)
+void tearDown(void)
 {
-    pqueue_queue *q = 0;
-    size_t size = 0;
-    q = pqueue_create();
-    assert(q != 0);
-    size = pqueue_size(q);
-    assert(size == 0);
+    pqueue_destroy(Q);
+}
 
-    pqueue_destroy(q);
+void test_create_ShouldCreateAnEmptyQueue(void)
+{
+    TEST_ASSERT_NOT_NULL(Q);
+    TEST_ASSERT_EQUAL_UINT(1, pqueue_is_empty(Q));
+}
+
+void test_create_ShouldCreateAZeroSizeQueue(void)
+{
+    TEST_ASSERT_NOT_NULL(Q);
+    TEST_ASSERT_EQUAL_UINT(0, pqueue_size(Q));
 }
 
 void test_enqueue_ShouldAppendAnElementToTheQueue(void)
 {
-    pqueue_queue *q = pqueue_create();
-    size_t prev_size = pqueue_size(q);
-
+    size_t prev_size = pqueue_size(Q);
     char *test_string = calloc(11, sizeof(char));
 
     strncpy(test_string, "Test data!", 11);
 
-    pqueue_enqueue(q, test_string);
+    pqueue_enqueue(Q, test_string);
 
-    assert(pqueue_size(q) == prev_size + 1);
+    TEST_ASSERT_EQUAL_UINT(prev_size + 1, pqueue_size(Q));
 
-    pqueue_destroy_all(q, free);
+    free(test_string);
 }
 
 void test_dequeue_ShouldRemoveAnElementFromTheQueue(void)
 {
-    pqueue_queue *q = pqueue_create();
-
     char *test_string = calloc(11, sizeof(char));
     strncpy(test_string, "Test data!", 11);
 
-    pqueue_enqueue(q, test_string);
+    pqueue_enqueue(Q, test_string);
 
-    size_t prev_size = pqueue_size(q);
+    size_t prev_size = pqueue_size(Q);
 
-    pqueue_dequeue(q);
-    assert(pqueue_size(q) == prev_size - 1);
+    pqueue_dequeue(Q);
+    TEST_ASSERT_EQUAL_UINT(prev_size - 1, pqueue_size(Q) );
 
     free(test_string);
-    pqueue_destroy(q);
 }
 
 void test_enqueue_ShouldEnqueueNullElements(void)
 {
-    pqueue_queue *q = pqueue_create();
     char *test_string = 0;
+    size_t prev_size = pqueue_size(Q);
 
-    size_t prev_size = pqueue_size(q);
-    pqueue_enqueue(q, test_string);
-
-    assert(pqueue_size(q) == prev_size + 1);
-
-    pqueue_destroy(q);
+    pqueue_enqueue(Q, test_string);
+    TEST_ASSERT_EQUAL_UINT(prev_size + 1, pqueue_size(Q));
 }
 
 void test_dequeue_ShouldNotDequeueFromAnEmptyQueue(void)
 {
-    pqueue_queue *q = pqueue_create();
+    TEST_ASSERT_NULL(pqueue_dequeue(Q));
+}
 
-    assert(pqueue_dequeue(q) == 0);
+int main(void)
+{
+    UNITY_BEGIN();
 
-    pqueue_destroy(q);
+    RUN_TEST(test_create_ShouldCreateAnEmptyQueue);
+    RUN_TEST(test_create_ShouldCreateAnEmptyQueue);
+    RUN_TEST(test_dequeue_ShouldNotDequeueFromAnEmptyQueue);
+    RUN_TEST(test_dequeue_ShouldRemoveAnElementFromTheQueue);
+    RUN_TEST(test_enqueue_ShouldAppendAnElementToTheQueue);
+    RUN_TEST(test_enqueue_ShouldEnqueueNullElements);
+
+    return UNITY_END();
 }
