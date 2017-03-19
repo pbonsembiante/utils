@@ -146,6 +146,15 @@ typedef struct plist_list plist_list;
  *
  * *Or any similar destroyer functions.
  *
+ * ~~~~~~~~~~~~~~~{.c}
+ * plist_list *L = plist_create();
+ *
+ * if(L) {
+ *      //Now your list is ready to be used, detroy it when you're done with it.
+ * } else {
+ *      //Ups, something went wrong!
+ * }
+ * ~~~~~~~~~~~~~~~
  */
 plist_list *plist_create(void);
 
@@ -158,6 +167,14 @@ plist_list *plist_create(void);
  * The given list will be destroyed, freeing any node.
  * If the internal data of the list needs to be freed too, [plist_detroy_all]
  * (@ref plist_destroy_all) should be used instead.
+ *
+ * ~~~~~~~~~~~~~~~{.c}
+ * plist_list *L = plist_create();
+ *
+ * //Do some pretty things here!
+ *
+ * plist_destroy(L);
+ * ~~~~~~~~~~~~~~~
  *
  */
 void plist_destroy(plist_list *self);
@@ -180,6 +197,14 @@ void plist_destroy(plist_list *self);
  * void element_destroyer(void *element);
  * ~~~~~~~~~~~~~~~
  *
+ * ~~~~~~~~~~~~~~~{.c}
+ * plist_list *L = plist_create();
+ *
+ * //Do some pretty things here!
+ *
+ * plist_destroy_all(L, free);
+ * ~~~~~~~~~~~~~~~
+ *
  */
 void plist_destroy_all(plist_list *self, plist_destroyer destroyer);
 
@@ -191,6 +216,17 @@ void plist_destroy_all(plist_list *self, plist_destroyer destroyer);
  *
  * Creates a new node containing the data received and adds it to the end of the
  * list. If the list is empty, the new node becomes the head of the list.
+ *
+ * ~~~~~~~~~~~~~~~{.c}
+ * plist_list *L = plist_create(); //L = []
+ *
+ * char *s1 = get_my_new_pretty_string();
+ * char *s2 = get_other_pretty_string();
+ *
+ * plist_append(L, s1); //L = ["Pretty String"]
+ * plist_append(L, s2); //L = ["Pretty String", "Another Pretty String"]
+ *
+ * ~~~~~~~~~~~~~~~
  *
  */
 size_t plist_append(plist_list *self, void *data);
@@ -208,6 +244,17 @@ size_t plist_append(plist_list *self, void *data);
  *
  * A node will be automatically created containing the data.
  *
+ * ~~~~~~~~~~~~~~~{.c}
+ * plist_list *L = plist_create(); //L = []
+ *
+ * char *s1 = get_my_new_pretty_string();
+ * char *s2 = get_other_pretty_string();
+ *
+ * plist_add(L, 0, s1); //L = ["Pretty String"]
+ * plist_add(L, 0, s2); //L = ["Another Pretty String", "Pretty String"]
+ *
+ * ~~~~~~~~~~~~~~~
+ *
  */
 void plist_add(plist_list *self, size_t index, void *data);
 
@@ -224,6 +271,20 @@ void plist_add(plist_list *self, size_t index, void *data);
  *
  * If the resulting list needs to be sorted, [@ref plist_sort] should be used
  * after the merging occurs.
+ *
+ * ~~~~~~~~~~~~~~~{.c}
+ * plist_list *L1 = plist_create(); //L1 = []
+ * plist_list *L2 = plist_create(); //L2 = []
+ *
+ * char *s1 = get_my_new_pretty_string();
+ * char *s2 = get_other_pretty_string();
+ *
+ * plist_append(L1, s1); //L1 = ["Pretty String"]
+ * plist_append(L2, s2); //L2 = ["Another Pretty String"]
+ *
+ * plist_merge(L1, L2); //L1 = ["Pretty String", "Another Pretty String"]
+ *
+ * ~~~~~~~~~~~~~~~
  *
  */
 void plist_merge(plist_list *self, plist_list *other);
