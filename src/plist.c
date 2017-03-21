@@ -312,7 +312,7 @@ plist_list *plist_map(plist_list *self, plist_transformer transformer)
     plinked_node *element = self->head;
 
     while(element) {
-        plist_append(mapped, transformer(element));
+        plist_append(mapped, transformer(element->data));
         element = element->next;
     }
 
