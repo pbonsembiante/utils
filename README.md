@@ -78,11 +78,9 @@ WIP
 
 ## Tests
 
-Still working on the unit tests for the older code (Lists, Exceptions and Dictionaries).
+I've adopted Unity framework for unit testing the library, it is a very powerfull and flexible, fully written in C, portable and extensible unit testing framework. 
 
-Finally added Unity for unit testing. 
-
-I'll be migrating the old tests soon to the new framework. 
+I'm slowly writing the tests for every functionality and probably won't write new functions untl the tests are finished. 
 
 ## Contributors
 
