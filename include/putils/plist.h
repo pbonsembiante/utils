@@ -526,4 +526,25 @@ bool plist_all_match(plist_list *self, plist_evaluator condition);
  */
 size_t plist_prepend(plist_list *self, void *data);
 
+/*
+ * Handy macros
+*/
+
+#define PLIST_GET_INT(L, i) *((int*) plist_get(L, i))
+#define PLIST_GET_PINT(L, i) ((int*) plist_get(L, i))
+
+#define PLIST_GET_UINT(L, i) *((unsigned int*) plist_get(L, i))
+#define PLIST_GET_PUINT(L, i) ((unsigned int*) plist_get(L, i))
+
+#define PLIST_GET_CHAR(L, i) *((char*) plist_get(L, i))
+#define PLIST_GET_UCHAR(L, i) *((unsigned char*) plist_get(L, i))
+#define PLIST_GET_PCHAR(L, i) ((char*) plist_get(L, i))
+
+#define PLIST_GET_FLOAT(L, i) *((float*) plist_get(L, i))
+#define PLIST_GET_PFLOAT(L, i) ((float*) plist_get(L, i))
+
+#define PLIST_GET_DOUBLE(L, i) *((double*) plist_get(L, i))
+#define PLIST_GET_PDOUBLE(L, i) ((double*) plist_get(L, i))
+
+
 #endif /* _PLISTS_H_ */
