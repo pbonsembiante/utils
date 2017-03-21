@@ -23,6 +23,15 @@ bool comp(const void *a, const void *b)
     return _a < _b;
 }
 
+void *mapper(void *_orig)
+{
+    int *orig = _orig;
+    int *mapped = calloc(1, sizeof(int));
+    *mapped = *orig * 2;
+
+    return mapped;
+}
+
 /*
 void f(void)
 {
@@ -158,7 +167,7 @@ void test_add_ShouldAddANewElementInTheMiddleOfAList(void)
     free(in);
 }
 
-void test_add_ShouldNotAddANewElementOutOfIndexInAnEmptyList(void)
+void test_add_ShouldNotAddANewElementOutOfIndexBoundFromAnEmptyList(void)
 {
     int *in = calloc(1, sizeof(int));
     *in = 1;
@@ -168,6 +177,28 @@ void test_add_ShouldNotAddANewElementOutOfIndexInAnEmptyList(void)
     TEST_ASSERT_EQUAL_UINT(0, plist_size(L));
 
     free(in);
+}
+
+void test_map_ShouldReturnATransformedList(void)
+{
+    int *data = calloc(10, sizeof(int));
+    plist_list *mapped = 0;
+
+    for (size_t i = 0; i < 10; ++i) {
+        data[i] = i+1;
+        plist_append(L, &data[i]);
+    }
+
+    mapped = plist_map(L, mapper);
+
+    for (size_t i = 0; i < plist_size(L); ++i ) {
+        TEST_ASSERT_EQUAL_INT( *((int*)plist_get(L, i)) * 2,
+                               *((int*)plist_get(mapped, i))
+                              );
+    }
+
+    plist_destroy_all(mapped, free);
+    free(data);
 }
 
 int main(void)
@@ -181,7 +212,8 @@ int main(void)
     RUN_TEST(test_add_ShouldAddANewElement);
     RUN_TEST(test_add_ShouldAddANewElementAndCheckIt);
     RUN_TEST(test_add_ShouldAddANewElementInTheMiddleOfAList);
-    RUN_TEST(test_add_ShouldNotAddANewElementOutOfIndexInAnEmptyList);
+    RUN_TEST(test_add_ShouldNotAddANewElementOutOfIndexBoundFromAnEmptyList);
+    RUN_TEST(test_map_ShouldReturnATransformedList);
 
     return UNITY_END();
 }
