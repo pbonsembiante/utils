@@ -369,7 +369,7 @@ plist_list *plist_filter(plist_list *self, plist_evaluator condition);
  * __Detail:__
  *
  * This function returns a new list containing all the elements in \self self
- * tran through \transformer transformer.
+ * ran through \transformer transformer.
  *
  */
 plist_list *plist_map(plist_list *self, plist_transformer transformer);
