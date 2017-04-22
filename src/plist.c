@@ -296,8 +296,8 @@ plist_list *plist_filter(plist_list *self, plist_evaluator condition)
     plinked_node *element = self->head;
 
     while (element) {
-        if(condition(element)) {
-            plist_append(filtered, element);
+        if(condition(element->data)) {
+            plist_append(filtered, element->data);
         }
 
         element = element->next;
