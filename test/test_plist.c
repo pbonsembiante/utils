@@ -9,20 +9,15 @@ int *data = 0;
 /*
 void f(void)
 {
-    plist_all_match();
-    plist_any_match();
     plist_clean_destroying_data();
-    plist_count_matching();
     plist_destroy();
     plist_destroy_all();
-    plist_filter();
     plist_find();
     plist_get();
     plist_get_elements();
     plist_get_removing_elements();
     plist_is_empty();
     plist_iterate();
-    plist_map();
     plist_merge();
     plist_prepend();
     plist_remove();
@@ -32,8 +27,6 @@ void f(void)
     plist_replace();
     plist_replace_and_destroy();
     plist_size();
-    plist_sort();
-}
 */
 void *mapper(void *_orig);
 bool comp(const void *a, const void *b);
@@ -57,6 +50,17 @@ void test_filter_ShouldFilterOutAllEvenNumbersFromList(void);
 void test_filter_ShouldFilterAnEmptyListAndReturnAValidEmptyList(void);
 void test_filter_ShouldFilterAListAndMatchAllItems(void);
 void test_filter_ShoildFilterAListAndMatchNoneAndReturnAnEmptyList(void);
+void test_allMatch_ShouldFilterAListAndAllElementsShouldMatch(void);
+void test_allMatch_ShouldFilterAlistAndNotAllTheElementsWillMatch(void);
+void test_anyMatch_ShouldFilterAListAndAtLeastOneShouldMatch(void);
+void test_anyMatch_ShouldFilterAListAndNoElementShouldMatch(void);
+void test_countMatch_ShouldCountAllEvenNumbersAndShouldBeGreaterThanZero(void);
+void test_countMatch_ShouldCountEvenNumbersAndResultShouldBeZero(void);
+void test_countMatch_ShouldCountEvenNumbersAndResultShouldBeHalfListSize(void);
+void test_size_ShouldBeZeroForANewList(void);
+void test_size_ShouldBeEqualToTheNumberOfAddedElements(void);
+void test_size_ShouldBeZeroForACleanList(void);
+void test_size_ShouldNotBeZeroAfterAddingElements(void);
 
 int main(void)
 {
@@ -70,14 +74,21 @@ int main(void)
     RUN_TEST(test_add_ShouldAddANewElementInTheMiddleOfAList);
     RUN_TEST(test_add_ShouldNotAddANewElementOutOfIndexBoundFromAnEmptyList);
     RUN_TEST(test_map_ShouldReturnATransformedList);
+    RUN_TEST(test_map_ShouldMapAnEmptyListAndReturnANewValidEmptyList);
     RUN_TEST(test_append_ShouldAddAnElementToTheEndOfList);
     RUN_TEST(test_append_ShouldAddAnElementToAnEmptyList);
     RUN_TEST(test_clean_ShouldEmptyALoadedList);
-    RUN_TEST(test_map_ShouldMapAnEmptyListAndReturnANewValidEmptyList);
     RUN_TEST(test_filter_ShoildFilterAListAndMatchNoneAndReturnAnEmptyList);
     RUN_TEST(test_filter_ShouldFilterAListAndMatchAllItems);
     RUN_TEST(test_filter_ShouldFilterAnEmptyListAndReturnAValidEmptyList);
     RUN_TEST(test_filter_ShouldFilterOutAllEvenNumbersFromList);
+    RUN_TEST(test_allMatch_ShouldFilterAListAndAllElementsShouldMatch);
+    RUN_TEST(test_allMatch_ShouldFilterAlistAndNotAllTheElementsWillMatch);
+    RUN_TEST(test_anyMatch_ShouldFilterAListAndAtLeastOneShouldMatch);
+    RUN_TEST(test_anyMatch_ShouldFilterAListAndNoElementShouldMatch);
+    RUN_TEST(test_countMatch_ShouldCountAllEvenNumbersAndShouldBeGreaterThanZero);
+    RUN_TEST(test_countMatch_ShouldCountEvenNumbersAndResultShouldBeHalfListSize);
+    RUN_TEST(test_countMatch_ShouldCountEvenNumbersAndResultShouldBeZero);
     return UNITY_END();
 }
 
@@ -327,4 +338,75 @@ void test_filter_ShoildFilterAListAndMatchNoneAndReturnAnEmptyList(void)
     TEST_ASSERT_NOT_NULL(filtered);
     TEST_ASSERT_TRUE(plist_size(filtered) == 0);
     plist_destroy(filtered);
+}
+
+void test_allMatch_ShouldFilterAListAndAllElementsShouldMatch(void)
+{
+    for ( size_t i = 0; i < DATA_ARRAY_LEN; ++i) {
+        data[i] = ((i + 1) * 2);
+        plist_append(L, &data[i]);
+    }
+
+    TEST_ASSERT_TRUE(plist_all_match(L, isEven));
+}
+
+void test_allMatch_ShouldFilterAlistAndNotAllTheElementsWillMatch(void)
+{
+    for ( size_t i = 0; i < DATA_ARRAY_LEN; ++i) {
+        data[i] = ((i + 1) * 2) - 1;
+        plist_append(L, &data[i]);
+    }
+
+    TEST_ASSERT_FALSE(plist_all_match(L, isEven));
+}
+
+void test_anyMatch_ShouldFilterAListAndAtLeastOneShouldMatch(void)
+{
+    for ( size_t i = 0; i < DATA_ARRAY_LEN; ++i) {
+        data[i] = (i + 1);
+        plist_append(L, &data[i]);
+    }
+
+    TEST_ASSERT_TRUE(plist_any_match(L, isEven));
+}
+
+void test_anyMatch_ShouldFilterAListAndNoElementShouldMatch(void)
+{
+    for ( size_t i = 0; i < DATA_ARRAY_LEN; ++i) {
+        data[i] = ((i + 1) * 2) - 1;
+        plist_append(L, &data[i]);
+    }
+
+    TEST_ASSERT_FALSE(plist_any_match(L, isEven));
+}
+
+void test_countMatch_ShouldCountAllEvenNumbersAndShouldBeGreaterThanZero(void)
+{
+    for ( size_t i = 0; i < DATA_ARRAY_LEN; ++i) {
+        data[i] = (i + 1);
+        plist_append(L, &data[i]);
+    }
+
+    TEST_ASSERT_TRUE( plist_count_matching(L, isEven) > 0 );
+}
+
+void test_countMatch_ShouldCountEvenNumbersAndResultShouldBeZero(void)
+{
+    for ( size_t i = 0; i < DATA_ARRAY_LEN; ++i) {
+        data[i] = ((i + 1) * 2) - 1;
+        plist_append(L, &data[i]);
+    }
+
+    TEST_ASSERT_EQUAL_INT( 0, plist_count_matching(L, isEven));
+}
+
+void test_countMatch_ShouldCountEvenNumbersAndResultShouldBeHalfListSize(void)
+{
+    for ( size_t i = 0; i < DATA_ARRAY_LEN; ++i) {
+        data[i] = (i + 1);
+        plist_append(L, &data[i]);
+    }
+
+    TEST_ASSERT_EQUAL_INT( DATA_ARRAY_LEN  / 2,
+                           plist_count_matching(L, isEven));
 }
