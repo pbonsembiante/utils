@@ -62,7 +62,7 @@ extern "C" {
 typedef struct PEXCEPT_FRAME_T PEXCEPT_FRAME_T;
 struct PEXCEPT_FRAME_T
 {
-    jmp_buf *pframe;
+    jmp_buf *frame;
     PEXCEPT_T volatile exception;
 };
 
