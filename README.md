@@ -38,39 +38,17 @@ WIP
 
 ## Motivation
 
-I've started this as an utilitary for another project which got dropped after a while. I've found some of the code and decided to upload it to share it and keep improving it over time. 
+I've started this as an utilitarian for another project which got dropped after a while. I've found some of the code and decided to upload it to share it and keep improving it over time.
 
 I've learned (ok, still learning) how to use Autotools thanks to this little lib. Since I had no previous experience with it, any contributions are welcome. 
+
+Moved to [CMake](https://cmake.org) build system since it can target various systems easily.
 
 Please, feel free to PR :)
 
 ## Installation
 
-
-To build the library run the following (you will need to have installed libtool): 
-    
-    > git clone git@github.com:Phanatos-/utils.git
-    > autoreconf -fi
-    > ./configure
-    > make 
-
-You should set a few flags (at least `-std=c11`) to do that use either:
-   
-    > ./configure CFLAGS='-std=c11'
-
-or 
-
-    > make CFLAGS='-std=c11'
-
-To run the tests run: 
-
-    > make check
-
-It will build and run all the tests for the library. 
-
-If you want to install the library you must have the required permisions:
-
-    > sudo make install
+WIP for CMake.... I'll update soon.
 
 ## API Reference
 
