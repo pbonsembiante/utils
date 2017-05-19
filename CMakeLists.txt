@@ -1,7 +1,8 @@
 cmake_minimum_required(VERSION 3.7)
 project(putils)
 
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_C_STANDARD 11)
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 set(PUTILS_SOURCES
         include/putils/pdict.h
@@ -34,11 +35,8 @@ include_directories(include/putils)
 include_directories(vendor/unity/src)
 
 add_library(putilsobj OBJECT ${PUTILS_SOURCES})
-set_property(TARGET ${putilsobj} PROPERTY POSITION_INDEPENDENT_CODE 1)
-
 add_library(putils_shared SHARED $<TARGET_OBJECTS:putilsobj>)
 add_library(putils_static STATIC $<TARGET_OBJECTS:putilsobj>)
-
 add_library(unitylib STATIC ${UNITY_SOURCES})
 
 add_executable(test_plist
