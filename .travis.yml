@@ -1,16 +1,11 @@
 dist: trusty
-
 sudo: required
-
 language: c
-
 compiler:
   - gcc
   - clang
-
 before_script:
     - mkdir build
     - cd build
     - cmake ..
-
 script: make
