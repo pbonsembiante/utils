@@ -5,7 +5,8 @@ compiler:
   - gcc
   - clang
 before_script:
-    - sudo apt upgrade cmake
+    - sudo apt update
+    - sudo apt full-upgrade
     - mkdir build
     - cd build
     - cmake ..
