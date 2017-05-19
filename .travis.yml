@@ -1,8 +1,16 @@
 dist: trusty
+
 sudo: required
+
 language: c
+
 compiler:
   - gcc
   - clang
-script: autoreconf -fi && ./configure CFLAGS='-std=c11 -Wall -Wextra' && make && make check  
 
+before_script:
+    - mkdir build
+    - cd build
+    - cmake ..
+
+script: make
