@@ -65,5 +65,5 @@ add_test(TEST_PLIST test_plist)
 add_test(TEST_PLIST test_pstack)
 add_test(TEST_PLIST test_pqueue)
 
-install(TARGETS putils_static putils_shared DESTINATION bin )
+install(TARGETS putils_static putils_shared DESTINATION lib )
 install(FILES ${PUTILS_HEADERS} DESTINATION include)
