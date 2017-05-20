@@ -62,8 +62,8 @@ target_link_libraries(test_pqueue
 
 enable_testing()
 add_test(TEST_PLIST test_plist)
-add_test(TEST_PLIST test_pstack)
-add_test(TEST_PLIST test_pqueue)
+add_test(TEST_PSTACK test_pstack)
+add_test(TEST_PQUEUE test_pqueue)
 
 install(TARGETS putils_static putils_shared DESTINATION lib )
 install(FILES ${PUTILS_HEADERS} DESTINATION include)
