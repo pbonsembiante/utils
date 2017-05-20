@@ -10,18 +10,18 @@ matrix:
         apt:
           sources:
             - ubuntu-toolchain-r-test
-            - george-edison55/precise-backports
+            - sourceline: 'deb http://ppa.launchpad.net/george-edison55/precise-backports/ubuntu precise main'
           packages:
-            - gcc-7
+            - gcc-6
             - cmake
-      env: COMPILER=gcc-7
+      env: COMPILER=gcc-6
     - compiler: clang
       addons:
         apt:
           sources:
             - ubuntu-toolchain-r-test
             - llvm-toolchain-precise-4.0
-            - george-edison55/precise-backports
+            - sourceline: 'deb http://ppa.launchpad.net/george-edison55/precise-backports/ubuntu precise main'
           packages:
             - clang-4.0
             - cmake
