@@ -1,13 +1,39 @@
-dist: trusty
+# Use new trusty images, should yield newer compilers and packages
 sudo: required
+dist: precise
 language: c
-compiler:
-  - gcc
-  - clang
-before_script:
-    - sudo apt update
-    - sudo apt full-upgrade
-    - mkdir build
-    - cd build
-    - cmake ..
-script: make
+
+matrix:
+  include:
+    - compiler: gcc
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+            - george-edison55/precise-backports
+          packages:
+            - gcc-7
+            - cmake
+      env: COMPILER=gcc-7
+    - compiler: clang
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+            - llvm-toolchain-precise-4.0
+            - george-edison55/precise-backports
+          packages:
+            - clang-4.0
+            - cmake
+      env: COMPILER=clang-4.0
+
+before_install:
+  - sudo apt-get update -qq
+script:
+  - mkdir build
+  - cd build
+  - cmake -DCMAKE_C_COMPILER=$COMPILER .. && make
+  - ./test_plist
+  - ./test_pstack
+  - ./test_pqueue
+  
