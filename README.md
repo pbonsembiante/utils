@@ -66,5 +66,4 @@ I'm slowly writing the tests for every functionality and probably won't write ne
 * Dipiert 
 
 ## License
-
-I'm releasing this code under [The GNU General Public License v3](./COPYING) so everybody can use and contributy freely.
+Putils is released under [The GNU General Public License v3](./COPYING) so everybody can use and contribute freely.
