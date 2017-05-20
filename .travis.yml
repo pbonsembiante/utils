@@ -1,30 +1,21 @@
-# Use new trusty images, should yield newer compilers and packages
 sudo: required
 dist: precise
 language: c
 
 matrix:
   include:
-    - compiler: gcc
+    - compiler: gcc-6
       addons:
         apt:
-          sources:
-            - ubuntu-toolchain-r-test
-            - sourceline: 'deb http://ppa.launchpad.net/george-edison55/precise-backports/ubuntu precise main'
-          packages:
-            - gcc-6
-            - cmake
+          sources: [ 'ubuntu-toolchain-r-test', 'george-edison55-precise-backports' ]
+          packages: [ 'gcc-6', 'cmake', 'cmake-data' ]
       env: COMPILER=gcc-6
-    - compiler: clang
+
+    - compiler: clang-4.0
       addons:
         apt:
-          sources:
-            - ubuntu-toolchain-r-test
-            - llvm-toolchain-precise-4.0
-            - sourceline: 'deb http://ppa.launchpad.net/george-edison55/precise-backports/ubuntu precise main'
-          packages:
-            - clang-4.0
-            - cmake
+          sources: [ 'ubuntu-toolchain-r-test', 'george-edison55-precise-backports' , 'llvm-toolchain-precise-4.0' ]
+          packages: [ 'clang-4.0', 'cmake', 'cmake-data' ]
       env: COMPILER=clang-4.0
 
 before_install:
