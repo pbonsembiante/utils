@@ -65,6 +65,6 @@ Thumbs.db
 # Python byte code
 *.pyc
 
-.idea/*
 cmake-build-debug/
 cmake-build-release/
+.idea/
