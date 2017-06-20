@@ -183,9 +183,7 @@ void *plist_remove(plist_list *self, size_t index)
     }
 
     self->elements_count--;
-    if (aux) {
-        free(aux);
-    }
+    free(aux);
 
     return data;
 }

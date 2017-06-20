@@ -1,5 +1,5 @@
-#ifndef _PLISTS_H_
-#define _PLISTS_H_
+#ifndef _PLIST_H_
+#define _PLIST_H_
 /***************************************************************************
  * Copyright (C) 2016 - 2017 Patricio Bonsembiante. All rights reserved.
  *
@@ -21,7 +21,7 @@
  *
  * Detail:
  *
- * This file contains all the requeried definitions to implement and use the
+ * This file contains all the required definitions to implement and use the
  * library. No internal or implementation details are provided in this headers.
  *
  */
@@ -150,7 +150,7 @@ typedef struct plist_list plist_list;
  * plist_list *L = plist_create();
  *
  * if(L) {
- *      //Now your list is ready to be used, detroy it when you're done with it.
+ *      //Now your list is ready to be used, destroy it when you're done with it.
  * } else {
  *      //Ups, something went wrong!
  * }
@@ -165,7 +165,7 @@ plist_list *plist_create(void);
  * __Detail:__
  *
  * The given list will be destroyed, freeing any node.
- * If the internal data of the list needs to be freed too, [plist_detroy_all]
+ * If the internal data of the list needs to be freed too, [plist_destroy_all]
  * (@ref plist_destroy_all) should be used instead.
  *
  * ~~~~~~~~~~~~~~~{.c}
@@ -265,7 +265,7 @@ void plist_add(plist_list *self, size_t index, void *data);
  *
  * __Detail:__
  *
- * This function will merge the \other other list into the one pointet by \self
+ * This function will merge the \other other list into the one pointed by \self
  * self. Here _merge_ means append \other other to \self self, without
  * performing any sorting.
  *
@@ -396,7 +396,7 @@ void *plist_replace(plist_list *self, size_t index, void *data);
  * \param self: A pointer to the list to transform.
  * \param index:  Index of the element to be replaced.
  * \param data: New data element to be replaced at \index index position:
- * \param element_detroyer: A function to free the replaced element.
+ * \param element_destroyer: A function to free the replaced element.
  *
  * __Detail:__
  *
@@ -547,4 +547,4 @@ size_t plist_prepend(plist_list *self, void *data);
 #define PLIST_GET_PDOUBLE(L, i) ((double*) plist_get(L, i))
 
 
-#endif /* _PLISTS_H_ */
+#endif /* _PLIST_H_ */

@@ -66,7 +66,7 @@ struct PEXCEPT_FRAME_T
     PEXCEPT_T volatile exception;
 };
 
-extern volatile PEXCEPT_FRAME_T pexceptFrames[];
+extern volatile PEXCEPT_FRAME_T pFrames[];
 
 /* *INDENT-OFF* */
 #define Try                                                         \
