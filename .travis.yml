@@ -1,5 +1,5 @@
 sudo: required
-dist: precise
+dist: trusty
 language: c
 
 matrix:
@@ -20,6 +20,7 @@ matrix:
 
 before_install:
   - sudo apt-get update -qq
+
 script:
   - mkdir build
   - cd build
