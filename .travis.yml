@@ -1,25 +1,26 @@
 sudo: required
-dist: precise
+dist: trusty
 language: c
 
 matrix:
   include:
-    - compiler: gcc-6
+    - compiler: gcc-7
       addons:
         apt:
-          sources: [ 'ubuntu-toolchain-r-test', 'george-edison55-precise-backports' ]
-          packages: [ 'gcc-6', 'cmake', 'cmake-data' ]
-      env: COMPILER=gcc-6
+          sources: [ 'ubuntu-toolchain-r-test' ]
+          packages: [ 'gcc-7', 'cmake' ]
+      env: COMPILER=gcc-7
 
-    - compiler: clang-3.8
+    - compiler: clang-3.9
       addons:
         apt:
-          sources: [ 'ubuntu-toolchain-r-test', 'george-edison55-precise-backports' , 'llvm-toolchain-precise-3.8' ]
-          packages: [ 'clang-3.8', 'cmake', 'cmake-data' ]
-      env: COMPILER=clang-3.8
+          sources: [ 'ubuntu-toolchain-r-test' , 'llvm-toolchain-3.9' ]
+          packages: [ 'clang-3.9', 'cmake']
+      env: COMPILER=clang-3.9
 
 before_install:
   - sudo apt-get update -qq
+
 script:
   - mkdir build
   - cd build
