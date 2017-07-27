@@ -85,8 +85,8 @@ extern volatile PEXCEPT_FRAME_T pFrames[];
             pexceptFrames[current].exception = PEXCEPT_NONE;		\
             PEXCEPT_HOOK_HAPPY_TRY;                                 \
         } else {                                                    \
-            e = pexceptFrames[current].exception;					\
-            (void)e;                                                \
+            (e) = pexceptFrames[current].exception;					\
+            (void)(e);                                              \
             PEXCEPT_HOOK_START_CATCH;								\
         }                                                           \
         pexceptFrames[current].pframe = PrevFrame;					\

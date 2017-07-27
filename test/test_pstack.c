@@ -16,9 +16,7 @@
 
 #include "putils/pstack.h"
 #include "unity.h"
-#include <stdbool.h>
 #include <string.h>
-#include <assert.h>
 
 pstack_stack *S = 0;
 

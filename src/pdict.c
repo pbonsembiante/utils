@@ -26,9 +26,9 @@ struct pdict_dictionary
     size_t elements_count;
 };
 
-static unsigned long pdict_hash(unsigned char const *key);
+static unsigned long pdict_hash(unsigned char const *str);
 
-static void pdict_resize(pdict_dictionary *, size_t new_max_size);
+static void pdict_resize(pdict_dictionary *self, size_t new_max_size);
 
 static phashmap_node *pdict_create_element(char *key, unsigned int key_hash, void *data);
 
@@ -40,7 +40,7 @@ static void pdict_destroy_element(phashmap_node *element, void(*data_destroyer)(
 
 static void internal_dictionary_clean_and_destroy_elements(pdict_dictionary *self, void(*data_destroyer)(void *));
 
-static char *pdict_strdup(char const *const str);
+static char *pdict_strdup(char const *str);
 
 pdict_dictionary *pdict_create()
 {
@@ -54,10 +54,11 @@ pdict_dictionary *pdict_create()
 
 void pdict_put(pdict_dictionary *self, char *key, void *data)
 {
-    unsigned int key_hash = pdict_hash((unsigned char *) key);
-    int index = key_hash % self->table_max_size;
+    unsigned long  key_hash = pdict_hash((unsigned char *) key);
+    size_t index = key_hash % self->table_max_size;
 
-    phashmap_node *new_element = pdict_create_element(pdict_strdup(key), key_hash, data);
+    phashmap_node *new_element = pdict_create_element(pdict_strdup(key),
+                                                      (unsigned int) key_hash, data);
 
     phashmap_node *element = self->elements[index];
 
@@ -140,7 +141,7 @@ bool pdict_is_empty(pdict_dictionary *self)
     return self->elements_count == 0;
 }
 
-int pdict_size(pdict_dictionary *self)
+size_t pdict_size(pdict_dictionary *self)
 {
     return self->elements_count;
 }
@@ -172,7 +173,7 @@ static void pdict_resize(pdict_dictionary *self, size_t new_max_size)
 
         while (old_element != 0) {
             // new position
-            int new_index = old_element->hashcode % new_max_size;
+            size_t new_index = old_element->hashcode % new_max_size;
             phashmap_node *new_element = new_table[new_index];
 
             if (new_element == 0) {
@@ -230,8 +231,8 @@ static phashmap_node *pdict_create_element(char *key, unsigned int key_hash, voi
 
 static phashmap_node *pdict_get_element(pdict_dictionary *self, char *key)
 {
-    unsigned int key_hash = pdict_hash((unsigned char *) key);
-    int index = key_hash % self->table_max_size;
+    unsigned long key_hash = pdict_hash((unsigned char *) key);
+    size_t index = key_hash % self->table_max_size;
     phashmap_node *element = self->elements[index];
 
     if (element == 0) {
@@ -249,8 +250,8 @@ static phashmap_node *pdict_get_element(pdict_dictionary *self, char *key)
 
 static void *pdict_remove_element(pdict_dictionary *self, char *key)
 {
-    unsigned int key_hash = pdict_hash((unsigned char *) key);
-    int index = key_hash % self->table_max_size;
+    unsigned long key_hash = pdict_hash((unsigned char *) key);
+    size_t index = key_hash % self->table_max_size;
     phashmap_node *element = self->elements[index];
 
     if (element == 0) {

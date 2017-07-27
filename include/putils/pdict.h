@@ -46,7 +46,7 @@ bool pdict_has_key(pdict_dictionary *self, char *key);
 
 bool pdict_is_empty(pdict_dictionary *self);
 
-int pdict_size(pdict_dictionary *self);
+size_t pdict_size(pdict_dictionary *self);
 
 void pdict_destroy(pdict_dictionary *self);
 

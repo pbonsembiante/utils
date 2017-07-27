@@ -17,7 +17,6 @@
 #include "putils/pqueue.h"
 #include "unity.h"
 #include <string.h>
-#include <assert.h>
 
 pqueue_queue *Q = 0;
 
@@ -92,6 +91,7 @@ int main(void)
 
     RUN_TEST(test_create_ShouldCreateAnEmptyQueue);
     RUN_TEST(test_create_ShouldCreateAnEmptyQueue);
+    RUN_TEST(test_create_ShouldCreateAZeroSizeQueue);
     RUN_TEST(test_dequeue_ShouldNotDequeueFromAnEmptyQueue);
     RUN_TEST(test_dequeue_ShouldRemoveAnElementFromTheQueue);
     RUN_TEST(test_enqueue_ShouldAppendAnElementToTheQueue);
