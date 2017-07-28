@@ -30,4 +30,5 @@ script:
   - cmake -DCMAKE_C_COMPILER=$COMPILER -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=ON .. && make -j 4
   - cd test
   - ctest -j 4
+  - cd ../..
   
