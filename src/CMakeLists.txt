@@ -1,6 +1,9 @@
 include_directories(${CMAKE_SOURCE_DIR}/include)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
+set(CMAKE_C_FLAGS_DEBUG  "${CMAKE_C_FLAGS_DEBUG} -coverage -O0" )
+set(CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} -lgcov" )
+
 set(PUTILS_SOURCES
         ${CMAKE_SOURCE_DIR}/include/putils/pdict.h
         ${CMAKE_SOURCE_DIR}/include/putils/pexcept.h

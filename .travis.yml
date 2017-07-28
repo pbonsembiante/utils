@@ -21,11 +21,13 @@ matrix:
 before_install:
   - sudo apt-get update -qq
 
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
+
 script:
   - mkdir build
   - cd build
-  - cmake -DCMAKE_C_COMPILER=$COMPILER .. && make
-  - ./test/test_plist
-  - ./test/test_pstack
-  - ./test/test_pqueue
+  - cmake -DCMAKE_C_COMPILER=$COMPILER -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=ON .. && make -j 4
+  - cd test
+  - ctest -j 4
   
