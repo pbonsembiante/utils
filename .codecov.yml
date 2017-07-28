@@ -27,4 +27,4 @@ comment:
 
 ignore:
   - vendor/.*
-  - *unity*
+  - .*unity.*
