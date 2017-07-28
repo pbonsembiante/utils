@@ -16,60 +16,60 @@
 #include "putils/pqueue.h"
 #include "putils/plist.h"
 
-struct pqueue_queue
+struct pqueue
 {
-    plist_list *list;
+    plist *list;
 };
 
-pqueue_queue *pqueue_create()
+pqueue *pqueue_create()
 {
-    pqueue_queue *q = calloc(1, sizeof(pqueue_queue));
+    pqueue *q = calloc(1, sizeof(pqueue));
     q->list = plist_create();
     return q;
 }
 
-size_t pqueue_enqueue(pqueue_queue *self, void *data)
+size_t pqueue_enqueue(pqueue *self, void *data)
 {
     return plist_append(self->list, data);
 }
 
-void *pqueue_dequeue(pqueue_queue *self)
+void *pqueue_dequeue(pqueue *self)
 {
     return plist_remove(self->list, 0);
 }
 
-void *pqueue_peek(pqueue_queue *self)
+void *pqueue_peek(pqueue *self)
 {
     return plist_get(self->list, 0);
 }
 
-size_t pqueue_size(pqueue_queue *self)
+size_t pqueue_size(pqueue *self)
 {
     return plist_size(self->list);
 }
 
-bool pqueue_is_empty(pqueue_queue *self)
+bool pqueue_is_empty(pqueue *self)
 {
     return plist_is_empty(self->list);
 }
 
-void pqueue_clean(pqueue_queue *self)
+void pqueue_clean(pqueue *self)
 {
     plist_clean(self->list);
 }
 
-void pqueue_clean_destroying_data(pqueue_queue *self, plist_destroyer destroyer)
+void pqueue_clean_destroying_data(pqueue *self, plist_destroyer destroyer)
 {
     plist_clean_destroying_data(self->list, destroyer);
 }
 
-void pqueue_destroy(pqueue_queue *self)
+void pqueue_destroy(pqueue *self)
 {
     plist_destroy(self->list);
     free(self);
 }
 
-void pqueue_destroy_all(pqueue_queue *self, pqueue_destroyer destroyer)
+void pqueue_destroy_all(pqueue *self, pqueue_destroyer destroyer)
 {
     plist_destroy_all(self->list, destroyer);
     free(self);

@@ -18,7 +18,7 @@
 #include "unity.h"
 #include <string.h>
 
-pqueue_queue *Q = 0;
+pqueue *Q = 0;
 
 void setUp(void)
 {

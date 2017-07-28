@@ -22,35 +22,35 @@
 #include <stdbool.h>
 
 
-typedef struct pdict_dictionary pdict_dictionary;
+typedef struct pdict pdict;
 
-pdict_dictionary *pdict_create();
+pdict *pdict_create();
 
-void pdict_put(pdict_dictionary *self, char *key, void *data);
+void pdict_put(pdict *self, char *key, void *data);
 
-void *pdict_get(pdict_dictionary *self, char *key);
+void *pdict_get(pdict *self, char *key);
 
-void *pdict_remove(pdict_dictionary *self, char *key);
+void *pdict_remove(pdict *self, char *key);
 
-void pdict_remove_and_destroy(pdict_dictionary *self, char *key,
+void pdict_remove_and_destroy(pdict *self, char *key,
                               void(*data_destroyer)(void *));
 
-void pdict_iterator(pdict_dictionary *self, void(*closure)(char *, void *));
+void pdict_iterator(pdict *self, void(*closure)(char *, void *));
 
-void pdict_clean(pdict_dictionary *self);
+void pdict_clean(pdict *self);
 
-void pdict_clean_and_destroy_elements(pdict_dictionary *self,
+void pdict_clean_and_destroy_elements(pdict *self,
                                       void(*destroyer)(void *));
 
-bool pdict_has_key(pdict_dictionary *self, char *key);
+bool pdict_has_key(pdict *self, char *key);
 
-bool pdict_is_empty(pdict_dictionary *self);
+bool pdict_is_empty(pdict *self);
 
-size_t pdict_size(pdict_dictionary *self);
+size_t pdict_size(pdict *self);
 
-void pdict_destroy(pdict_dictionary *self);
+void pdict_destroy(pdict *self);
 
-void pdict_destroy_and_destroy_elements(pdict_dictionary *self,
+void pdict_destroy_and_destroy_elements(pdict *self,
                                         void(*destroyer)(void *));
 
 #endif /* _DICTIONARY_H_ */

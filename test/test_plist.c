@@ -3,7 +3,7 @@
 
 #define DATA_ARRAY_LEN 10
 
-plist_list *L = 0;
+plist *L = 0;
 size_t *data = 0;
 
 /*
@@ -284,7 +284,7 @@ void test_add_ShouldNotAddANewElementOutOfIndexBoundFromAnEmptyList(void) {
 }
 
 void test_map_ShouldReturnATransformedList(void) {
-    plist_list *mapped = 0;
+    plist *mapped = 0;
 
     for (size_t i = 0; i < DATA_ARRAY_LEN; ++i) {
         data[i] = i + 1;
@@ -302,7 +302,7 @@ void test_map_ShouldReturnATransformedList(void) {
 }
 
 void test_map_ShouldMapAnEmptyListAndReturnANewValidEmptyList() {
-    plist_list *mapped = 0;
+    plist *mapped = 0;
     mapped = plist_map(L, mapper);
     TEST_ASSERT_NOT_NULL(mapped);
     TEST_ASSERT_TRUE(plist_is_empty(mapped));
@@ -343,7 +343,7 @@ void test_clean_ShouldEmptyALoadedList() {
 }
 
 void test_filter_ShouldFilterOutAllEvenNumbersFromList(void) {
-    plist_list *filtered = 0;
+    plist *filtered = 0;
 
     for (size_t i = 0; i < DATA_ARRAY_LEN; ++i) {
         data[i] = i + 1;
@@ -360,14 +360,14 @@ void test_filter_ShouldFilterOutAllEvenNumbersFromList(void) {
 }
 
 void test_filter_ShouldFilterAnEmptyListAndReturnAValidEmptyList(void) {
-    plist_list *filtered = plist_filter(L, isEven);
+    plist *filtered = plist_filter(L, isEven);
     TEST_ASSERT_NOT_NULL(filtered);
     TEST_ASSERT_TRUE(plist_size(filtered) == 0);
     plist_destroy(filtered);
 }
 
 void test_filter_ShouldFilterAListAndMatchAllItems(void) {
-    plist_list *filtered = 0;
+    plist *filtered = 0;
 
     for (size_t i = 0; i < DATA_ARRAY_LEN; ++i) {
         data[i] = (i + 1) * 2;
@@ -388,7 +388,7 @@ void test_filter_ShouldFilterAListAndMatchAllItems(void) {
 }
 
 void test_filter_ShoildFilterAListAndMatchNoneAndReturnAnEmptyList(void) {
-    plist_list *filtered = 0;
+    plist *filtered = 0;
 
     for (size_t i = 0; i < DATA_ARRAY_LEN; ++i) {
         data[i] = ((i + 1) * 2) - 1;
@@ -502,7 +502,7 @@ void test_get_ShouldGetTheTailElementFromTheList(void) {
 }
 
 void test_merge_ShouldMergeTwoLists(void) {
-    plist_list *temp = plist_create();
+    plist *temp = plist_create();
     size_t *val = calloc(DATA_ARRAY_LEN, sizeof(size_t));
 
     for (size_t i = 0; i < DATA_ARRAY_LEN; ++i) {
@@ -523,7 +523,7 @@ void test_merge_ShouldMergeTwoLists(void) {
 }
 
 void test_merge_ShouldMergeShouldHandleAnEmptyListAsSecondParameter(void) {
-    plist_list *temp = plist_create();
+    plist *temp = plist_create();
 
     for (size_t i = 0; i < DATA_ARRAY_LEN; ++i) {
         data[i] = i + 1;
@@ -540,7 +540,7 @@ void test_merge_ShouldMergeShouldHandleAnEmptyListAsSecondParameter(void) {
 }
 
 void test_merge_ShouldMergeShouldHandleAnEmptyListAsFirstParameter(void) {
-    plist_list *temp = plist_create();
+    plist *temp = plist_create();
 
     for (size_t i = 0; i < DATA_ARRAY_LEN; ++i) {
         data[i] = i + 1;

@@ -18,7 +18,7 @@
 #include <string.h>
 #include "putils/pdict.h"
 
-struct pdict_dictionary
+struct pdict
 {
     phashmap_node **elements;
     size_t table_max_size;
@@ -28,23 +28,23 @@ struct pdict_dictionary
 
 static unsigned long pdict_hash(unsigned char const *str);
 
-static void pdict_resize(pdict_dictionary *self, size_t new_max_size);
+static void pdict_resize(pdict *self, size_t new_max_size);
 
 static phashmap_node *pdict_create_element(char *key, unsigned int key_hash, void *data);
 
-static phashmap_node *pdict_get_element(pdict_dictionary *self, char *key);
+static phashmap_node *pdict_get_element(pdict *self, char *key);
 
-static void *pdict_remove_element(pdict_dictionary *self, char *key);
+static void *pdict_remove_element(pdict *self, char *key);
 
 static void pdict_destroy_element(phashmap_node *element, void(*data_destroyer)(void *));
 
-static void internal_dictionary_clean_and_destroy_elements(pdict_dictionary *self, void(*data_destroyer)(void *));
+static void internal_dictionary_clean_and_destroy_elements(pdict *self, void(*data_destroyer)(void *));
 
 static char *pdict_strdup(char const *str);
 
-pdict_dictionary *pdict_create()
+pdict *pdict_create()
 {
-    pdict_dictionary *self = calloc(1, sizeof(pdict_dictionary));
+    pdict *self = calloc(1, sizeof(pdict));
     self->table_max_size = PDICT_INITIAL_SIZE;
     self->elements = calloc(self->table_max_size, sizeof(phashmap_node));
     self->table_current_size = 0;
@@ -52,7 +52,7 @@ pdict_dictionary *pdict_create()
     return self;
 }
 
-void pdict_put(pdict_dictionary *self, char *key, void *data)
+void pdict_put(pdict *self, char *key, void *data)
 {
     unsigned long  key_hash = pdict_hash((unsigned char *) key);
     size_t index = key_hash % self->table_max_size;
@@ -80,13 +80,13 @@ void pdict_put(pdict_dictionary *self, char *key, void *data)
     self->elements_count++;
 }
 
-void *pdict_get(pdict_dictionary *self, char *key)
+void *pdict_get(pdict *self, char *key)
 {
     phashmap_node *element = pdict_get_element(self, key);
     return element ? element->data : 0;
 }
 
-void *pdict_remove(pdict_dictionary *self, char *key)
+void *pdict_remove(pdict *self, char *key)
 {
     void *data = pdict_remove_element(self, key);
 
@@ -97,7 +97,7 @@ void *pdict_remove(pdict_dictionary *self, char *key)
     return data;
 }
 
-void pdict_remove_and_destroy(pdict_dictionary *self, char *key, void(*data_destroyer)(void *))
+void pdict_remove_and_destroy(pdict *self, char *key, void(*data_destroyer)(void *))
 {
     void *data = pdict_remove_element(self, key);
 
@@ -107,7 +107,7 @@ void pdict_remove_and_destroy(pdict_dictionary *self, char *key, void(*data_dest
     }
 }
 
-void pdict_iterator(pdict_dictionary *self, void(*closure)(char *, void *))
+void pdict_iterator(pdict *self, void(*closure)(char *, void *))
 {
     int table_index;
 
@@ -121,46 +121,46 @@ void pdict_iterator(pdict_dictionary *self, void(*closure)(char *, void *))
     }
 }
 
-void pdict_clean(pdict_dictionary *self)
+void pdict_clean(pdict *self)
 {
     internal_dictionary_clean_and_destroy_elements(self, 0);
 }
 
-void pdict_clean_and_destroy_elements(pdict_dictionary *self, void(*destroyer)(void *))
+void pdict_clean_and_destroy_elements(pdict *self, void(*destroyer)(void *))
 {
     internal_dictionary_clean_and_destroy_elements(self, destroyer);
 }
 
-bool pdict_has_key(pdict_dictionary *self, char *key)
+bool pdict_has_key(pdict *self, char *key)
 {
     return pdict_get_element(self, key) != 0;
 }
 
-bool pdict_is_empty(pdict_dictionary *self)
+bool pdict_is_empty(pdict *self)
 {
     return self->elements_count == 0;
 }
 
-size_t pdict_size(pdict_dictionary *self)
+size_t pdict_size(pdict *self)
 {
     return self->elements_count;
 }
 
-void pdict_destroy(pdict_dictionary *self)
+void pdict_destroy(pdict *self)
 {
     pdict_clean(self);
     free(self->elements);
     free(self);
 }
 
-void pdict_destroy_and_destroy_elements(pdict_dictionary *self, void(*destroyer)(void *))
+void pdict_destroy_and_destroy_elements(pdict *self, void(*destroyer)(void *))
 {
     pdict_clean_and_destroy_elements(self, destroyer);
     free(self->elements);
     free(self);
 }
 
-static void pdict_resize(pdict_dictionary *self, size_t new_max_size)
+static void pdict_resize(pdict *self, size_t new_max_size)
 {
     phashmap_node **new_table = calloc(new_max_size, sizeof(phashmap_node *));
     phashmap_node **old_table = self->elements;
@@ -198,7 +198,7 @@ static void pdict_resize(pdict_dictionary *self, size_t new_max_size)
     free(old_table);
 }
 
-static void internal_dictionary_clean_and_destroy_elements(pdict_dictionary *self, void(*data_destroyer)(void *))
+static void internal_dictionary_clean_and_destroy_elements(pdict *self, void(*data_destroyer)(void *))
 {
     int table_index;
 
@@ -229,7 +229,7 @@ static phashmap_node *pdict_create_element(char *key, unsigned int key_hash, voi
     return element;
 }
 
-static phashmap_node *pdict_get_element(pdict_dictionary *self, char *key)
+static phashmap_node *pdict_get_element(pdict *self, char *key)
 {
     unsigned long key_hash = pdict_hash((unsigned char *) key);
     size_t index = key_hash % self->table_max_size;
@@ -248,7 +248,7 @@ static phashmap_node *pdict_get_element(pdict_dictionary *self, char *key)
     return 0;
 }
 
-static void *pdict_remove_element(pdict_dictionary *self, char *key)
+static void *pdict_remove_element(pdict *self, char *key)
 {
     unsigned long key_hash = pdict_hash((unsigned char *) key);
     size_t index = key_hash % self->table_max_size;
@@ -312,7 +312,7 @@ static unsigned long pdict_hash(unsigned char const *str)
 static char *pdict_strdup(char const *const str)
 {
     size_t len = strlen(str);
-    char *s = calloc(len, sizeof(char) + 1);
+    char *s = calloc(len+1, sizeof(char));
 
     memcpy(s, str, len);
     s[len] = 0;

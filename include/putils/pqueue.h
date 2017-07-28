@@ -34,7 +34,7 @@
  * All functions provided know how to handle the structure properly.
  *
  */
-typedef struct pqueue_queue pqueue_queue;
+typedef struct pqueue pqueue;
 
 typedef void (*pqueue_destroyer)(void *);
 
@@ -42,7 +42,7 @@ typedef void (*pqueue_destroyer)(void *);
  * \brief pqueue_create
  * \return
  */
-pqueue_queue *pqueue_create(void);
+pqueue *pqueue_create(void);
 
 /*!
  * \brief pqueue_enqueue
@@ -50,62 +50,62 @@ pqueue_queue *pqueue_create(void);
  * \param data
  * \return
  */
-size_t pqueue_enqueue(pqueue_queue *self, void *data);
+size_t pqueue_enqueue(pqueue *self, void *data);
 
 /*!
  * \brief pqueue_dequeue
  * \param self
  * \return
  */
-void *pqueue_dequeue(pqueue_queue *self);
+void *pqueue_dequeue(pqueue *self);
 
 /*!
  * \brief pqueue_peek
  * \param self
  * \return
  */
-void *pqueue_peek(pqueue_queue *self);
+void *pqueue_peek(pqueue *self);
 
 /*!
  * \brief pqueue_size
  * \param self
  * \return
  */
-size_t pqueue_size(pqueue_queue *self);
+size_t pqueue_size(pqueue *self);
 
 /*!
  * \brief pqueue_is_empty
  * \param self
  * \return
  */
-bool pqueue_is_empty(pqueue_queue *self);
+bool pqueue_is_empty(pqueue *self);
 
 /*!
  * \brief pqueue_clean
  * \param self
  */
-void pqueue_clean(pqueue_queue *self);
+void pqueue_clean(pqueue *self);
 
 /*!
  * \brief pqueue_clean_destroying_data
  * \param self
  * \param destroyer
  */
-void pqueue_clean_destroying_data(pqueue_queue *self,
+void pqueue_clean_destroying_data(pqueue *self,
                                   pqueue_destroyer destroyer);
 
 /*!
  * \brief pqueue_destroy
  * \param self
  */
-void pqueue_destroy(pqueue_queue *self);
+void pqueue_destroy(pqueue *self);
 
 /*!
  * \brief pqueue_destroy_all
  * \param self
  * \param destroyer
  */
-void pqueue_destroy_all(pqueue_queue *self, pqueue_destroyer destroyer);
+void pqueue_destroy_all(pqueue *self, pqueue_destroyer destroyer);
 
 
 #endif /* _PQUEUE_H_ */

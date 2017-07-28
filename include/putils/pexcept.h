@@ -49,8 +49,8 @@ extern "C" {
 #ifndef PEXCEPT_HOOK_START_TRY
 #define PEXCEPT_HOOK_START_TRY
 #endif
-#ifndef PEXCEPT_HOOK_HAPPY_TRY
-#define PEXCEPT_HOOK_HAPPY_TRY
+#ifndef PEXCEPT_HOOK_SUCCESS_TRY
+#define PEXCEPT_HOOK_SUCCESS_TRY
 #endif
 #ifndef PEXCEPT_HOOK_AFTER_TRY
 #define PEXCEPT_HOOK_AFTER_TRY
@@ -83,7 +83,7 @@ extern volatile PEXCEPT_FRAME_T pFrames[];
 #define Catch(e)                                                    \
             else { }                                                \
             pexceptFrames[current].exception = PEXCEPT_NONE;		\
-            PEXCEPT_HOOK_HAPPY_TRY;                                 \
+            PEXCEPT_HOOK_SUCCESS_TRY;                                 \
         } else {                                                    \
             (e) = pexceptFrames[current].exception;					\
             (void)(e);                                              \

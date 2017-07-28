@@ -18,7 +18,7 @@
 #include "unity.h"
 #include <string.h>
 
-pstack_stack *S = 0;
+pstack *S = 0;
 
 void setUp(void)
 {
