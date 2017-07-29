@@ -46,9 +46,15 @@ void test_sort_ShouldOrderShuffledList(void);
 
 void test_add_ShouldAddANewElement(void);
 
+void test_sort_ShouldOrderAOneItemList(void);
+
+void test_sort_ShouldHandleAnEmptyList(void);
+
 void test_add_ShouldAddANewElementAndCheckIt(void);
 
 void test_add_ShouldAddANewElementInTheMiddleOfAList(void);
+
+void test_add_ShouldAddANewElementAtTheEndOfAList(void);
 
 void test_add_ShouldNotAddANewElementOutOfIndexBoundFromAnEmptyList(void);
 
@@ -109,37 +115,50 @@ int main(void) {
 
     RUN_TEST(test_create_NewListShouldBeEmpty);
     RUN_TEST(test_create_NewListShouldNotBeNull);
+
     RUN_TEST(test_size_SizeOfNewListWithOneItemShouldBeOne);
     RUN_TEST(test_size_ShouldBeZeroForANewList);
     RUN_TEST(test_size_ShouldBeEqualToTheNumberOfAddedElements);
     RUN_TEST(test_size_ShouldBeZeroForACleanList);
     RUN_TEST(test_size_ShouldNotBeZeroAfterAddingElements);
+
     RUN_TEST(test_sort_ShouldOrderShuffledList);
+    RUN_TEST(test_sort_ShouldOrderAOneItemList);
+    RUN_TEST(test_sort_ShouldHandleAnEmptyList);
+
     RUN_TEST(test_add_ShouldAddANewElement);
     RUN_TEST(test_add_ShouldAddANewElementAndCheckIt);
     RUN_TEST(test_add_ShouldAddANewElementInTheMiddleOfAList);
     RUN_TEST(test_add_ShouldNotAddANewElementOutOfIndexBoundFromAnEmptyList);
+    RUN_TEST(test_add_ShouldAddANewElementAtTheEndOfAList);
+
     RUN_TEST(test_map_ShouldReturnATransformedList);
     RUN_TEST(test_map_ShouldMapAnEmptyListAndReturnANewValidEmptyList);
+
     RUN_TEST(test_append_ShouldAddAnElementToTheEndOfList);
     RUN_TEST(test_append_ShouldAddAnElementToAnEmptyList);
+
     RUN_TEST(test_clean_ShouldEmptyALoadedList);
+
     RUN_TEST(test_filter_ShoildFilterAListAndMatchNoneAndReturnAnEmptyList);
     RUN_TEST(test_filter_ShouldFilterAListAndMatchAllItems);
     RUN_TEST(test_filter_ShouldFilterAnEmptyListAndReturnAValidEmptyList);
     RUN_TEST(test_filter_ShouldFilterOutAllEvenNumbersFromList);
+
     RUN_TEST(test_allMatch_ShouldFilterAListAndAllElementsShouldMatch);
     RUN_TEST(test_allMatch_ShouldFilterAlistAndNotAllTheElementsWillMatch);
+
     RUN_TEST(test_anyMatch_ShouldFilterAListAndAtLeastOneShouldMatch);
     RUN_TEST(test_anyMatch_ShouldFilterAListAndNoElementShouldMatch);
-    RUN_TEST(
-        test_countMatch_ShouldCountAllEvenNumbersAndShouldBeGreaterThanZero);
-    RUN_TEST(
-        test_countMatch_ShouldCountEvenNumbersAndResultShouldBeHalfListSize);
+
+    RUN_TEST(test_countMatch_ShouldCountAllEvenNumbersAndShouldBeGreaterThanZero);
+    RUN_TEST(test_countMatch_ShouldCountEvenNumbersAndResultShouldBeHalfListSize);
     RUN_TEST(test_countMatch_ShouldCountEvenNumbersAndResultShouldBeZero);
+
     RUN_TEST(test_get_ShouldGetAValidElementFromTheList);
     RUN_TEST(test_get_ShouldGetAllElementsFromTheList);
     RUN_TEST(test_get_ShouldGetTheTailElementFromTheList);
+
     RUN_TEST(test_merge_ShouldMergeTwoLists);
     RUN_TEST(test_merge_ShouldMergeShouldHandleAnEmptyListAsSecondParameter);
     RUN_TEST(test_merge_ShouldMergeShouldHandleAnEmptyListAsFirstParameter);
@@ -221,6 +240,21 @@ void test_size_ShouldNotBeZeroAfterAddingElements(void) {
     TEST_ASSERT_TRUE(plist_size(L) != 0);
 }
 
+void test_sort_ShouldOrderAOneItemList(void) {
+    size_t x = 99;
+
+    plist_append(L, &x);
+    plist_sort(L, comp);
+
+    TEST_ASSERT_EQUAL_UINT(99, PLIST_GET_UINT(L, 0));
+}
+
+void test_sort_ShouldHandleAnEmptyList(void) {
+    plist_sort(L, comp);
+    TEST_ASSERT_TRUE(L);
+    TEST_ASSERT_EQUAL_UINT(0, plist_size(L));
+}
+
 void test_sort_ShouldOrderShuffledList(void) {
     for (size_t i = 0; i < DATA_ARRAY_LEN; ++i) {
         data[i] = i + 1;
@@ -236,11 +270,12 @@ void test_sort_ShouldOrderShuffledList(void) {
     plist_append(L, &data[9]);
     plist_append(L, &data[8]);
     plist_append(L, &data[7]);
+
     plist_sort(L, comp);
     size_t len = plist_size(L);
 
     for (size_t i = 0; i < len; ++i) {
-        TEST_ASSERT_EQUAL_INT(i + 1, PLIST_GET_INT(L, i));
+        TEST_ASSERT_EQUAL_UINT(i + 1, PLIST_GET_UINT(L, i));
     }
 }
 
@@ -249,7 +284,7 @@ void test_add_ShouldAddANewElement(void) {
 
     if (plist_is_empty(L)) {
         plist_add(L, 0, &data[0]);
-        TEST_ASSERT_EQUAL_INT(1, plist_size(L));
+        TEST_ASSERT_EQUAL_UINT(1, plist_size(L));
     } else {
         TEST_FAIL();
     }
@@ -274,13 +309,26 @@ void test_add_ShouldAddANewElementInTheMiddleOfAList(void) {
 
     data[DATA_ARRAY_LEN / 2] = 99;
     plist_add(L, DATA_ARRAY_LEN / 2, &data[DATA_ARRAY_LEN / 2]);
-    int out = PLIST_GET_INT(L, DATA_ARRAY_LEN / 2);
-    TEST_ASSERT_EQUAL_INT(data[DATA_ARRAY_LEN / 2], out);
+    int out = PLIST_GET_UINT(L, DATA_ARRAY_LEN / 2);
+    TEST_ASSERT_EQUAL_UINT(data[DATA_ARRAY_LEN / 2], out);
 }
 
 void test_add_ShouldNotAddANewElementOutOfIndexBoundFromAnEmptyList(void) {
     plist_add(L, 1, data);
     TEST_ASSERT_EQUAL_UINT(0, plist_size(L));
+}
+
+void test_add_ShouldAddANewElementAtTheEndOfAList(void) {
+    size_t x = 99;
+
+    for (size_t i = 0; i < DATA_ARRAY_LEN; ++i) {
+        data[i] = i + 1;
+        plist_append(L, &data[i]);
+    }
+
+    plist_add(L, DATA_ARRAY_LEN, &x);
+
+    TEST_ASSERT_EQUAL_UINT(x, PLIST_GET_UINT(L, DATA_ARRAY_LEN));
 }
 
 void test_map_ShouldReturnATransformedList(void) {
@@ -294,8 +342,8 @@ void test_map_ShouldReturnATransformedList(void) {
     mapped = plist_map(L, mapper);
 
     for (size_t i = 0; i < plist_size(L); ++i) {
-        TEST_ASSERT_EQUAL_INT(PLIST_GET_INT(L, i) * 2,
-                              PLIST_GET_INT(mapped, i));
+        TEST_ASSERT_EQUAL_UINT(PLIST_GET_UINT(L, i) * 2,
+                              PLIST_GET_UINT(mapped, i));
     }
 
     plist_destroy_all(mapped, free);
@@ -316,8 +364,8 @@ void test_append_ShouldAddAnElementToTheEndOfList(void) {
     }
 
     plist_append(L, &data[DATA_ARRAY_LEN - 1]);
-    TEST_ASSERT_EQUAL(data[DATA_ARRAY_LEN - 1],
-                      PLIST_GET_INT(L, plist_size(L) - 1));
+    TEST_ASSERT_EQUAL_UINT(data[DATA_ARRAY_LEN - 1],
+                      PLIST_GET_UINT(L, plist_size(L) - 1));
 }
 
 void test_append_ShouldAddAnElementToAnEmptyList(void) {
@@ -337,8 +385,6 @@ void test_clean_ShouldEmptyALoadedList() {
     if (!plist_is_empty(L)) {
         plist_clean(L);
         TEST_ASSERT_TRUE(plist_is_empty(L));
-    } else {
-        TEST_FAIL();
     }
 }
 
@@ -353,7 +399,7 @@ void test_filter_ShouldFilterOutAllEvenNumbersFromList(void) {
     filtered = plist_filter(L, isEven);
 
     for (size_t i = 0; i < plist_size(filtered); ++i) {
-        TEST_ASSERT_TRUE((PLIST_GET_INT(filtered, i) % 2) == 0);
+        TEST_ASSERT_TRUE((PLIST_GET_UINT(filtered, i) % 2) == 0);
     }
 
     plist_destroy(filtered);
@@ -375,13 +421,11 @@ void test_filter_ShouldFilterAListAndMatchAllItems(void) {
     }
 
     filtered = plist_filter(L, isEven);
-    TEST_ASSERT_TRUE_MESSAGE(plist_size(L) == plist_size(filtered),
-                             "Error al comparar tamaños de las listas");
+    TEST_ASSERT_TRUE(plist_size(L) == plist_size(filtered));
 
     for (size_t i = 0; i < plist_size(filtered); ++i) {
-        TEST_ASSERT_EQUAL_INT_MESSAGE(PLIST_GET_INT(L, i),
-                                      PLIST_GET_INT(filtered, i),
-                                      "Error al filtrar numeros pares");
+        TEST_ASSERT_EQUAL_UINT(PLIST_GET_UINT(L, i),
+                                      PLIST_GET_UINT(filtered, i));
     }
 
     plist_destroy(filtered);
@@ -452,7 +496,7 @@ void test_countMatch_ShouldCountEvenNumbersAndResultShouldBeZero(void) {
         plist_append(L, &data[i]);
     }
 
-    TEST_ASSERT_EQUAL_INT(0, plist_count_matching(L, isEven));
+    TEST_ASSERT_EQUAL_UINT(0, plist_count_matching(L, isEven));
 }
 
 void test_countMatch_ShouldCountEvenNumbersAndResultShouldBeHalfListSize(void) {
@@ -461,7 +505,7 @@ void test_countMatch_ShouldCountEvenNumbersAndResultShouldBeHalfListSize(void) {
         plist_append(L, &data[i]);
     }
 
-    TEST_ASSERT_EQUAL_INT(DATA_ARRAY_LEN / 2, plist_count_matching(L, isEven));
+    TEST_ASSERT_EQUAL_UINT(DATA_ARRAY_LEN / 2, plist_count_matching(L, isEven));
 }
 
 void test_get_ShouldGetAValidElementFromTheList(void) {
@@ -472,7 +516,7 @@ void test_get_ShouldGetAValidElementFromTheList(void) {
     }
 
     TEST_ASSERT_NOT_NULL(plist_get(L, 0));
-    TEST_ASSERT_EQUAL_INT(1, PLIST_GET_INT(L, 0));
+    TEST_ASSERT_EQUAL_UINT(1, PLIST_GET_UINT(L, 0));
 
 }
 
@@ -485,7 +529,7 @@ void test_get_ShouldGetAllElementsFromTheList(void) {
 
     for (size_t i = 0; i < DATA_ARRAY_LEN - 1; ++i) {
         TEST_ASSERT_NOT_NULL(plist_get(L, i));
-        TEST_ASSERT_EQUAL_INT(i + 1, PLIST_GET_INT(L, i));
+        TEST_ASSERT_EQUAL_UINT(i + 1, PLIST_GET_UINT(L, i));
     }
 
 }
@@ -498,7 +542,7 @@ void test_get_ShouldGetTheTailElementFromTheList(void) {
     }
 
     TEST_ASSERT_NOT_NULL(plist_get(L, DATA_ARRAY_LEN - 1));
-    TEST_ASSERT_EQUAL_INT(DATA_ARRAY_LEN, PLIST_GET_INT(L, DATA_ARRAY_LEN - 1));
+    TEST_ASSERT_EQUAL_UINT(DATA_ARRAY_LEN, PLIST_GET_UINT(L, DATA_ARRAY_LEN - 1));
 }
 
 void test_merge_ShouldMergeTwoLists(void) {
@@ -515,7 +559,7 @@ void test_merge_ShouldMergeTwoLists(void) {
     plist_merge(L, temp);
 
     for (size_t i = 0; i < DATA_ARRAY_LEN * 2; ++i) {
-        TEST_ASSERT_EQUAL_INT(i + 1, PLIST_GET_INT(L, i));
+        TEST_ASSERT_EQUAL_UINT(i + 1, PLIST_GET_UINT(L, i));
     }
 
     free(val);
@@ -533,7 +577,7 @@ void test_merge_ShouldMergeShouldHandleAnEmptyListAsSecondParameter(void) {
     plist_merge(L, temp);
 
     for (size_t i = 0; i < DATA_ARRAY_LEN; ++i) {
-        TEST_ASSERT_EQUAL_INT(i + 1, PLIST_GET_INT(L, i));
+        TEST_ASSERT_EQUAL_UINT(i + 1, PLIST_GET_UINT(L, i));
     }
 
     plist_destroy(temp);
@@ -550,7 +594,7 @@ void test_merge_ShouldMergeShouldHandleAnEmptyListAsFirstParameter(void) {
     plist_merge(temp, L);
 
     for (size_t i = 0; i < DATA_ARRAY_LEN; ++i) {
-        TEST_ASSERT_EQUAL_INT(i + 1, PLIST_GET_INT(L, i));
+        TEST_ASSERT_EQUAL_UINT(i + 1, PLIST_GET_UINT(L, i));
     }
 
     plist_destroy(temp);

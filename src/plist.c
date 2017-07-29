@@ -292,7 +292,9 @@ plist *plist_map(plist *self, plist_transformer transformer) {
 
 void plist_sort(plist *self, plist_comparator comparator) {
     plist_merge_sort(&self->head, comparator);
-    self->tail = plist_get_node(self, self->elements_count - 2)->next;
+    if(self->head != 0 && self->head->next != 0){
+        self->tail = plist_get_node(self, self->elements_count - 2)->next;
+    }
 }
 
 size_t plist_count_matching(plist *self, plist_evaluator condition) {
