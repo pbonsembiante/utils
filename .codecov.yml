@@ -26,5 +26,4 @@ comment:
   require_changes: no
 
 ignore:
-  - vendor/.*
-  - .*unity.c
+  - **/*unity.c
