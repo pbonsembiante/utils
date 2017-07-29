@@ -1,7 +1,7 @@
 include_directories(${CMAKE_SOURCE_DIR}/include)
 
 set(CMAKE_C_FLAGS_DEBUG  "${CMAKE_C_FLAGS_DEBUG} --coverage -O0" )
-set(CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} -lgcov" )
+#set(CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} -lgcov" )
 
 set(UNITY_SOURCES
         ${CMAKE_SOURCE_DIR}/vendor/unity/src/unity.c
