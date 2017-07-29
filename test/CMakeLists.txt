@@ -1,10 +1,5 @@
 include_directories(${CMAKE_SOURCE_DIR}/include)
 
-if(${CMAKE_C_COMPILER} MATCHES ^.+cc.*$ )
-    set(CMAKE_C_FLAGS_DEBUG  "${CMAKE_C_FLAGS_DEBUG} --coverage -O0" )
-    set(CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} -lgcov" )
-endif()
-
 set(UNITY_SOURCES
         ${CMAKE_SOURCE_DIR}/vendor/unity/src/unity.c
         ${CMAKE_SOURCE_DIR}/vendor/unity/src/unity.h
