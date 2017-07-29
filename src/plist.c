@@ -243,10 +243,12 @@ void plist_destroy_all(plist *self, plist_destroyer destroyer) {
 plist *plist_get_elements(plist *self, size_t count) {
     plist *sublist = plist_create();
 
-    for (size_t i = 0; i < count; ++i) {
-        void *data = 0;
-        data = plist_get(self, i);
-        plist_append(sublist, data);
+    if(!plist_is_empty(self)) {
+        count = count > plist_size(self) ? plist_size(self) : count;
+        for (size_t i = 0; i < count; ++i) {
+            void *data = plist_get(self, i);
+            plist_append(sublist, data);
+        }
     }
 
     return sublist;
@@ -361,7 +363,7 @@ static plinked_node *plist_get_node(plist *self, size_t index) {
         }
     }
 
-    return element ? element : 0;
+    return element;
 }
 
 static plinked_node * plist_find_node(plist *self, plist_evaluator condition, size_t *index) {

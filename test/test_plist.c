@@ -13,7 +13,6 @@ void f(void)
     plist_destroy();
     plist_destroy_all();
     plist_find();
-    plist_get_elements();
     plist_get_removing_elements();
     plist_is_empty();
     plist_iterate();
@@ -24,7 +23,6 @@ void f(void)
     plist_remove_selected();
     plist_replace();
     plist_replace_and_destroy();
-    plist_size();
 */
 void *mapper(void *_orig);
 
@@ -110,6 +108,10 @@ void test_merge_ShouldMergeShouldHandleAnEmptyListAsSecondParameter(void);
 
 void test_merge_ShouldMergeShouldHandleAnEmptyListAsFirstParameter(void);
 
+void test_getElements_ShouldReturnANewEmptyList(void);
+
+void test_getElements_ShouldReturnANewLoadedList(void);
+
 int main(void) {
     UNITY_BEGIN();
 
@@ -163,6 +165,9 @@ int main(void) {
     RUN_TEST(test_merge_ShouldMergeShouldHandleAnEmptyListAsSecondParameter);
     RUN_TEST(test_merge_ShouldMergeShouldHandleAnEmptyListAsFirstParameter);
 
+    RUN_TEST(test_getElements_ShouldReturnANewEmptyList);
+    RUN_TEST(test_getElements_ShouldReturnANewLoadedList);
+
     return UNITY_END();
 }
 
@@ -194,6 +199,13 @@ bool isEven(void *_val) {
     return (*number % 2) == 0;
 }
 
+void loadList(void) {
+    for (size_t i = 0; i < DATA_ARRAY_LEN; ++i) {
+        data[i] = i + 1;
+        plist_append(L, &data[i]);
+    }
+}
+
 void test_create_NewListShouldBeEmpty(void) {
     TEST_ASSERT_TRUE(plist_is_empty(L));
 }
@@ -213,30 +225,18 @@ void test_size_ShouldBeZeroForANewList(void) {
 }
 
 void test_size_ShouldBeEqualToTheNumberOfAddedElements(void) {
-    for (size_t i = 0; i < DATA_ARRAY_LEN; ++i) {
-        data[i] = i + 1;
-        plist_append(L, &data[i]);
-    }
-
+    loadList();
     TEST_ASSERT_EQUAL_UINT(plist_size(L), DATA_ARRAY_LEN);
 }
 
 void test_size_ShouldBeZeroForACleanList(void) {
-    for (size_t i = 0; i < DATA_ARRAY_LEN; ++i) {
-        data[i] = i + 1;
-        plist_append(L, &data[i]);
-    }
-
+    loadList();
     plist_clean(L);
     TEST_ASSERT_EQUAL_UINT(plist_size(L), 0);
 }
 
 void test_size_ShouldNotBeZeroAfterAddingElements(void) {
-    for (size_t i = 0; i < DATA_ARRAY_LEN; ++i) {
-        data[i] = i + 1;
-        plist_append(L, &data[i]);
-    }
-
+    loadList();
     TEST_ASSERT_TRUE(plist_size(L) != 0);
 }
 
@@ -302,10 +302,7 @@ void test_add_ShouldAddANewElementAndCheckIt(void) {
 }
 
 void test_add_ShouldAddANewElementInTheMiddleOfAList(void) {
-    for (size_t i = 0; i < DATA_ARRAY_LEN; ++i) {
-        data[i] = i + 1;
-        plist_append(L, &data[i]);
-    }
+    loadList();
 
     data[DATA_ARRAY_LEN / 2] = 99;
     plist_add(L, DATA_ARRAY_LEN / 2, &data[DATA_ARRAY_LEN / 2]);
@@ -321,11 +318,7 @@ void test_add_ShouldNotAddANewElementOutOfIndexBoundFromAnEmptyList(void) {
 void test_add_ShouldAddANewElementAtTheEndOfAList(void) {
     size_t x = 99;
 
-    for (size_t i = 0; i < DATA_ARRAY_LEN; ++i) {
-        data[i] = i + 1;
-        plist_append(L, &data[i]);
-    }
-
+    loadList();
     plist_add(L, DATA_ARRAY_LEN, &x);
 
     TEST_ASSERT_EQUAL_UINT(x, PLIST_GET_UINT(L, DATA_ARRAY_LEN));
@@ -334,10 +327,7 @@ void test_add_ShouldAddANewElementAtTheEndOfAList(void) {
 void test_map_ShouldReturnATransformedList(void) {
     plist *mapped = 0;
 
-    for (size_t i = 0; i < DATA_ARRAY_LEN; ++i) {
-        data[i] = i + 1;
-        plist_append(L, &data[i]);
-    }
+    loadList();
 
     mapped = plist_map(L, mapper);
 
@@ -358,10 +348,7 @@ void test_map_ShouldMapAnEmptyListAndReturnANewValidEmptyList() {
 }
 
 void test_append_ShouldAddAnElementToTheEndOfList(void) {
-    for (size_t i = 0; i < DATA_ARRAY_LEN - 1; ++i) {
-        data[i] = i + 1;
-        plist_append(L, &data[i]);
-    }
+    loadList();
 
     plist_append(L, &data[DATA_ARRAY_LEN - 1]);
     TEST_ASSERT_EQUAL_UINT(data[DATA_ARRAY_LEN - 1],
@@ -377,10 +364,7 @@ void test_append_ShouldAddAnElementToAnEmptyList(void) {
 
 
 void test_clean_ShouldEmptyALoadedList() {
-    for (size_t i = 0; i < DATA_ARRAY_LEN - 1; ++i) {
-        data[i] = i + 1;
-        plist_append(L, &data[i]);
-    }
+    loadList();
 
     if (!plist_is_empty(L)) {
         plist_clean(L);
@@ -391,11 +375,7 @@ void test_clean_ShouldEmptyALoadedList() {
 void test_filter_ShouldFilterOutAllEvenNumbersFromList(void) {
     plist *filtered = 0;
 
-    for (size_t i = 0; i < DATA_ARRAY_LEN; ++i) {
-        data[i] = i + 1;
-        plist_append(L, &data[i]);
-    }
-
+    loadList();
     filtered = plist_filter(L, isEven);
 
     for (size_t i = 0; i < plist_size(filtered); ++i) {
@@ -464,10 +444,7 @@ void test_allMatch_ShouldFilterAlistAndNotAllTheElementsWillMatch(void) {
 }
 
 void test_anyMatch_ShouldFilterAListAndAtLeastOneShouldMatch(void) {
-    for (size_t i = 0; i < DATA_ARRAY_LEN; ++i) {
-        data[i] = (i + 1);
-        plist_append(L, &data[i]);
-    }
+    loadList();
 
     TEST_ASSERT_TRUE(plist_any_match(L, isEven));
 }
@@ -482,10 +459,7 @@ void test_anyMatch_ShouldFilterAListAndNoElementShouldMatch(void) {
 }
 
 void test_countMatch_ShouldCountAllEvenNumbersAndShouldBeGreaterThanZero(void) {
-    for (size_t i = 0; i < DATA_ARRAY_LEN; ++i) {
-        data[i] = (i + 1);
-        plist_append(L, &data[i]);
-    }
+    loadList();
 
     TEST_ASSERT_TRUE(plist_count_matching(L, isEven) > 0);
 }
@@ -500,32 +474,20 @@ void test_countMatch_ShouldCountEvenNumbersAndResultShouldBeZero(void) {
 }
 
 void test_countMatch_ShouldCountEvenNumbersAndResultShouldBeHalfListSize(void) {
-    for (size_t i = 0; i < DATA_ARRAY_LEN; ++i) {
-        data[i] = (i + 1);
-        plist_append(L, &data[i]);
-    }
-
+    loadList();
     TEST_ASSERT_EQUAL_UINT(DATA_ARRAY_LEN / 2, plist_count_matching(L, isEven));
 }
 
 void test_get_ShouldGetAValidElementFromTheList(void) {
+    loadList();
 
-    for (size_t i = 0; i < DATA_ARRAY_LEN - 1; ++i) {
-        data[i] = i + 1;
-        plist_append(L, &data[i]);
-    }
-
-    TEST_ASSERT_NOT_NULL(plist_get(L, 0));
-    TEST_ASSERT_EQUAL_UINT(1, PLIST_GET_UINT(L, 0));
+    TEST_ASSERT_NOT_NULL(plist_get(L, DATA_ARRAY_LEN/2));
+    TEST_ASSERT_EQUAL_UINT(1+DATA_ARRAY_LEN/2, PLIST_GET_UINT(L, DATA_ARRAY_LEN/2));
 
 }
 
 void test_get_ShouldGetAllElementsFromTheList(void) {
-
-    for (size_t i = 0; i < DATA_ARRAY_LEN - 1; ++i) {
-        data[i] = i + 1;
-        plist_append(L, &data[i]);
-    }
+    loadList();
 
     for (size_t i = 0; i < DATA_ARRAY_LEN - 1; ++i) {
         TEST_ASSERT_NOT_NULL(plist_get(L, i));
@@ -535,11 +497,7 @@ void test_get_ShouldGetAllElementsFromTheList(void) {
 }
 
 void test_get_ShouldGetTheTailElementFromTheList(void) {
-
-    for (size_t i = 0; i < DATA_ARRAY_LEN; ++i) {
-        data[i] = i + 1;
-        plist_append(L, &data[i]);
-    }
+    loadList();
 
     TEST_ASSERT_NOT_NULL(plist_get(L, DATA_ARRAY_LEN - 1));
     TEST_ASSERT_EQUAL_UINT(DATA_ARRAY_LEN, PLIST_GET_UINT(L, DATA_ARRAY_LEN - 1));
@@ -549,11 +507,11 @@ void test_merge_ShouldMergeTwoLists(void) {
     plist *temp = plist_create();
     size_t *val = calloc(DATA_ARRAY_LEN, sizeof(size_t));
 
+    loadList();
+
     for (size_t i = 0; i < DATA_ARRAY_LEN; ++i) {
-        data[i] = i + 1;
         val[i] = i + DATA_ARRAY_LEN + 1;
         plist_append(temp, &val[i]);
-        plist_append(L, &data[i]);
     }
 
     plist_merge(L, temp);
@@ -569,10 +527,7 @@ void test_merge_ShouldMergeTwoLists(void) {
 void test_merge_ShouldMergeShouldHandleAnEmptyListAsSecondParameter(void) {
     plist *temp = plist_create();
 
-    for (size_t i = 0; i < DATA_ARRAY_LEN; ++i) {
-        data[i] = i + 1;
-        plist_append(L, &data[i]);
-    }
+    loadList();
 
     plist_merge(L, temp);
 
@@ -586,10 +541,7 @@ void test_merge_ShouldMergeShouldHandleAnEmptyListAsSecondParameter(void) {
 void test_merge_ShouldMergeShouldHandleAnEmptyListAsFirstParameter(void) {
     plist *temp = plist_create();
 
-    for (size_t i = 0; i < DATA_ARRAY_LEN; ++i) {
-        data[i] = i + 1;
-        plist_append(L, &data[i]);
-    }
+    loadList();
 
     plist_merge(temp, L);
 
@@ -599,3 +551,25 @@ void test_merge_ShouldMergeShouldHandleAnEmptyListAsFirstParameter(void) {
 
     plist_destroy(temp);
 }
+
+void test_getElements_ShouldReturnANewEmptyList(void) {
+    plist *sublist = 0;
+
+    sublist = plist_get_elements(L, DATA_ARRAY_LEN/2);
+
+    TEST_ASSERT_NOT_NULL(sublist);
+    TEST_ASSERT_TRUE(plist_is_empty(sublist));
+}
+
+void test_getElements_ShouldReturnANewLoadedList(void) {
+    plist *sublist = 0;
+
+    loadList();
+    sublist = plist_get_elements(L, DATA_ARRAY_LEN/2);
+
+    TEST_ASSERT_NOT_NULL(sublist);
+    TEST_ASSERT_FALSE(plist_is_empty(sublist));
+    TEST_ASSERT_EQUAL_UINT(DATA_ARRAY_LEN/2, plist_size(sublist));
+}
+
+
