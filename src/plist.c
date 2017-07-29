@@ -362,8 +362,7 @@ static plinked_node *plist_get_node(plist *self, size_t index) {
     return element ? element : 0;
 }
 
-static plinked_node *
-plist_find_node(plist *self, plist_evaluator condition, size_t *index) {
+static plinked_node * plist_find_node(plist *self, plist_evaluator condition, size_t *index) {
     plinked_node *element = self->head;
     size_t position = 0;
 
@@ -383,8 +382,7 @@ plist_find_node(plist *self, plist_evaluator condition, size_t *index) {
     return element;
 }
 
-static void
-plist_merge_sort(plinked_node **headReference, plist_comparator comparator) {
+static void plist_merge_sort(plinked_node **headReference, plist_comparator comparator) {
     plinked_node *head = *headReference;
     plinked_node *a;
     plinked_node *b;
@@ -419,8 +417,7 @@ static plinked_node *plist_sorted_merge(plinked_node *self, plinked_node *other,
     return (result);
 }
 
-static void
-plist_front_back_split(plinked_node *source, plinked_node **frontRef,
+static void plist_front_back_split(plinked_node *source, plinked_node **frontRef,
                        plinked_node **backRef) {
     plinked_node *fast;
     plinked_node *slow;

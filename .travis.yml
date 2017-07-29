@@ -27,8 +27,7 @@ after_success:
 script:
   - mkdir build
   - cd build
-  - cmake -DCMAKE_C_COMPILER=$COMPILER -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=ON .. && make VERBOSE=1 -j 4
-  - cd test
-  - ctest -j 4
+  - cmake -DCMAKE_C_COMPILER=$COMPILER -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=ON .. && make -j 4
+  - cd test && ctest -j 4
   - cd ../..
   
