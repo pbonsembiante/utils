@@ -257,11 +257,13 @@ plist *plist_get_elements(plist *self, size_t count) {
 plist *plist_get_removing_elements(plist *self, size_t count) {
     plist *sublist = plist_create();
 
-    for (size_t i = 0; i < count; ++i) {
-        void *element = plist_remove(self, 0);
-        plist_append(sublist, element);
+    if(!plist_is_empty(self)) {
+        count = count > plist_size(self) ? plist_size(self) : count;
+        for (size_t i = 0; i < count; ++i) {
+            void *element = plist_remove(self, 0);
+            plist_append(sublist, element);
+        }
     }
-
     return sublist;
 }
 

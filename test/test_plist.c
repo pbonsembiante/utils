@@ -13,11 +13,9 @@ void f(void)
     plist_destroy();
     plist_destroy_all();
     plist_find();
-    plist_get_removing_elements();
     plist_is_empty();
     plist_iterate();
     plist_prepend();
-    plist_remove();
     plist_remove_and_destroy();
     plist_remove_destroying_selected();
     plist_remove_selected();
@@ -112,6 +110,20 @@ void test_getElements_ShouldReturnANewEmptyList(void);
 
 void test_getElements_ShouldReturnANewLoadedList(void);
 
+void test_getRemoving_ShouldReturnAnEmptyList(void);
+
+void test_getRemoving_ShouldReturnAnNewLoadedListAndRemoveFromOriginal(void);
+
+void test_remove_ShouldRemoveAnElementFromList(void);
+
+void test_remove_ShouldRemoveFirstElementFromList(void);
+
+void test_remove_ShouldRemoveLastElementFromList(void);
+
+void test_prepend_ShouldAddAnElementToTheHeadOfList(void);
+
+void test_prepend_ShouldAddAnElementToAnEmptyList(void);
+
 int main(void) {
     UNITY_BEGIN();
 
@@ -167,6 +179,16 @@ int main(void) {
 
     RUN_TEST(test_getElements_ShouldReturnANewEmptyList);
     RUN_TEST(test_getElements_ShouldReturnANewLoadedList);
+
+    RUN_TEST(test_getRemoving_ShouldReturnAnEmptyList);
+    RUN_TEST(test_getRemoving_ShouldReturnAnNewLoadedListAndRemoveFromOriginal);
+
+    RUN_TEST(test_remove_ShouldRemoveAnElementFromList);
+    RUN_TEST(test_remove_ShouldRemoveFirstElementFromList);
+    RUN_TEST(test_remove_ShouldRemoveLastElementFromList);
+
+    RUN_TEST(test_prepend_ShouldAddAnElementToTheHeadOfList);
+    RUN_TEST(test_prepend_ShouldAddAnElementToAnEmptyList);
 
     return UNITY_END();
 }
@@ -555,7 +577,7 @@ void test_merge_ShouldMergeShouldHandleAnEmptyListAsFirstParameter(void) {
 void test_getElements_ShouldReturnANewEmptyList(void) {
     plist *sublist = 0;
 
-    sublist = plist_get_elements(L, DATA_ARRAY_LEN/2);
+    sublist = plist_get_elements(L, DATA_ARRAY_LEN / 2);
 
     TEST_ASSERT_NOT_NULL(sublist);
     TEST_ASSERT_TRUE(plist_is_empty(sublist));
@@ -565,11 +587,77 @@ void test_getElements_ShouldReturnANewLoadedList(void) {
     plist *sublist = 0;
 
     loadList();
-    sublist = plist_get_elements(L, DATA_ARRAY_LEN/2);
+    sublist = plist_get_elements(L, DATA_ARRAY_LEN / 2);
 
     TEST_ASSERT_NOT_NULL(sublist);
     TEST_ASSERT_FALSE(plist_is_empty(sublist));
-    TEST_ASSERT_EQUAL_UINT(DATA_ARRAY_LEN/2, plist_size(sublist));
+    TEST_ASSERT_EQUAL_UINT(DATA_ARRAY_LEN / 2, plist_size(sublist));
 }
 
+void test_getRemoving_ShouldReturnAnEmptyList(void) {
+    plist *sublist = 0;
 
+    sublist = plist_get_removing_elements(L, DATA_ARRAY_LEN / 2);
+
+    TEST_ASSERT_NOT_NULL(sublist);
+    TEST_ASSERT_TRUE(plist_is_empty(sublist));
+}
+
+void test_getRemoving_ShouldReturnAnNewLoadedListAndRemoveFromOriginal(void) {
+    plist *sublist = 0;
+
+    loadList();
+    sublist = plist_get_removing_elements(L, DATA_ARRAY_LEN / 2);
+
+    TEST_ASSERT_NOT_NULL(sublist);
+    TEST_ASSERT_FALSE(plist_is_empty(sublist));
+    TEST_ASSERT_EQUAL_UINT(DATA_ARRAY_LEN / 2, plist_size(sublist));
+    TEST_ASSERT_EQUAL_UINT(DATA_ARRAY_LEN / 2, plist_size(L));
+}
+
+void test_remove_ShouldRemoveAnElementFromList(void) {
+    loadList();
+    TEST_ASSERT_EQUAL_UINT(DATA_ARRAY_LEN, plist_size(L));
+    plist_remove(L, DATA_ARRAY_LEN / 2);
+    TEST_ASSERT_EQUAL_UINT(DATA_ARRAY_LEN - 1, plist_size(L));
+}
+
+void test_remove_ShouldRemoveFirstElementFromList(void) {
+    loadList();
+    TEST_ASSERT_EQUAL_UINT(DATA_ARRAY_LEN, plist_size(L));
+    plist_remove(L, 0);
+    TEST_ASSERT_EQUAL_UINT(DATA_ARRAY_LEN - 1, plist_size(L));
+    TEST_ASSERT_EQUAL_UINT(2, PLIST_GET_UINT(L, 0));
+}
+
+void test_remove_ShouldRemoveLastElementFromList(void) {
+    loadList();
+
+    TEST_ASSERT_EQUAL_UINT(DATA_ARRAY_LEN, plist_size(L));
+    plist_remove(L, DATA_ARRAY_LEN - 1);
+
+    TEST_ASSERT_EQUAL_UINT(DATA_ARRAY_LEN - 1,
+                           plist_size(L));
+
+    TEST_ASSERT_EQUAL_UINT(DATA_ARRAY_LEN - 1,
+                           PLIST_GET_UINT(L, plist_size(L) - 1));
+}
+
+void test_prepend_ShouldAddAnElementToTheHeadOfList(void) {
+    size_t x = 99;
+
+    loadList();
+    plist_prepend(L, &x);
+
+    TEST_ASSERT_EQUAL_UINT(data[DATA_ARRAY_LEN - 1],
+                           PLIST_GET_UINT(L, plist_size(L) - 1));
+}
+
+void test_prepend_ShouldAddAnElementToAnEmptyList(void) {
+    size_t x = 99;
+
+    if (plist_is_empty(L)) {
+        plist_prepend(L, &x);
+        TEST_ASSERT_FALSE(plist_is_empty(L))
+    }
+}
