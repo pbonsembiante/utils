@@ -124,6 +124,12 @@ void test_prepend_ShouldAddAnElementToTheHeadOfList(void);
 
 void test_prepend_ShouldAddAnElementToAnEmptyList(void);
 
+void test_replace_ShouldReplaceAnElementInTheList(void);
+
+void test_replace_ShouldReplaceFirstElementInTheList(void);
+
+void test_replace_ShouldReplaceLastElementInTheList(void);
+
 int main(void) {
     UNITY_BEGIN();
 
@@ -189,6 +195,10 @@ int main(void) {
 
     RUN_TEST(test_prepend_ShouldAddAnElementToTheHeadOfList);
     RUN_TEST(test_prepend_ShouldAddAnElementToAnEmptyList);
+
+    RUN_TEST(test_replace_ShouldReplaceAnElementInTheList);
+    RUN_TEST(test_replace_ShouldReplaceFirstElementInTheList);
+    RUN_TEST(test_replace_ShouldReplaceLastElementInTheList);
 
     return UNITY_END();
 }
@@ -660,4 +670,31 @@ void test_prepend_ShouldAddAnElementToAnEmptyList(void) {
         plist_prepend(L, &x);
         TEST_ASSERT_FALSE(plist_is_empty(L))
     }
+}
+
+void test_replace_ShouldReplaceAnElementInTheList(void) {
+    size_t x = 99;
+
+    loadList();
+    plist_replace(L, DATA_ARRAY_LEN / 2, &x);
+
+    TEST_ASSERT_EQUAL_UINT(x, PLIST_GET_UINT(L, DATA_ARRAY_LEN / 2));
+}
+
+void test_replace_ShouldReplaceFirstElementInTheList(void) {
+    size_t x = 99;
+
+    loadList();
+    plist_replace(L, 0, &x);
+
+    TEST_ASSERT_EQUAL_UINT(x, PLIST_GET_UINT(L, 0));
+}
+
+void test_replace_ShouldReplaceLastElementInTheList(void) {
+    size_t x = 99;
+
+    loadList();
+    plist_replace(L, plist_size(L) - 1, &x);
+
+    TEST_ASSERT_EQUAL_UINT(x, PLIST_GET_UINT(L, plist_size(L) - 1));
 }
