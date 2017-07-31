@@ -125,7 +125,7 @@ void *plist_replace(plist *self, size_t index, void *data) {
 void plist_replace_and_destroy(plist *self, size_t index, void *data,
                                plist_destroyer destroyer) {
     void *old_data = plist_replace(self, index, data);
-    if (old_data) {
+    if (old_data && destroyer) {
         destroyer(old_data);
         old_data = 0;
     }

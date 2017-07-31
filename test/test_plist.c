@@ -17,7 +17,6 @@ void f(void)
     plist_remove_destroying_selected();
     plist_remove_selected();
     plist_replace();
-    plist_replace_and_destroy();
 */
 
 /* See: https://stackoverflow.com/a/22637665/6194674*/
@@ -587,6 +586,33 @@ void test_destroy_ShouldFreeTheList(void) {
     TEST_ASSERT_TRUE(is_freed(tmp));
 }
 
+void test_replaceDestroy_ShouldReplaceAnElementFromTheListAndDestroyTheOldOne(void) {
+    size_t *x = calloc(1, sizeof(size_t));
+    *x = 99;
+    size_t y = 0;
+
+    plist_append(L, x);
+    plist_replace_and_destroy(L, 0, &y, free);
+
+    TEST_ASSERT_EQUAL_UINT(1, plist_size(L));
+    TEST_ASSERT_TRUE(is_freed(x));
+    TEST_ASSERT_EQUAL_UINT(y, PLIST_GET_UINT(L, 0));
+}
+
+void test_replaceDestroy_ShouldReplaceAnElementFromTheListAndKeepTheOldOneIfNoDestructorFunction(void) {
+    size_t *x = calloc(1, sizeof(size_t));
+    *x = 99;
+    size_t y = 0;
+
+    plist_append(L, x);
+    plist_replace_and_destroy(L, 0, &y, 0);
+
+    TEST_ASSERT_EQUAL_UINT(1, plist_size(L));
+    TEST_ASSERT_FALSE(is_freed(x));
+    TEST_ASSERT_EQUAL_UINT(y, PLIST_GET_UINT(L, 0));
+    free(x);
+}
+
 int main(void) {
     UNITY_BEGIN();
 
@@ -669,6 +695,9 @@ int main(void) {
     RUN_TEST(test_isEmpty_ShouldReturnFalseOnAnLoadedList);
 
     RUN_TEST(test_destroy_ShouldFreeTheList);
+
+    RUN_TEST(test_replaceDestroy_ShouldReplaceAnElementFromTheListAndDestroyTheOldOne);
+    RUN_TEST(test_replaceDestroy_ShouldReplaceAnElementFromTheListAndKeepTheOldOneIfNoDestructorFunction);
 
     return UNITY_END();
 }
