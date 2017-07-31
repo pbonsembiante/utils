@@ -127,11 +127,12 @@ void plist_replace_and_destroy(plist *self, size_t index, void *data,
     void *old_data = plist_replace(self, index, data);
     if (old_data) {
         destroyer(old_data);
+        old_data = 0;
     }
 }
 
-void *plist_find(plist *self, plist_evaluator condition) {
-    plinked_node *element = plist_find_node(self, condition, 0);
+void *plist_find(plist *self, plist_evaluator condition, size_t *index) {
+    plinked_node *element = plist_find_node(self, condition, index);
     return element ? element->data : 0;
 }
 
@@ -192,7 +193,10 @@ void *plist_remove_selected(plist *self, plist_evaluator condition) {
 void plist_remove_and_destroy(plist *self, size_t index,
                               plist_destroyer destroyer) {
     void *data = plist_remove(self, index);
-    destroyer(data);
+    if (data && destroyer) {
+        destroyer(data);
+        data = 0;
+    }
 }
 
 void
@@ -200,8 +204,9 @@ plist_remove_destroying_selected(plist *self, plist_evaluator condition,
                                  plist_destroyer destroyer) {
     void *data = plist_remove_selected(self, condition);
 
-    if (data) {
+    if (data && destroyer) {
         destroyer(data);
+        data = 0;
     }
 }
 
@@ -214,6 +219,8 @@ bool plist_is_empty(plist *self) {
 }
 
 void plist_clean(plist *self) {
+    if(!self) return;
+
     while (self->head) {
         plinked_node *element;
         element = self->head;
@@ -372,7 +379,7 @@ static plinked_node * plist_find_node(plist *self, plist_evaluator condition, si
     plinked_node *element = self->head;
     size_t position = 0;
 
-    if (!element || self->elements_count == 0) {
+    if (!element || self->elements_count == 0 || !condition) {
         return 0;
     }
 

@@ -471,7 +471,7 @@ void plist_iterate(plist *self, plist_closure closure);
  * \param closure
  * \return
  */
-void *plist_find(plist *self, plist_evaluator condition);
+void *plist_find(plist *self, plist_evaluator condition, size_t *index);
 
 /*!
  * \brief plist_size

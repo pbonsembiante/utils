@@ -1,3 +1,4 @@
+#include <string.h>
 #include "putils/plist.h"
 #include "unity.h"
 
@@ -12,195 +13,27 @@ void f(void)
     plist_clean_destroying_data();
     plist_destroy();
     plist_destroy_all();
-    plist_find();
-    plist_is_empty();
     plist_iterate();
-    plist_prepend();
-    plist_remove_and_destroy();
     plist_remove_destroying_selected();
     plist_remove_selected();
     plist_replace();
     plist_replace_and_destroy();
 */
-void *mapper(void *_orig);
 
-bool comp(const void *a, const void *b);
+/* See: https://stackoverflow.com/a/22637665/6194674*/
+int is_freed(void *p)
+{
+    void * q;
+    char p_addr [50];
+    char q_addr [50];
 
-bool isEven(void *_val);
+    sprintf(p_addr, "%p", p);
 
-void setUp(void);
+    q = malloc (1);
+    sprintf(q_addr, "%p", q);
+    free (q);
 
-void tearDown(void);
-
-void test_create_NewListShouldBeEmpty(void);
-
-void test_create_NewListShouldNotBeNull(void);
-
-void test_size_SizeOfNewListWithOneItemShouldBeOne(void);
-
-void test_sort_ShouldOrderShuffledList(void);
-
-void test_add_ShouldAddANewElement(void);
-
-void test_sort_ShouldOrderAOneItemList(void);
-
-void test_sort_ShouldHandleAnEmptyList(void);
-
-void test_add_ShouldAddANewElementAndCheckIt(void);
-
-void test_add_ShouldAddANewElementInTheMiddleOfAList(void);
-
-void test_add_ShouldAddANewElementAtTheEndOfAList(void);
-
-void test_add_ShouldNotAddANewElementOutOfIndexBoundFromAnEmptyList(void);
-
-void test_map_ShouldReturnATransformedList(void);
-
-void test_append_ShouldAddAnElementToTheEndOfList(void);
-
-void test_append_ShouldAddAnElementToAnEmptyList(void);
-
-void test_clean_ShouldEmptyALoadedList(void);
-
-void test_map_ShouldMapAnEmptyListAndReturnANewValidEmptyList(void);
-
-void test_filter_ShouldFilterOutAllEvenNumbersFromList(void);
-
-void test_filter_ShouldFilterAnEmptyListAndReturnAValidEmptyList(void);
-
-void test_filter_ShouldFilterAListAndMatchAllItems(void);
-
-void test_filter_ShoildFilterAListAndMatchNoneAndReturnAnEmptyList(void);
-
-void test_allMatch_ShouldFilterAListAndAllElementsShouldMatch(void);
-
-void test_allMatch_ShouldFilterAlistAndNotAllTheElementsWillMatch(void);
-
-void test_anyMatch_ShouldFilterAListAndAtLeastOneShouldMatch(void);
-
-void test_anyMatch_ShouldFilterAListAndNoElementShouldMatch(void);
-
-void test_countMatch_ShouldCountAllEvenNumbersAndShouldBeGreaterThanZero(void);
-
-void test_countMatch_ShouldCountEvenNumbersAndResultShouldBeZero(void);
-
-void test_countMatch_ShouldCountEvenNumbersAndResultShouldBeHalfListSize(void);
-
-void test_size_ShouldBeZeroForANewList(void);
-
-void test_size_ShouldBeEqualToTheNumberOfAddedElements(void);
-
-void test_size_ShouldBeZeroForACleanList(void);
-
-void test_size_ShouldNotBeZeroAfterAddingElements(void);
-
-void test_get_ShouldGetAValidElementFromTheList(void);
-
-void test_get_ShouldGetAllElementsFromTheList(void);
-
-void test_get_ShouldGetTheTailElementFromTheList(void);
-
-void test_merge_ShouldMergeTwoLists(void);
-
-void test_merge_ShouldMergeShouldHandleAnEmptyListAsSecondParameter(void);
-
-void test_merge_ShouldMergeShouldHandleAnEmptyListAsFirstParameter(void);
-
-void test_getElements_ShouldReturnANewEmptyList(void);
-
-void test_getElements_ShouldReturnANewLoadedList(void);
-
-void test_getRemoving_ShouldReturnAnEmptyList(void);
-
-void test_getRemoving_ShouldReturnAnNewLoadedListAndRemoveFromOriginal(void);
-
-void test_remove_ShouldRemoveAnElementFromList(void);
-
-void test_remove_ShouldRemoveFirstElementFromList(void);
-
-void test_remove_ShouldRemoveLastElementFromList(void);
-
-void test_prepend_ShouldAddAnElementToTheHeadOfList(void);
-
-void test_prepend_ShouldAddAnElementToAnEmptyList(void);
-
-void test_replace_ShouldReplaceAnElementInTheList(void);
-
-void test_replace_ShouldReplaceFirstElementInTheList(void);
-
-void test_replace_ShouldReplaceLastElementInTheList(void);
-
-int main(void) {
-    UNITY_BEGIN();
-
-    RUN_TEST(test_create_NewListShouldBeEmpty);
-    RUN_TEST(test_create_NewListShouldNotBeNull);
-
-    RUN_TEST(test_size_SizeOfNewListWithOneItemShouldBeOne);
-    RUN_TEST(test_size_ShouldBeZeroForANewList);
-    RUN_TEST(test_size_ShouldBeEqualToTheNumberOfAddedElements);
-    RUN_TEST(test_size_ShouldBeZeroForACleanList);
-    RUN_TEST(test_size_ShouldNotBeZeroAfterAddingElements);
-
-    RUN_TEST(test_sort_ShouldOrderShuffledList);
-    RUN_TEST(test_sort_ShouldOrderAOneItemList);
-    RUN_TEST(test_sort_ShouldHandleAnEmptyList);
-
-    RUN_TEST(test_add_ShouldAddANewElement);
-    RUN_TEST(test_add_ShouldAddANewElementAndCheckIt);
-    RUN_TEST(test_add_ShouldAddANewElementInTheMiddleOfAList);
-    RUN_TEST(test_add_ShouldNotAddANewElementOutOfIndexBoundFromAnEmptyList);
-    RUN_TEST(test_add_ShouldAddANewElementAtTheEndOfAList);
-
-    RUN_TEST(test_map_ShouldReturnATransformedList);
-    RUN_TEST(test_map_ShouldMapAnEmptyListAndReturnANewValidEmptyList);
-
-    RUN_TEST(test_append_ShouldAddAnElementToTheEndOfList);
-    RUN_TEST(test_append_ShouldAddAnElementToAnEmptyList);
-
-    RUN_TEST(test_clean_ShouldEmptyALoadedList);
-
-    RUN_TEST(test_filter_ShoildFilterAListAndMatchNoneAndReturnAnEmptyList);
-    RUN_TEST(test_filter_ShouldFilterAListAndMatchAllItems);
-    RUN_TEST(test_filter_ShouldFilterAnEmptyListAndReturnAValidEmptyList);
-    RUN_TEST(test_filter_ShouldFilterOutAllEvenNumbersFromList);
-
-    RUN_TEST(test_allMatch_ShouldFilterAListAndAllElementsShouldMatch);
-    RUN_TEST(test_allMatch_ShouldFilterAlistAndNotAllTheElementsWillMatch);
-
-    RUN_TEST(test_anyMatch_ShouldFilterAListAndAtLeastOneShouldMatch);
-    RUN_TEST(test_anyMatch_ShouldFilterAListAndNoElementShouldMatch);
-
-    RUN_TEST(test_countMatch_ShouldCountAllEvenNumbersAndShouldBeGreaterThanZero);
-    RUN_TEST(test_countMatch_ShouldCountEvenNumbersAndResultShouldBeHalfListSize);
-    RUN_TEST(test_countMatch_ShouldCountEvenNumbersAndResultShouldBeZero);
-
-    RUN_TEST(test_get_ShouldGetAValidElementFromTheList);
-    RUN_TEST(test_get_ShouldGetAllElementsFromTheList);
-    RUN_TEST(test_get_ShouldGetTheTailElementFromTheList);
-
-    RUN_TEST(test_merge_ShouldMergeTwoLists);
-    RUN_TEST(test_merge_ShouldMergeShouldHandleAnEmptyListAsSecondParameter);
-    RUN_TEST(test_merge_ShouldMergeShouldHandleAnEmptyListAsFirstParameter);
-
-    RUN_TEST(test_getElements_ShouldReturnANewEmptyList);
-    RUN_TEST(test_getElements_ShouldReturnANewLoadedList);
-
-    RUN_TEST(test_getRemoving_ShouldReturnAnEmptyList);
-    RUN_TEST(test_getRemoving_ShouldReturnAnNewLoadedListAndRemoveFromOriginal);
-
-    RUN_TEST(test_remove_ShouldRemoveAnElementFromList);
-    RUN_TEST(test_remove_ShouldRemoveFirstElementFromList);
-    RUN_TEST(test_remove_ShouldRemoveLastElementFromList);
-
-    RUN_TEST(test_prepend_ShouldAddAnElementToTheHeadOfList);
-    RUN_TEST(test_prepend_ShouldAddAnElementToAnEmptyList);
-
-    RUN_TEST(test_replace_ShouldReplaceAnElementInTheList);
-    RUN_TEST(test_replace_ShouldReplaceFirstElementInTheList);
-    RUN_TEST(test_replace_ShouldReplaceLastElementInTheList);
-
-    return UNITY_END();
+    return ! strncmp(q_addr, p_addr, 50);
 }
 
 void setUp(void) {
@@ -697,4 +530,145 @@ void test_replace_ShouldReplaceLastElementInTheList(void) {
     plist_replace(L, plist_size(L) - 1, &x);
 
     TEST_ASSERT_EQUAL_UINT(x, PLIST_GET_UINT(L, plist_size(L) - 1));
+}
+
+void test_find_ShouldRetrieveTheDesiredItem(void) {
+    loadList();
+    TEST_ASSERT_EQUAL_UINT(2 , *((size_t*)plist_find(L, isEven, 0)));
+}
+
+void test_find_ShouldRetrieveTheDesiredItemAndGetItsIndex(void) {
+    size_t index = 0;
+    loadList();
+    TEST_ASSERT_EQUAL_UINT(2 , *((size_t*)plist_find(L, isEven, &index)));
+    TEST_ASSERT_EQUAL_UINT(1, index);
+}
+
+void test_find_ShouldNotFindElementsOnAnEmptyList(void) {
+    TEST_ASSERT_NULL(plist_find(L, isEven, 0));
+}
+
+void test_find_ShouldNotFindIfNotEvaluatorIsProvidedAndEmptyList(void) {
+    TEST_ASSERT_NULL(plist_find(L, 0, 0));
+}
+
+void test_find_ShouldNotFindIfNotEvaluatorIsProvidedAndLoadedList(void) {
+    loadList();
+    TEST_ASSERT_NULL(plist_find(L, 0, 0));
+}
+
+void test_removeDestroy_ShouldRemoveAndDestroyAnElement(void) {
+    size_t *x = calloc(1, sizeof(size_t));
+    *x = 99;
+    loadList();
+
+    plist_append(L, x);
+    plist_remove_and_destroy(L, plist_size(L) - 1, free );
+
+    TEST_ASSERT_EQUAL_UINT(DATA_ARRAY_LEN, plist_size(L));
+    TEST_ASSERT_TRUE(is_freed(x));
+}
+
+void test_isEmpty_ShouldReturnTrueOnAnEmptyList(void) {
+    TEST_ASSERT_TRUE(plist_is_empty(L));
+}
+
+void test_isEmpty_ShouldReturnFalseOnAnLoadedList(void) {
+    loadList();
+    TEST_ASSERT_FALSE(plist_is_empty(L));
+}
+
+void test_destroy_ShouldFreeTheList(void) {
+    /* Do not use L since we cannot avoid tearDown */
+    plist *tmp = plist_create();
+    if(tmp) {
+        plist_destroy(tmp);
+    }
+    TEST_ASSERT_TRUE(is_freed(tmp));
+}
+
+int main(void) {
+    UNITY_BEGIN();
+
+    RUN_TEST(test_create_NewListShouldBeEmpty);
+    RUN_TEST(test_create_NewListShouldNotBeNull);
+
+    RUN_TEST(test_size_SizeOfNewListWithOneItemShouldBeOne);
+    RUN_TEST(test_size_ShouldBeZeroForANewList);
+    RUN_TEST(test_size_ShouldBeEqualToTheNumberOfAddedElements);
+    RUN_TEST(test_size_ShouldBeZeroForACleanList);
+    RUN_TEST(test_size_ShouldNotBeZeroAfterAddingElements);
+
+    RUN_TEST(test_sort_ShouldOrderShuffledList);
+    RUN_TEST(test_sort_ShouldOrderAOneItemList);
+    RUN_TEST(test_sort_ShouldHandleAnEmptyList);
+
+    RUN_TEST(test_add_ShouldAddANewElement);
+    RUN_TEST(test_add_ShouldAddANewElementAndCheckIt);
+    RUN_TEST(test_add_ShouldAddANewElementInTheMiddleOfAList);
+    RUN_TEST(test_add_ShouldNotAddANewElementOutOfIndexBoundFromAnEmptyList);
+    RUN_TEST(test_add_ShouldAddANewElementAtTheEndOfAList);
+
+    RUN_TEST(test_map_ShouldReturnATransformedList);
+    RUN_TEST(test_map_ShouldMapAnEmptyListAndReturnANewValidEmptyList);
+
+    RUN_TEST(test_append_ShouldAddAnElementToTheEndOfList);
+    RUN_TEST(test_append_ShouldAddAnElementToAnEmptyList);
+
+    RUN_TEST(test_clean_ShouldEmptyALoadedList);
+
+    RUN_TEST(test_filter_ShoildFilterAListAndMatchNoneAndReturnAnEmptyList);
+    RUN_TEST(test_filter_ShouldFilterAListAndMatchAllItems);
+    RUN_TEST(test_filter_ShouldFilterAnEmptyListAndReturnAValidEmptyList);
+    RUN_TEST(test_filter_ShouldFilterOutAllEvenNumbersFromList);
+
+    RUN_TEST(test_allMatch_ShouldFilterAListAndAllElementsShouldMatch);
+    RUN_TEST(test_allMatch_ShouldFilterAlistAndNotAllTheElementsWillMatch);
+
+    RUN_TEST(test_anyMatch_ShouldFilterAListAndAtLeastOneShouldMatch);
+    RUN_TEST(test_anyMatch_ShouldFilterAListAndNoElementShouldMatch);
+
+    RUN_TEST(test_countMatch_ShouldCountAllEvenNumbersAndShouldBeGreaterThanZero);
+    RUN_TEST(test_countMatch_ShouldCountEvenNumbersAndResultShouldBeHalfListSize);
+    RUN_TEST(test_countMatch_ShouldCountEvenNumbersAndResultShouldBeZero);
+
+    RUN_TEST(test_get_ShouldGetAValidElementFromTheList);
+    RUN_TEST(test_get_ShouldGetAllElementsFromTheList);
+    RUN_TEST(test_get_ShouldGetTheTailElementFromTheList);
+
+    RUN_TEST(test_merge_ShouldMergeTwoLists);
+    RUN_TEST(test_merge_ShouldMergeShouldHandleAnEmptyListAsSecondParameter);
+    RUN_TEST(test_merge_ShouldMergeShouldHandleAnEmptyListAsFirstParameter);
+
+    RUN_TEST(test_getElements_ShouldReturnANewEmptyList);
+    RUN_TEST(test_getElements_ShouldReturnANewLoadedList);
+
+    RUN_TEST(test_getRemoving_ShouldReturnAnEmptyList);
+    RUN_TEST(test_getRemoving_ShouldReturnAnNewLoadedListAndRemoveFromOriginal);
+
+    RUN_TEST(test_remove_ShouldRemoveAnElementFromList);
+    RUN_TEST(test_remove_ShouldRemoveFirstElementFromList);
+    RUN_TEST(test_remove_ShouldRemoveLastElementFromList);
+
+    RUN_TEST(test_prepend_ShouldAddAnElementToTheHeadOfList);
+    RUN_TEST(test_prepend_ShouldAddAnElementToAnEmptyList);
+
+    RUN_TEST(test_replace_ShouldReplaceAnElementInTheList);
+    RUN_TEST(test_replace_ShouldReplaceFirstElementInTheList);
+    RUN_TEST(test_replace_ShouldReplaceLastElementInTheList);
+
+    RUN_TEST(test_find_ShouldRetrieveTheDesiredItem);
+    RUN_TEST(test_find_ShouldRetrieveTheDesiredItemAndGetItsIndex);
+    RUN_TEST(test_find_ShouldNotFindIfNotEvaluatorIsProvidedAndLoadedList);
+    RUN_TEST(test_find_ShouldNotFindIfNotEvaluatorIsProvidedAndEmptyList);
+    RUN_TEST(test_find_ShouldNotFindElementsOnAnEmptyList);
+
+    RUN_TEST(test_removeDestroy_ShouldRemoveAndDestroyAnElement);
+
+    RUN_TEST(test_isEmpty_ShouldReturnTrueOnAnEmptyList);
+    RUN_TEST(test_isEmpty_ShouldReturnFalseOnAnLoadedList);
+
+    RUN_TEST(test_destroy_ShouldFreeTheList);
+
+    return UNITY_END();
 }
