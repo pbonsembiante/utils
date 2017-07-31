@@ -145,7 +145,6 @@ void test_sort_ShouldOrderShuffledList(void) {
 
 void test_add_ShouldAddANewElement(void) {
     size_t x = 99;
-
     TEST_ASSERT_TRUE(plist_is_empty(L));
     plist_add(L, 0, &x);
     TEST_ASSERT_EQUAL_UINT(1, plist_size(L));
