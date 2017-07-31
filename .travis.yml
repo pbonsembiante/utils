@@ -21,7 +21,7 @@ before_install:
   - sudo apt-get update -qq
 
 after_success:
-  - bash <(curl -s https://codecov.io/bash)
+  - bash <(curl -s https://codecov.io/bash) -f '!*unity*' -F unittesting
 
 script:
   - mkdir build && cd build

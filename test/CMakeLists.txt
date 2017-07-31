@@ -8,7 +8,6 @@ set(UNITY_SOURCES
 include_directories(${CMAKE_SOURCE_DIR}/vendor/unity/src)
 
 add_library(unitylib STATIC ${UNITY_SOURCES})
-target_compile_definitions(unitylib PRIVATE "")
 
 add_executable(test_plist test_plist.c)
 add_executable(test_pstack test_pstack.c)
