@@ -216,20 +216,19 @@ void test_append_ShouldAddAnElementToTheEndOfList(void) {
 }
 
 void test_append_ShouldAddAnElementToAnEmptyList(void) {
-    if (plist_is_empty(L)) {
+    TEST_ASSERT_TRUE(plist_is_empty(L));
         plist_append(L, data);
         TEST_ASSERT_FALSE(plist_is_empty(L))
-    }
 }
 
 
 void test_clean_ShouldEmptyALoadedList() {
     loadList();
 
-    if (!plist_is_empty(L)) {
-        plist_clean(L);
-        TEST_ASSERT_TRUE(plist_is_empty(L));
-    }
+    TEST_ASSERT_FALSE(plist_is_empty(L));
+    plist_clean(L);
+    TEST_ASSERT_TRUE(plist_is_empty(L));
+
 }
 
 void test_filter_ShouldFilterOutAllEvenNumbersFromList(void) {
@@ -494,10 +493,10 @@ void test_prepend_ShouldAddAnElementToTheHeadOfList(void) {
 void test_prepend_ShouldAddAnElementToAnEmptyList(void) {
     size_t x = 99;
 
-    if (plist_is_empty(L)) {
-        plist_prepend(L, &x);
-        TEST_ASSERT_FALSE(plist_is_empty(L))
-    }
+    TEST_ASSERT_TRUE(plist_is_empty(L));
+    plist_prepend(L, &x);
+    TEST_ASSERT_FALSE(plist_is_empty(L))
+
 }
 
 void test_replace_ShouldReplaceAnElementInTheList(void) {
@@ -576,9 +575,8 @@ void test_isEmpty_ShouldReturnFalseOnAnLoadedList(void) {
 void test_destroy_ShouldFreeTheList(void) {
     /* Do not use L since we cannot avoid tearDown */
     plist *tmp = plist_create();
-    if(tmp) {
-        plist_destroy(tmp);
-    }
+    TEST_ASSERT_NOT_NULL(tmp);
+    plist_destroy(tmp);
     TEST_ASSERT_TRUE(is_freed(tmp));
 }
 
