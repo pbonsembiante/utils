@@ -144,14 +144,11 @@ void test_sort_ShouldOrderShuffledList(void) {
 }
 
 void test_add_ShouldAddANewElement(void) {
-    data[0] = 13;
+    size_t x = 99;
 
-    if (plist_is_empty(L)) {
-        plist_add(L, 0, &data[0]);
-        TEST_ASSERT_EQUAL_UINT(1, plist_size(L));
-    } else {
-        TEST_FAIL();
-    }
+    TEST_ASSERT_TRUE(plist_is_empty(L));
+    plist_add(L, 0, &x);
+    TEST_ASSERT_EQUAL_UINT(1, plist_size(L));
 }
 
 void test_add_ShouldAddANewElementAndCheckIt(void) {
