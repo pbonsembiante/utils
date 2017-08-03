@@ -127,7 +127,6 @@ void plist_replace_and_destroy(plist *self, size_t index, void *data,
     void *old_data = plist_replace(self, index, data);
     if (old_data && destroyer) {
         destroyer(old_data);
-        old_data = 0;
     }
 }
 
@@ -195,18 +194,15 @@ void plist_remove_and_destroy(plist *self, size_t index,
     void *data = plist_remove(self, index);
     if (data && destroyer) {
         destroyer(data);
-        data = 0;
     }
 }
 
-void
-plist_remove_destroying_selected(plist *self, plist_evaluator condition,
+void plist_remove_destroying_selected(plist *self, plist_evaluator condition,
                                  plist_destroyer destroyer) {
     void *data = plist_remove_selected(self, condition);
 
     if (data && destroyer) {
         destroyer(data);
-        data = 0;
     }
 }
 

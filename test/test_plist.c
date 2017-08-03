@@ -7,20 +7,8 @@
 plist *L = 0;
 size_t *data = 0;
 
-/*
-void f(void)
-{
-    plist_clean_destroying_data();
-    plist_destroy();
-    plist_destroy_all();
-    plist_iterate();
-    plist_remove_destroying_selected();
-    plist_remove_selected();
-    plist_replace();
-*/
-
 /* See: https://stackoverflow.com/a/22637665/6194674*/
-int is_freed(void *p)
+int isFreed(void *p)
 {
     void * q;
     char p_addr [50];
@@ -61,6 +49,11 @@ void *mapper(void *_orig) {
 bool isEven(void *_val) {
     const int *number = _val;
     return (*number % 2) == 0;
+}
+
+bool is99(void *_val) {
+    const int *number = _val;
+    return (*number == 99);
 }
 
 void loadList(void) {
@@ -560,7 +553,7 @@ void test_removeDestroy_ShouldRemoveAndDestroyAnElement(void) {
     plist_remove_and_destroy(L, plist_size(L) - 1, free );
 
     TEST_ASSERT_EQUAL_UINT(DATA_ARRAY_LEN, plist_size(L));
-    TEST_ASSERT_TRUE(is_freed(x));
+    TEST_ASSERT_TRUE(isFreed(x));
 }
 
 void test_isEmpty_ShouldReturnTrueOnAnEmptyList(void) {
@@ -577,7 +570,7 @@ void test_destroy_ShouldFreeTheList(void) {
     plist *tmp = plist_create();
     TEST_ASSERT_NOT_NULL(tmp);
     plist_destroy(tmp);
-    TEST_ASSERT_TRUE(is_freed(tmp));
+    TEST_ASSERT_TRUE(isFreed(tmp));
 }
 
 void test_replaceDestroy_ShouldReplaceAnElementFromTheListAndDestroyTheOldOne(void) {
@@ -589,7 +582,7 @@ void test_replaceDestroy_ShouldReplaceAnElementFromTheListAndDestroyTheOldOne(vo
     plist_replace_and_destroy(L, 0, &y, free);
 
     TEST_ASSERT_EQUAL_UINT(1, plist_size(L));
-    TEST_ASSERT_TRUE(is_freed(x));
+    TEST_ASSERT_TRUE(isFreed(x));
     TEST_ASSERT_EQUAL_UINT(y, PLIST_GET_UINT(L, 0));
 }
 
@@ -602,9 +595,36 @@ void test_replaceDestroy_ShouldReplaceAnElementFromTheListAndKeepTheOldOneIfNoDe
     plist_replace_and_destroy(L, 0, &y, 0);
 
     TEST_ASSERT_EQUAL_UINT(1, plist_size(L));
-    TEST_ASSERT_FALSE(is_freed(x));
+    TEST_ASSERT_FALSE(isFreed(x));
     TEST_ASSERT_EQUAL_UINT(y, PLIST_GET_UINT(L, 0));
     free(x);
+}
+
+void test_removeSelected_ShouldRemoveAParticularElementFromTheList(void) {
+    loadList();
+
+    TEST_ASSERT_EQUAL_UINT(DATA_ARRAY_LEN, plist_size(L));
+
+    size_t *x = plist_remove_selected(L, isEven);
+
+    TEST_ASSERT_NOT_NULL(x);
+    TEST_ASSERT_EQUAL_UINT(*x, data[1]);
+    TEST_ASSERT_EQUAL_UINT(DATA_ARRAY_LEN - 1, plist_size(L));
+}
+
+void test_removeDestroyingSelected_ShouldRemoveAndDestroyAnElementSelectedFromTheList(void) {
+    size_t *x = calloc(1, sizeof(size_t));
+    *x = 99;
+
+    loadList();
+    plist_append(L, x);
+
+    TEST_ASSERT_EQUAL_UINT(DATA_ARRAY_LEN + 1, plist_size(L));
+
+    plist_remove_destroying_selected(L, is99, free);
+
+    TEST_ASSERT_EQUAL_UINT(DATA_ARRAY_LEN, plist_size(L));
+    TEST_ASSERT_TRUE(isFreed(x));
 }
 
 int main(void) {
@@ -692,6 +712,10 @@ int main(void) {
 
     RUN_TEST(test_replaceDestroy_ShouldReplaceAnElementFromTheListAndDestroyTheOldOne);
     RUN_TEST(test_replaceDestroy_ShouldReplaceAnElementFromTheListAndKeepTheOldOneIfNoDestructorFunction);
+
+    RUN_TEST(test_removeSelected_ShouldRemoveAParticularElementFromTheList);
+
+    RUN_TEST(test_removeDestroyingSelected_ShouldRemoveAndDestroyAnElementSelectedFromTheList);
 
     return UNITY_END();
 }
