@@ -57,9 +57,11 @@ bool pstack_is_empty(pstack *self)
 void pstack_destroy(pstack *self)
 {
     plist_destroy(self->list);
+    free(self);
 }
 
 void pstack_destroy_all(pstack *self, pstack_destroyer destroyer)
 {
     plist_destroy_all(self->list, destroyer);
+    free(self);
 }

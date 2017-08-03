@@ -101,4 +101,23 @@ void pstack_destroy(pstack *self);
  */
 void pstack_destroy_all(pstack *self, pstack_destroyer destroyer);
 
+/*
+ * Handy macros
+*/
+#define PSTACK_PEEK_INT(Q) *((int*) pstack_peek(Q))
+#define PSTACK_PEEK_PINT(Q) ((int*) pstack_peek(Q))
+
+#define PSTACK_PEEK_UINT(Q) *((unsigned int*) pstack_peek(Q))
+#define PSTACK_PEEK_PUINT(Q) ((unsigned int*) pstack_peek(Q))
+
+#define PSTACK_PEEK_CHAR(Q) *((char*) pstack_peek(Q))
+#define PSTACK_PEEK_UCHAR(Q) *((unsigned char*) pstack_peek(Q))
+#define PSTACK_PEEK_PCHAR(Q) ((char*) pstack_peek(Q))
+
+#define PSTACK_PEEK_FLOAT(Q) *((float*) pstack_peek(Q))
+#define PSTACK_PEEK_PFLOAT(Q) ((float*) pstack_peek(Q))
+
+#define PSTACK_PEEK_DOUBLE(Q) *((double*) pstack_peek(Q))
+#define PSTACK_PEEK_PDOUBLE(Q) ((double*) pstack_peek(Q))
+
 #endif /* _PSTACK_H_ */
