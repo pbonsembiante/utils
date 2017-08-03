@@ -30,10 +30,28 @@ void tearDown(void)
     pqueue_destroy(Q);
 }
 
+/*
+ * See: https://stackoverflow.com/a/22637665/6194674
+ * */
+int isFreed(void *p)
+{
+    void * q;
+    char p_addr [50];
+    char q_addr [50];
+
+    sprintf(p_addr, "%p", p);
+
+    q = malloc (1);
+    sprintf(q_addr, "%p", q);
+    free (q);
+
+    return ! strncmp(q_addr, p_addr, 50);
+}
+
 void test_create_ShouldCreateAnEmptyQueue(void)
 {
     TEST_ASSERT_NOT_NULL(Q);
-    TEST_ASSERT_EQUAL_UINT(1, pqueue_is_empty(Q));
+    TEST_ASSERT_TRUE(pqueue_is_empty(Q));
 }
 
 void test_create_ShouldCreateAZeroSizeQueue(void)
@@ -85,6 +103,58 @@ void test_dequeue_ShouldNotDequeueFromAnEmptyQueue(void)
     TEST_ASSERT_NULL(pqueue_dequeue(Q));
 }
 
+void test_peek_ShouldRetrieveTheNextElementFromTheQueueButNotDequeueIt(void) {
+    size_t x = 99, y = 98, z = 97;
+
+    pqueue_enqueue(Q, &x);
+    pqueue_enqueue(Q, &y);
+    pqueue_enqueue(Q, &z);
+
+    TEST_ASSERT_EQUAL_UINT(x, PQUEUE_PEEK_UINT(Q));
+    TEST_ASSERT_EQUAL_UINT(3, pqueue_size(Q));
+}
+
+void test_clean_ShouldEmptyTheQueue(void) {
+    size_t x = 99, y = 98, z = 97;
+
+    pqueue_enqueue(Q, &x);
+    pqueue_enqueue(Q, &y);
+    pqueue_enqueue(Q, &z);
+
+    pqueue_clean(Q);
+
+    TEST_ASSERT_TRUE(pqueue_is_empty(Q));
+    TEST_ASSERT_EQUAL_UINT(0, pqueue_size(Q));
+}
+
+void test_destroyAll_ShouldDestroyTheQueueAndEveryElementInIt(void) {
+    pqueue *queue  = pqueue_create();
+    size_t *x = calloc(1, sizeof(size_t)); *x = 99;
+    size_t *y = calloc(1, sizeof(size_t)); *y = 99;
+    size_t *z = calloc(1, sizeof(size_t)); *z = 99;
+
+    pqueue_enqueue(queue, x);
+    pqueue_enqueue(queue, y);
+    pqueue_enqueue(queue, z);
+
+    pqueue_destroy_all(queue, free);
+    TEST_ASSERT_TRUE(isFreed(queue));
+}
+
+void test_cleanDestroy_ShouldDestroyTheQueueAndEveryElementInIt(void) {
+    size_t *x = calloc(1, sizeof(size_t)); *x = 99;
+    size_t *y = calloc(1, sizeof(size_t)); *y = 99;
+    size_t *z = calloc(1, sizeof(size_t)); *z = 99;
+
+    pqueue_enqueue(Q, x);
+    pqueue_enqueue(Q, y);
+    pqueue_enqueue(Q, z);
+
+    pqueue_clean_destroying_data(Q, free);
+
+    TEST_ASSERT_TRUE(pqueue_is_empty(Q));
+}
+
 int main(void)
 {
     UNITY_BEGIN();
@@ -92,10 +162,20 @@ int main(void)
     RUN_TEST(test_create_ShouldCreateAnEmptyQueue);
     RUN_TEST(test_create_ShouldCreateAnEmptyQueue);
     RUN_TEST(test_create_ShouldCreateAZeroSizeQueue);
+
     RUN_TEST(test_dequeue_ShouldNotDequeueFromAnEmptyQueue);
     RUN_TEST(test_dequeue_ShouldRemoveAnElementFromTheQueue);
+
     RUN_TEST(test_enqueue_ShouldAppendAnElementToTheQueue);
     RUN_TEST(test_enqueue_ShouldEnqueueNullElements);
+
+    RUN_TEST(test_peek_ShouldRetrieveTheNextElementFromTheQueueButNotDequeueIt);
+
+    RUN_TEST(test_clean_ShouldEmptyTheQueue);
+
+    RUN_TEST(test_destroyAll_ShouldDestroyTheQueueAndEveryElementInIt);
+
+    RUN_TEST(test_cleanDestroy_ShouldDestroyTheQueueAndEveryElementInIt);
 
     return UNITY_END();
 }

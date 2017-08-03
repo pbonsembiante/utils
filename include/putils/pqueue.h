@@ -107,5 +107,24 @@ void pqueue_destroy(pqueue *self);
  */
 void pqueue_destroy_all(pqueue *self, pqueue_destroyer destroyer);
 
+/*
+ * Handy macros
+*/
+
+#define PQUEUE_PEEK_INT(Q) *((int*) pqueue_peek(Q))
+#define PQUEUE_PEEK_PINT(Q) ((int*) pqueue_peek(Q))
+
+#define PQUEUE_PEEK_UINT(Q) *((unsigned int*) pqueue_peek(Q))
+#define PQUEUE_PEEK_PUINT(Q) ((unsigned int*) pqueue_peek(Q))
+
+#define PQUEUE_PEEK_CHAR(Q) *((char*) pqueue_peek(Q))
+#define PQUEUE_PEEK_UCHAR(Q) *((unsigned char*) pqueue_peek(Q))
+#define PQUEUE_PEEK_PCHAR(Q) ((char*) pqueue_peek(Q))
+
+#define PQUEUE_PEEK_FLOAT(Q) *((float*) pqueue_peek(Q))
+#define PQUEUE_PEEK_PFLOAT(Q) ((float*) pqueue_peek(Q))
+
+#define PQUEUE_PEEK_DOUBLE(Q) *((double*) pqueue_peek(Q))
+#define PQUEUE_PEEK_PDOUBLE(Q) ((double*) pqueue_peek(Q))
 
 #endif /* _PQUEUE_H_ */
