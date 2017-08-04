@@ -68,3 +68,4 @@ Thumbs.db
 cmake-build-*/
 .idea/
 CMakeLists.txt.user
+Testing/
