@@ -2,6 +2,11 @@
 #include "putils/plist.h"
 #include "unity.h"
 
+#if defined(PEXCEPT_ENABLE_LIBS)
+#define USING_PEXCEPT
+#include <putils/pexcept.h>
+#endif
+
 #define DATA_ARRAY_LEN 10
 
 plist *L = 0;
@@ -627,6 +632,19 @@ void test_removeDestroyingSelected_ShouldRemoveAndDestroyAnElementSelectedFromTh
     TEST_ASSERT_TRUE(isFreed(x));
 }
 
+#ifdef USING_PEXCEPT
+void test_append_ShouldThrowAnExceptionAndCatchIt(void) {
+    PEXCEPT_T e = 0;
+
+    try {
+        plist_append(0, 0);
+        TEST_ASSERT_TRUE(0);
+    } catch(e) {
+        TEST_ASSERT_TRUE(e == 1);
+    }
+}
+#endif
+
 int main(void) {
     UNITY_BEGIN();
 
@@ -716,6 +734,8 @@ int main(void) {
     RUN_TEST(test_removeSelected_ShouldRemoveAParticularElementFromTheList);
 
     RUN_TEST(test_removeDestroyingSelected_ShouldRemoveAndDestroyAnElementSelectedFromTheList);
+
+    RUN_TEST(test_append_ShouldThrowAnExceptionAndCatchIt);
 
     return UNITY_END();
 }

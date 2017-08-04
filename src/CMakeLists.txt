@@ -1,6 +1,3 @@
-include_directories(${CMAKE_SOURCE_DIR}/include)
-set(CMAKE_POSITION_INDEPENDENT_CODE ON)
-
 set(PUTILS_SOURCES
         ${CMAKE_SOURCE_DIR}/include/putils/pdict.h
         ${CMAKE_SOURCE_DIR}/include/putils/pexcept.h
@@ -27,4 +24,4 @@ add_library(putils_shared SHARED $<TARGET_OBJECTS:putilsobj>)
 add_library(putils_static STATIC $<TARGET_OBJECTS:putilsobj>)
 
 install(TARGETS putils_static putils_shared DESTINATION lib )
-install(FILES ${PUTILS_HEADERS} DESTINATION include)
+install(FILES ${PUTILS_HEADERS} DESTINATION include/putils)

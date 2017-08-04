@@ -18,6 +18,11 @@
 #include <stdbool.h>
 #include "putils/plist.h"
 
+#if defined(PEXCEPT_ENABLE_LIBS)
+#define USING_PEXCEPT
+#include <putils/pexcept.h>
+#endif
+
 struct plist {
     plinked_node *head;
     plinked_node *tail;
@@ -52,6 +57,11 @@ plist *plist_create(void) {
 }
 
 size_t plist_append(plist *self, void *data) {
+#ifdef USING_PEXCEPT
+    if(!self) {
+        throw(1);
+    }
+#endif
     plinked_node *new_element = plist_create_node(data);
     plinked_node *last = self->tail;
 

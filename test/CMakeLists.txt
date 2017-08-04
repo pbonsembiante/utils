@@ -1,5 +1,3 @@
-include_directories(${CMAKE_SOURCE_DIR}/include)
-
 set(UNITY_SOURCES
         ${CMAKE_SOURCE_DIR}/vendor/unity/src/unity.c
         ${CMAKE_SOURCE_DIR}/vendor/unity/src/unity.h
