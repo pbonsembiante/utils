@@ -109,9 +109,7 @@ void pdict_remove_and_destroy(pdict *self, char *key, void(*data_destroyer)(void
 
 void pdict_iterator(pdict *self, void(*closure)(char *, void *))
 {
-    int table_index;
-
-    for (table_index = 0; table_index < self->table_max_size; table_index++) {
+    for (size_t table_index = 0; table_index < self->table_max_size; table_index++) {
         phashmap_node *element = self->elements[table_index];
 
         while (element != 0) {
@@ -200,9 +198,7 @@ static void pdict_resize(pdict *self, size_t new_max_size)
 
 static void internal_dictionary_clean_and_destroy_elements(pdict *self, void(*data_destroyer)(void *))
 {
-    int table_index;
-
-    for (table_index = 0; table_index < self->table_max_size; table_index++) {
+     for (size_t table_index = 0; table_index < self->table_max_size; table_index++) {
         phashmap_node *element = self->elements[table_index];
         phashmap_node *next_element = 0;
 

@@ -66,15 +66,15 @@ struct PEXCEPT_FRAME_T
     PEXCEPT_T volatile exception;
 };
 
-extern volatile PEXCEPT_FRAME_T pFrames[];
+extern volatile PEXCEPT_FRAME_T pexceptFrames[];
 
 /* *INDENT-OFF* */
 #define try                                                         \
     {                                                               \
         jmp_buf *PrevFrame, NewFrame;                               \
         unsigned int current = PEXCEPT_GET_ID;                      \
-        PrevFrame = pexceptFrames[current].pframe;                  \
-        pexceptFrames[current].pframe = (jmp_buf*)(&NewFrame);		\
+        PrevFrame = pexceptFrames[current].frame;                  \
+        pexceptFrames[current].frame = (jmp_buf*)(&NewFrame);		\
         pexceptFrames[current].exception = PEXCEPT_NONE;			\
         PEXCEPT_HOOK_START_TRY;                                     \
         if (setjmp(NewFrame) == 0) {                                \
@@ -89,7 +89,7 @@ extern volatile PEXCEPT_FRAME_T pFrames[];
             (void)(e);                                              \
             PEXCEPT_HOOK_START_CATCH;								\
         }                                                           \
-        pexceptFrames[current].pframe = PrevFrame;					\
+        pexceptFrames[current].frame = PrevFrame;					\
         PEXCEPT_HOOK_AFTER_TRY;                                     \
     }                                                               \
     if (pexceptFrames[PEXCEPT_GET_ID].exception != PEXCEPT_NONE)
