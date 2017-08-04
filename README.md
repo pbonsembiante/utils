@@ -99,8 +99,10 @@ If running from command line you should use:
       > `git clone https://github.com/Phanatos-/utils.git`
       > `cd utils`
       > `mkdir build && cd build`
-      > `cmake ..` (You can, and should, set compiler/linker flags to use in the build using -D. You can look at [Travis YML](./.travis.yml) for an example)
+      > `cmake ..`
       > `make`
+
+You can, and should, set compiler/linker flags to use in the build using -D. You can look at [Travis YML](./.travis.yml) for an example.
 
 If using it from an IDE, the steps and required configuration might vary widely from one IDE to the other and you should check the IDE's documentation related to CMake based projects.
 
