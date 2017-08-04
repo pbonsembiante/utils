@@ -112,7 +112,7 @@ I'm currently writing the tests for the available code and will not write any ne
 
 You can run `ctest` moving to the test directory in your `build` directory:
 
-  - `cd build && cd test`
+  - `cd build/test`
   - `ctest`
 
 ## Contributors
