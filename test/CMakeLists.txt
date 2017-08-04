@@ -1,3 +1,5 @@
+include_directories(${UNITY_DIR})
+
 set(UNITY_DIR
         ${CMAKE_SOURCE_DIR}/vendor/unity/src)
 
@@ -5,8 +7,6 @@ set(UNITY_SOURCES
         ${UNITY_DIR}/unity.c
         ${UNITY_DIR}/unity.h
         ${UNITY_DIR}/unity_internals.h)
-
-include_directories(${UNITY_DIR})
 
 add_library(unitylib STATIC ${UNITY_SOURCES})
 

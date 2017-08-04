@@ -1,5 +1,5 @@
 cmake_minimum_required (VERSION 3.0.0)
-project(putils)
+project(PUtils)
 
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)

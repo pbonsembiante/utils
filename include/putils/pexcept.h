@@ -102,7 +102,6 @@ void throw(PEXCEPT_T ExceptionID);
 
 /*!
  * \brief ExitTry
- *
  */
 #define ExitTry() Throw(PEXCEPT_NONE)
 

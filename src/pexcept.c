@@ -20,6 +20,7 @@ volatile PEXCEPT_FRAME_T pexceptFrames[PEXCEPT_STACK_ID] = {{ .frame = 0 }};
 
 void throw(PEXCEPT_T ExceptionID) {
     unsigned int current = PEXCEPT_GET_ID;
+
     pexceptFrames[current].exception = ExceptionID;
     if (pexceptFrames[current].frame) {
         longjmp(*pexceptFrames[current].frame, 1);
