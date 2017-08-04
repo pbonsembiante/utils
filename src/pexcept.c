@@ -18,7 +18,7 @@
 
 volatile PEXCEPT_FRAME_T pFrames[PEXCEPT_STACK_ID] = {{ .frame = 0 }};
 
-void Throw(PEXCEPT_T ExceptionID)
+void throw(PEXCEPT_T ExceptionID)
 {
     unsigned int current = PEXCEPT_GET_ID;
     pFrames[current].exception = ExceptionID;
