@@ -519,6 +519,17 @@ void test_replace_ShouldReplaceLastElementInTheList(void) {
     TEST_ASSERT_EQUAL_UINT(x, PLIST_GET_UINT(L, plist_size(L) - 1));
 }
 
+void test_replace_ShouldReplaceANullElementInTheList(void) {
+    size_t x = 99;
+
+    loadList();
+    plist_append(L, 0);
+    void * element = plist_replace(L, plist_size(L) - 1, &x);
+
+    TEST_ASSERT_EQUAL_UINT(x, PLIST_GET_UINT(L, plist_size(L) - 1));
+    TEST_ASSERT_NULL(element);
+}
+
 void test_find_ShouldRetrieveTheDesiredItem(void) {
     loadList();
     TEST_ASSERT_EQUAL_UINT(2 , *((size_t*)plist_find(L, isEven, 0)));
@@ -598,6 +609,17 @@ void test_replaceDestroy_ShouldReplaceAnElementFromTheListAndKeepTheOldOneIfNoDe
     TEST_ASSERT_FALSE(isFreed(x));
     TEST_ASSERT_EQUAL_UINT(y, PLIST_GET_UINT(L, 0));
     free(x);
+}
+
+void test_replaceDestroy_ShouldReplaceANullElementFromTheList(void) {
+    size_t *x = 0;
+    size_t y = 99;
+
+    plist_append(L, x);
+    plist_replace_and_destroy(L, 0, &y, free);
+
+    TEST_ASSERT_EQUAL_UINT(1, plist_size(L));
+    TEST_ASSERT_EQUAL_UINT(y, PLIST_GET_UINT(L, 0));
 }
 
 void test_removeSelected_ShouldRemoveAParticularElementFromTheList(void) {
@@ -696,6 +718,7 @@ int main(void) {
     RUN_TEST(test_replace_ShouldReplaceAnElementInTheList);
     RUN_TEST(test_replace_ShouldReplaceFirstElementInTheList);
     RUN_TEST(test_replace_ShouldReplaceLastElementInTheList);
+    RUN_TEST(test_replace_ShouldReplaceANullElementInTheList);
 
     RUN_TEST(test_find_ShouldRetrieveTheDesiredItem);
     RUN_TEST(test_find_ShouldRetrieveTheDesiredItemAndGetItsIndex);
@@ -712,6 +735,7 @@ int main(void) {
 
     RUN_TEST(test_replaceDestroy_ShouldReplaceAnElementFromTheListAndDestroyTheOldOne);
     RUN_TEST(test_replaceDestroy_ShouldReplaceAnElementFromTheListAndKeepTheOldOneIfNoDestructorFunction);
+    RUN_TEST(test_replaceDestroy_ShouldReplaceANullElementFromTheList);
 
     RUN_TEST(test_removeSelected_ShouldRemoveAParticularElementFromTheList);
 
