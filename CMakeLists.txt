@@ -8,3 +8,5 @@ include_directories(${CMAKE_SOURCE_DIR}/include)
 
 add_subdirectory(src)
 add_subdirectory(test)
+
+message("Flags = " ${CMAKE_C_FLAGS_DEBUG})

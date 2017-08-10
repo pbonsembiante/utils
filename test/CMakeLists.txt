@@ -22,3 +22,5 @@ enable_testing()
 add_test(TEST_PLIST test_plist)
 add_test(TEST_PSTACK test_pstack)
 add_test(TEST_PQUEUE test_pqueue)
+
+message("Flags = " ${CMAKE_C_FLAGS_DEBUG})
