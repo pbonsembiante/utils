@@ -23,7 +23,7 @@ matrix:
         apt:
           sources: [ 'ubuntu-toolchain-r-test']
           packages: [ 'musl-tools', 'musl-dev' ]
-      env: [COMPILER=musl-gcc, CMAKE_C_FLAGS_DEBUG="--verbose -std=c11 -Wall -Wextra -Wpedantic -Wchkp -Wuninitialized -Winit-self -static", CMAKE_EXE_LINKER_FLAGS=]
+      env: [COMPILER=musl-gcc, CMAKE_C_FLAGS_DEBUG="--verbose -std=c11 -Wall -Wextra -Wpedantic -Wuninitialized -Winit-self -static", CMAKE_EXE_LINKER_FLAGS=]
 before_install:
   - sudo apt-get update -qq
 
