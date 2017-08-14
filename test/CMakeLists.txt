@@ -27,3 +27,4 @@ add_test(TEST_PQUEUE test_pqueue)
 add_test(TEST_PDICT test_pdict)
 
 message("Flags = " ${CMAKE_C_FLAGS_DEBUG})
+
