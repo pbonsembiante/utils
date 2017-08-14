@@ -25,5 +25,3 @@ add_library(putils_static STATIC $<TARGET_OBJECTS:putilsobj>)
 
 install(TARGETS putils_static putils_shared DESTINATION lib )
 install(FILES ${PUTILS_HEADERS} DESTINATION include)
-
-message("Flags = " ${CMAKE_C_FLAGS_DEBUG})
