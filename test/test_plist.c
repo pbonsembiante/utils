@@ -263,7 +263,7 @@ void test_filter_ShouldFilterAListAndMatchAllItems(void) {
     plist_destroy(filtered);
 }
 
-void test_filter_ShoildFilterAListAndMatchNoneAndReturnAnEmptyList(void) {
+void test_filter_ShouldFilterAListAndMatchNoneAndReturnAnEmptyList(void) {
     plist *filtered = 0;
 
     for (size_t i = 0; i < DATA_ARRAY_LEN; ++i) {
@@ -679,7 +679,7 @@ int main(void) {
 
     RUN_TEST(test_clean_ShouldEmptyALoadedList);
 
-    RUN_TEST(test_filter_ShoildFilterAListAndMatchNoneAndReturnAnEmptyList);
+    RUN_TEST(test_filter_ShouldFilterAListAndMatchNoneAndReturnAnEmptyList);
     RUN_TEST(test_filter_ShouldFilterAListAndMatchAllItems);
     RUN_TEST(test_filter_ShouldFilterAnEmptyListAndReturnAValidEmptyList);
     RUN_TEST(test_filter_ShouldFilterOutAllEvenNumbersFromList);
