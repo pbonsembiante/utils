@@ -1,16 +1,3 @@
-set(PUTILS_SOURCES
-        ${CMAKE_SOURCE_DIR}/include/putils/pdict.h
-        ${CMAKE_SOURCE_DIR}/include/putils/pexcept.h
-        ${CMAKE_SOURCE_DIR}/include/putils/plist.h
-        ${CMAKE_SOURCE_DIR}/include/putils/pnode.h
-        ${CMAKE_SOURCE_DIR}/include/putils/pqueue.h
-        ${CMAKE_SOURCE_DIR}/include/putils/pstack.h
-        pdict.c
-        pexcept.c
-        plist.c
-        pqueue.c
-        pstack.c)
-
 set(PUTILS_HEADERS
         ${CMAKE_SOURCE_DIR}/include/putils/pdict.h
         ${CMAKE_SOURCE_DIR}/include/putils/pexcept.h
@@ -18,6 +5,14 @@ set(PUTILS_HEADERS
         ${CMAKE_SOURCE_DIR}/include/putils/pnode.h
         ${CMAKE_SOURCE_DIR}/include/putils/pqueue.h
         ${CMAKE_SOURCE_DIR}/include/putils/pstack.h)
+
+set(PUTILS_SOURCES
+        ${PUTILS_HEADERS}
+        pdict.c
+        pexcept.c
+        plist.c
+        pqueue.c
+        pstack.c)
 
 add_library(putilsobj OBJECT ${PUTILS_SOURCES})
 add_library(putils_shared SHARED $<TARGET_OBJECTS:putilsobj>)

@@ -23,13 +23,13 @@ matrix:
         apt:
           sources: [ 'ubuntu-toolchain-r-test']
           packages: [ 'gcc-7', 'musl-tools', 'musl-dev' ]
-      env: [COMPILER=musl-gcc, CMAKE_C_FLAGS_DEBUG="--verbose -std=c11 -Wall -Wextra -Wpedantic -Wuninitialized -Winit-self -static", CMAKE_EXE_LINKER_FLAGS=]
+      env: [COMPILER=musl-gcc, CMAKE_C_FLAGS_DEBUG="--verbose -std=c11 -Wall -Wextra -Wpedantic -Wuninitialized -Winit-self -Wchkp", CMAKE_EXE_LINKER_FLAGS=]
 
 before_install:
   - sudo apt-get update -qq
 
 install:
-  - sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-7 90
+  - sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-7 90 || echo "OK"
 
 after_success:
   - bash <(curl -s https://codecov.io/bash) -f '!*unity*' -F unittesting
