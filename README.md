@@ -96,11 +96,11 @@ Once CMake is installed you have two choices:
 
 If running from command line you should use:
 
-      > `git clone https://github.com/Phanatos-/utils.git`
-      > `cd utils`
-      > `mkdir build && cd build`
-      > `cmake ..`
-      > `make`
+      > git clone https://github.com/Phanatos-/utils.git
+      > cd utils
+      > mkdir build && cd build
+      > cmake ..
+      > make
 
 You can, and should, set compiler/linker flags to use in the build using -D. You can look at [Travis YML](./.travis.yml) for an example.
 
@@ -114,12 +114,12 @@ I'm currently writing the tests for the available code and will not write any ne
 
 You can run `ctest` moving to the test directory in your `build` directory:
 
-      > `cd build/test`
-      > `ctest`
+      > cd build/test
+      > ctest
 
 ## Contributors
 
-* [Phanatos](https://github.com/Phanatos-) (Patricio Bonsembiante)
+* [Phanatos](https://github.com/Phanatos-)
 * [Dipiert](https://github.com/Dipiert)
 
 ## License
