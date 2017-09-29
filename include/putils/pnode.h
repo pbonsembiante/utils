@@ -15,11 +15,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ***************************************************************************/
+#ifndef plist_member_t
+#define plist_member_t void
+#endif
 
 typedef struct plinked_node plinked_node;
 struct plinked_node
 {
-	void *data;
+    plist_member_t* data;
     struct plinked_node *next;
 };
 

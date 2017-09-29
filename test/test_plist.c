@@ -1,4 +1,7 @@
 #include <string.h>
+
+#define plist_member_t size_t
+
 #include "putils/plist.h"
 #include "unity.h"
 
@@ -24,7 +27,7 @@ int isFreed(void *p)
 }
 
 void setUp(void) {
-    data = calloc(DATA_ARRAY_LEN, sizeof(size_t));
+    data = calloc(DATA_ARRAY_LEN, sizeof(plist_member_t));
     L = plist_create();
 }
 
@@ -33,31 +36,31 @@ void tearDown(void) {
     plist_destroy(L);
 }
 
-bool comp(const void *a, const void *b) {
-    const int *_a = a;
-    const int *_b = b;
-    return _a < _b;
+bool comp(const plist_member_t* a, const plist_member_t* b) {
+    const plist_member_t* _a = a;
+    const plist_member_t* _b = b;
+    return *_a < *_b;
 }
 
-void *mapper(void *_orig) {
-    const int *orig = _orig;
-    int *mapped = calloc(1, sizeof(int));
+plist_member_t* mapper(const plist_member_t* _orig) {
+    const plist_member_t* orig = _orig;
+    plist_member_t* mapped = calloc(1, sizeof(plist_member_t));
     *mapped = *orig * 2;
     return mapped;
 }
 
-bool isEven(void *_val) {
-    const int *number = _val;
+bool isEven(const plist_member_t* _val) {
+    const plist_member_t* number = _val;
     return (*number % 2) == 0;
 }
 
-bool is99(void *_val) {
-    const int *number = _val;
+bool is99(const plist_member_t* _val) {
+    const plist_member_t* number = _val;
     return (*number == 99);
 }
 
 void loadList(void) {
-    for (size_t i = 0; i < DATA_ARRAY_LEN; ++i) {
+    for (plist_member_t i = 0; i < DATA_ARRAY_LEN; ++i) {
         data[i] = i + 1;
         plist_append(L, &data[i]);
     }
