@@ -1,12 +1,11 @@
 #include <string.h>
-#include <stdlib.h>
 #include "putils/pdict.h"
 #include "unity.h"
 
 #define DATA_ARRAY_LEN 10
 
-pdict *D = 0;
-size_t *data = 0;
+pdict* D = 0;
+size_t* data = 0;
 
 void setUp(void) {
     D = pdict_create();

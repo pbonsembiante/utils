@@ -22,6 +22,7 @@
 
 #include <stdbool.h>
 #include <stdlib.h>
+
 /*!
  * \typedef pqueue_queue
  * \brief Type definition for abstract Queue handler.
@@ -36,13 +37,13 @@
  */
 typedef struct pqueue pqueue;
 
-typedef void (*pqueue_destroyer)(void *);
+typedef void (* pqueue_destroyer)(void*);
 
 /*!
  * \brief pqueue_create
  * \return
  */
-pqueue *pqueue_create(void);
+pqueue* pqueue_create(void);
 
 /*!
  * \brief pqueue_enqueue
@@ -50,62 +51,61 @@ pqueue *pqueue_create(void);
  * \param data
  * \return
  */
-size_t pqueue_enqueue(pqueue *self, void *data);
+size_t pqueue_enqueue(pqueue* self, void* data);
 
 /*!
  * \brief pqueue_dequeue
  * \param self
  * \return
  */
-void *pqueue_dequeue(pqueue *self);
+void* pqueue_dequeue(pqueue* self);
 
 /*!
  * \brief pqueue_peek
  * \param self
  * \return
  */
-void *pqueue_peek(pqueue *self);
+void* pqueue_peek(pqueue* self);
 
 /*!
  * \brief pqueue_size
  * \param self
  * \return
  */
-size_t pqueue_size(pqueue *self);
+size_t pqueue_size(pqueue* self);
 
 /*!
  * \brief pqueue_is_empty
  * \param self
  * \return
  */
-bool pqueue_is_empty(pqueue *self);
+bool pqueue_is_empty(pqueue* self);
 
 /*!
  * \brief pqueue_clean
  * \param self
  */
-void pqueue_clean(pqueue *self);
+void pqueue_clean(pqueue* self);
 
 /*!
  * \brief pqueue_clean_destroying_data
  * \param self
  * \param destroyer
  */
-void pqueue_clean_destroying_data(pqueue *self,
-                                  pqueue_destroyer destroyer);
+void pqueue_clean_destroying_data(pqueue* self, pqueue_destroyer destroyer);
 
 /*!
  * \brief pqueue_destroy
  * \param self
  */
-void pqueue_destroy(pqueue *self);
+void pqueue_destroy(pqueue* self);
 
 /*!
  * \brief pqueue_destroy_all
  * \param self
  * \param destroyer
  */
-void pqueue_destroy_all(pqueue *self, pqueue_destroyer destroyer);
+void pqueue_destroy_all(pqueue* self, pqueue_destroyer destroyer);
 
 /*
  * Handy macros

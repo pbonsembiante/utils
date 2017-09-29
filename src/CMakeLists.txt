@@ -18,5 +18,5 @@ add_library(putilsobj OBJECT ${PUTILS_SOURCES})
 add_library(putils_shared SHARED $<TARGET_OBJECTS:putilsobj>)
 add_library(putils_static STATIC $<TARGET_OBJECTS:putilsobj>)
 
-install(TARGETS putils_static putils_shared DESTINATION lib )
+install(TARGETS putils_static putils_shared DESTINATION lib)
 install(FILES ${PUTILS_HEADERS} DESTINATION include)

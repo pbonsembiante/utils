@@ -18,52 +18,46 @@
 #include "unity.h"
 #include <string.h>
 
-pqueue *Q = 0;
+pqueue* Q = 0;
 
-void setUp(void)
-{
+void setUp(void) {
     Q = pqueue_create();
 }
 
-void tearDown(void)
-{
+void tearDown(void) {
     pqueue_destroy(Q);
 }
 
 /*
  * See: https://stackoverflow.com/a/22637665/6194674
  * */
-int isFreed(void *p)
-{
-    void * q;
-    char p_addr [50];
-    char q_addr [50];
+int isFreed(void* p) {
+    void* q;
+    char p_addr[50];
+    char q_addr[50];
 
     sprintf(p_addr, "%p", p);
 
-    q = malloc (1);
+    q = malloc(1);
     sprintf(q_addr, "%p", q);
-    free (q);
+    free(q);
 
-    return ! strncmp(q_addr, p_addr, 50);
+    return !strncmp(q_addr, p_addr, 50);
 }
 
-void test_create_ShouldCreateAnEmptyQueue(void)
-{
+void test_create_ShouldCreateAnEmptyQueue(void) {
     TEST_ASSERT_NOT_NULL(Q);
     TEST_ASSERT_TRUE(pqueue_is_empty(Q));
 }
 
-void test_create_ShouldCreateAZeroSizeQueue(void)
-{
+void test_create_ShouldCreateAZeroSizeQueue(void) {
     TEST_ASSERT_NOT_NULL(Q);
     TEST_ASSERT_EQUAL_UINT(0, pqueue_size(Q));
 }
 
-void test_enqueue_ShouldAppendAnElementToTheQueue(void)
-{
+void test_enqueue_ShouldAppendAnElementToTheQueue(void) {
     size_t prev_size = pqueue_size(Q);
-    char *test_string = calloc(11, sizeof(char));
+    char* test_string = calloc(11, sizeof(char));
 
     strncpy(test_string, "Test data!", 11);
 
@@ -74,9 +68,8 @@ void test_enqueue_ShouldAppendAnElementToTheQueue(void)
     free(test_string);
 }
 
-void test_dequeue_ShouldRemoveAnElementFromTheQueue(void)
-{
-    char *test_string = calloc(11, sizeof(char));
+void test_dequeue_ShouldRemoveAnElementFromTheQueue(void) {
+    char* test_string = calloc(11, sizeof(char));
     strncpy(test_string, "Test data!", 11);
 
     pqueue_enqueue(Q, test_string);
@@ -84,22 +77,20 @@ void test_dequeue_ShouldRemoveAnElementFromTheQueue(void)
     size_t prev_size = pqueue_size(Q);
 
     pqueue_dequeue(Q);
-    TEST_ASSERT_EQUAL_UINT(prev_size - 1, pqueue_size(Q) );
+    TEST_ASSERT_EQUAL_UINT(prev_size - 1, pqueue_size(Q));
 
     free(test_string);
 }
 
-void test_enqueue_ShouldEnqueueNullElements(void)
-{
-    char *test_string = 0;
+void test_enqueue_ShouldEnqueueNullElements(void) {
+    char* test_string = 0;
     size_t prev_size = pqueue_size(Q);
 
     pqueue_enqueue(Q, test_string);
     TEST_ASSERT_EQUAL_UINT(prev_size + 1, pqueue_size(Q));
 }
 
-void test_dequeue_ShouldNotDequeueFromAnEmptyQueue(void)
-{
+void test_dequeue_ShouldNotDequeueFromAnEmptyQueue(void) {
     TEST_ASSERT_NULL(pqueue_dequeue(Q));
 }
 
@@ -128,10 +119,13 @@ void test_clean_ShouldEmptyTheQueue(void) {
 }
 
 void test_destroyAll_ShouldDestroyTheQueueAndEveryElementInIt(void) {
-    pqueue *queue  = pqueue_create();
-    size_t *x = calloc(1, sizeof(size_t)); *x = 99;
-    size_t *y = calloc(1, sizeof(size_t)); *y = 99;
-    size_t *z = calloc(1, sizeof(size_t)); *z = 99;
+    pqueue* queue = pqueue_create();
+    size_t* x = calloc(1, sizeof(size_t));
+    *x = 99;
+    size_t* y = calloc(1, sizeof(size_t));
+    *y = 99;
+    size_t* z = calloc(1, sizeof(size_t));
+    *z = 99;
 
     pqueue_enqueue(queue, x);
     pqueue_enqueue(queue, y);
@@ -142,9 +136,12 @@ void test_destroyAll_ShouldDestroyTheQueueAndEveryElementInIt(void) {
 }
 
 void test_cleanDestroy_ShouldDestroyTheQueueAndEveryElementInIt(void) {
-    size_t *x = calloc(1, sizeof(size_t)); *x = 99;
-    size_t *y = calloc(1, sizeof(size_t)); *y = 99;
-    size_t *z = calloc(1, sizeof(size_t)); *z = 99;
+    size_t* x = calloc(1, sizeof(size_t));
+    *x = 99;
+    size_t* y = calloc(1, sizeof(size_t));
+    *y = 99;
+    size_t* z = calloc(1, sizeof(size_t));
+    *z = 99;
 
     pqueue_enqueue(Q, x);
     pqueue_enqueue(Q, y);
@@ -155,8 +152,7 @@ void test_cleanDestroy_ShouldDestroyTheQueueAndEveryElementInIt(void) {
     TEST_ASSERT_TRUE(pqueue_is_empty(Q));
 }
 
-int main(void)
-{
+int main(void) {
     UNITY_BEGIN();
 
     RUN_TEST(test_create_ShouldCreateAnEmptyQueue);

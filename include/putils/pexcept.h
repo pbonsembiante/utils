@@ -60,9 +60,8 @@ extern "C" {
 #endif
 
 typedef struct PEXCEPT_FRAME_T PEXCEPT_FRAME_T;
-struct PEXCEPT_FRAME_T
-{
-    jmp_buf *frame;
+struct PEXCEPT_FRAME_T {
+    jmp_buf* frame;
     PEXCEPT_T volatile exception;
 };
 
@@ -74,22 +73,22 @@ extern volatile PEXCEPT_FRAME_T pexceptFrames[];
         jmp_buf *PrevFrame, NewFrame;                               \
         unsigned int current = PEXCEPT_GET_ID;                      \
         PrevFrame = pexceptFrames[current].frame;                  \
-        pexceptFrames[current].frame = (jmp_buf*)(&NewFrame);		\
-        pexceptFrames[current].exception = PEXCEPT_NONE;			\
+        pexceptFrames[current].frame = (jmp_buf*)(&NewFrame);        \
+        pexceptFrames[current].exception = PEXCEPT_NONE;            \
         PEXCEPT_HOOK_START_TRY;                                     \
         if (setjmp(NewFrame) == 0) {                                \
-			if (1)
+            if (1)
 
 #define catch(e)                                                    \
             else { }                                                \
-            pexceptFrames[current].exception = PEXCEPT_NONE;		\
+            pexceptFrames[current].exception = PEXCEPT_NONE;        \
             PEXCEPT_HOOK_SUCCESS_TRY;                               \
         } else {                                                    \
-            (e) = pexceptFrames[current].exception;					\
+            (e) = pexceptFrames[current].exception;                    \
             (void)(e);                                              \
-            PEXCEPT_HOOK_START_CATCH;								\
+            PEXCEPT_HOOK_START_CATCH;                                \
         }                                                           \
-        pexceptFrames[current].frame = PrevFrame;					\
+        pexceptFrames[current].frame = PrevFrame;                    \
         PEXCEPT_HOOK_AFTER_TRY;                                     \
     }                                                               \
     if (pexceptFrames[PEXCEPT_GET_ID].exception != PEXCEPT_NONE)
