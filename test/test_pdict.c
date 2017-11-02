@@ -20,7 +20,7 @@ void tearDown(void) {
 
 void loadDict(void) {
     keys = malloc(sizeof(char[DICT_DATA_LEN][KEYS_LEN]));
-    data = calloc(1, DICT_DATA_LEN*sizeof(size_t*));
+    data = calloc(1, DICT_DATA_LEN*sizeof(size_t));
     for( size_t i = 0; i < DICT_DATA_LEN; ++i) {
         snprintf(keys[i], KEYS_LEN, "%c", (int) i + 65);
         data[i] = i + 1;
@@ -46,7 +46,7 @@ void test_isEmpty_ShouldReturnTrueOnAnEmptyDict(void) {
 
 void test_size_SizeOfNewDictWithOneItemShouldBeOne(void) {
     char *key = malloc(sizeof(char[1][KEYS_LEN]));
-    data = calloc(1, sizeof(size_t*));
+    data = calloc(1, sizeof(size_t));
     data[0] = 0;
     snprintf(key, KEYS_LEN, "%s", "0_key");
     pdict_put(D, key, &data[0]);
@@ -71,7 +71,7 @@ void test_size_ShouldNotBeZeroAfterAddingElements(void) {
 
 void test_add_ShouldAddANewElement(void) {
     char *key = malloc(sizeof(char[1][KEYS_LEN]));
-    data = calloc(1, sizeof(size_t*));
+    data = calloc(1, sizeof(size_t));
     snprintf(key, KEYS_LEN, "%s", "99_key");
     data[0] = 99;
     TEST_ASSERT_TRUE(pdict_is_empty(D));
@@ -81,7 +81,7 @@ void test_add_ShouldAddANewElement(void) {
 
 void test_append_ShouldAddAnElementToAnEmptyDict(void) {
     char* key = malloc(sizeof(char[1][KEYS_LEN]));
-    data = calloc(1, sizeof(size_t*));
+    data = calloc(1, sizeof(size_t));
     snprintf(key, KEYS_LEN, "%s", "1_key");
     data[0] = 1;
     TEST_ASSERT_TRUE(pdict_is_empty(D));
@@ -118,9 +118,8 @@ int main(void) {
 /* Pending
 
 test_plist based:
-
-test_get_ShouldGetAValidElementFromTheDict(){};
-test_get_ShouldGetAllElementsFromTheDict(){};
+void test_get_ShouldGetAValidElementFromTheDict(){};
+void_test_get_ShouldGetAllElementsFromTheDict(){};
 void test_remove_ShouldRemoveAnElementFromDict(void) {}
 void test_remove_ShouldRemoveFirstElementFromDict(void) {}
 void test_remove_ShouldRemoveLastElementFromList(void) {}
