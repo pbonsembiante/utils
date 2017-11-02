@@ -29,6 +29,10 @@
 #include <stdlib.h>
 #include "pnode.h"
 
+#ifndef plist_member_t
+#define plist_member_t void*
+#endif
+
 /*!
  * \typedef plist_comparator
  * \brief User-defined function type to compare two objects.
