@@ -17,6 +17,7 @@
  ***************************************************************************/
 
 #define PDICT_INITIAL_SIZE 20
+#define KEYS_LEN 10
 
 #include "pnode.h"
 #include <stdbool.h>
@@ -24,11 +25,25 @@
 
 typedef struct pdict pdict;
 
+typedef struct key_value key_value;
+struct key_value {
+    void* value;
+    char* key;
+};
+
+typedef struct key_value_array key_value_array;
+struct key_value_array {
+    key_value *array;
+    size_t count;
+};
+
 pdict* pdict_create();
 
 void pdict_put(pdict* self, char* key, void* data);
 
-void* pdict_get(pdict* self, char* key);
+void* pdict_get_value(pdict* self, char* key);
+
+key_value_array pdict_get_all(pdict* self);
 
 void* pdict_remove(pdict* self, char* key);
 
