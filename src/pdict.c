@@ -82,7 +82,7 @@ void pdict_put(pdict* self, char* key, void* data) {
     self->elements_count++;
 }
 
-void* pdict_get(pdict* self, char* key) {
+void* pdict_get_value(pdict* self, char* key) {
     phashmap_node* element = pdict_get_element(self, key);
     return element ? element->data : 0;
 }

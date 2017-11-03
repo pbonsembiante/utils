@@ -94,6 +94,15 @@ void test_isEmpty_ShouldReturnFalseOnALoadedDict(void) {
     TEST_ASSERT_FALSE(pdict_is_empty(D));
 }
 
+void test_get_ShouldGetAllValuesFromTheDict(void) {
+    loadDict();
+    for (size_t i = 0; i < DICT_DATA_LEN - 1; ++i) {
+        void *element = pdict_get_value(D, keys[i]);
+        TEST_ASSERT_NOT_NULL(element);
+        TEST_ASSERT_EQUAL_UINT(element, &data[i]);
+    }
+}
+
 int main(void) {
     UNITY_BEGIN();
     RUN_TEST(test_create_NewDictShouldBeEmpty);
@@ -112,14 +121,16 @@ int main(void) {
 
     RUN_TEST(test_append_ShouldAddAnElementToAnEmptyDict);
 
+    RUN_TEST(test_get_ShouldGetAllValuesFromTheDict);
+
     return UNITY_END();
 }
 
 /* Pending
 
+void_test_get_ShouldGetAllKeysValuesFromTheDict(){};
+
 test_plist based:
-void test_get_ShouldGetAValidElementFromTheDict(){};
-void_test_get_ShouldGetAllElementsFromTheDict(){};
 void test_remove_ShouldRemoveAnElementFromDict(void) {}
 void test_remove_ShouldRemoveFirstElementFromDict(void) {}
 void test_remove_ShouldRemoveLastElementFromList(void) {}

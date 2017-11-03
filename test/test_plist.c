@@ -332,14 +332,6 @@ void test_countMatch_ShouldCountEvenNumbersAndResultShouldBeHalfListSize(void) {
     TEST_ASSERT_EQUAL_UINT(DATA_ARRAY_LEN / 2, plist_count_matching(L, isEven));
 }
 
-void test_get_ShouldGetAValidElementFromTheList(void) {
-    loadList();
-
-    TEST_ASSERT_NOT_NULL(plist_get(L, DATA_ARRAY_LEN / 2));
-    TEST_ASSERT_EQUAL_UINT(1 + DATA_ARRAY_LEN / 2,
-                           PLIST_GET_UINT(L, DATA_ARRAY_LEN / 2));
-
-}
 
 void test_get_ShouldGetAllElementsFromTheList(void) {
     loadList();
@@ -704,7 +696,6 @@ int main(void) {
         test_countMatch_ShouldCountEvenNumbersAndResultShouldBeHalfListSize);
     RUN_TEST(test_countMatch_ShouldCountEvenNumbersAndResultShouldBeZero);
 
-    RUN_TEST(test_get_ShouldGetAValidElementFromTheList);
     RUN_TEST(test_get_ShouldGetAllElementsFromTheList);
     RUN_TEST(test_get_ShouldGetTheTailElementFromTheList);
 
