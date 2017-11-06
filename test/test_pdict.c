@@ -28,6 +28,11 @@ void loadDict(void) {
     }
 }
 
+void free_keys_data(){
+    free(keys);
+    free(data);
+}
+
 void test_create_NewDictShouldBeEmpty(void) {
     TEST_ASSERT_TRUE(pdict_is_empty(D));
 }
@@ -51,22 +56,27 @@ void test_size_SizeOfNewDictWithOneItemShouldBeOne(void) {
     snprintf(key, KEYS_LEN, "%s", "0_key");
     pdict_put(D, key, &data[0]);
     TEST_ASSERT_EQUAL_UINT(pdict_size(D), 1);
+    free(key);
+    free(data);
 }
 
 void test_size_ShouldBeEqualToTheNumberOfAddedElements(void) {
     loadDict();
     TEST_ASSERT_EQUAL_UINT(pdict_size(D), DICT_DATA_LEN);
+    free_keys_data();
 }
 
 void test_size_ShouldBeZeroForACleanDict(void) {
     loadDict();
     pdict_clean(D);
     TEST_ASSERT_EQUAL_UINT(pdict_size(D), 0);
+    free_keys_data();
 }
 
 void test_size_ShouldNotBeZeroAfterAddingElements(void) {
     loadDict();
     TEST_ASSERT_TRUE(pdict_size(D) != 0);
+    free_keys_data();
 }
 
 void test_add_ShouldAddANewElement(void) {
@@ -77,6 +87,8 @@ void test_add_ShouldAddANewElement(void) {
     TEST_ASSERT_TRUE(pdict_is_empty(D));
     pdict_put(D, key, &data[0]);
     TEST_ASSERT_EQUAL_UINT(1, pdict_size(D));
+    free(key);
+    free(data);
 }
 
 void test_append_ShouldAddAnElementToAnEmptyDict(void) {
@@ -87,11 +99,14 @@ void test_append_ShouldAddAnElementToAnEmptyDict(void) {
     TEST_ASSERT_TRUE(pdict_is_empty(D));
     pdict_put(D, key, &data[0]);
     TEST_ASSERT_FALSE(pdict_is_empty(D));
+    free(key);
+    free(data);
 }
 
 void test_isEmpty_ShouldReturnFalseOnALoadedDict(void) {
     loadDict();
     TEST_ASSERT_FALSE(pdict_is_empty(D));
+    free_keys_data();
 }
 
 void test_get_ShouldGetAllValuesFromTheDict(void) {
@@ -101,6 +116,7 @@ void test_get_ShouldGetAllValuesFromTheDict(void) {
         TEST_ASSERT_NOT_NULL(element);
         TEST_ASSERT_EQUAL_UINT(element, &data[i]);
     }
+    free_keys_data();
 }
 
 int main(void) {
@@ -127,9 +143,7 @@ int main(void) {
 }
 
 /* Pending
-
 void_test_get_ShouldGetAllKeysValuesFromTheDict(){};
-
 test_plist based:
 void test_remove_ShouldRemoveAnElementFromDict(void) {}
 void test_remove_ShouldRemoveFirstElementFromDict(void) {}
