@@ -305,3 +305,11 @@ static char* pdict_strdup(char const* const str) {
 
     return s;
 }
+
+key_value pdict_get(pdict *self, char *key) {
+    struct key_value key_value;
+    phashmap_node *element = pdict_get_element(self, key);
+    key_value.key = element->key;
+    key_value.value = element->data;
+    return key_value;
+}
