@@ -113,6 +113,15 @@ void test_get_ShouldGetAllValuesFromTheDict(void) {
     free_keys_data();
 }
 
+void test_get_ShouldGetAKeyValuePairFromTheDict(void) {
+    loadDict();
+    char *key_to_test = "C";
+    void *element = pdict_get_value(D, keys[2]);
+    key_value key_value = pdict_get(D, key_to_test);
+    TEST_ASSERT_TRUE(strcmp(key_to_test, key_value.key) == 0);
+    TEST_ASSERT_EQUAL_UINT(element, key_value.value);
+}
+
 int main(void) {
     UNITY_BEGIN();
     RUN_TEST(test_create_NewDictShouldBeEmpty);
@@ -132,6 +141,8 @@ int main(void) {
     RUN_TEST(test_append_ShouldAddAnElementToAnEmptyDict);
 
     RUN_TEST(test_get_ShouldGetAllValuesFromTheDict);
+    RUN_TEST(test_get_ShouldGetAKeyValuePairFromTheDict);
+
 
     return UNITY_END();
 }

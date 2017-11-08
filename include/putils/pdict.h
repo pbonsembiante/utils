@@ -43,12 +43,13 @@ void pdict_put(pdict* self, char* key, void* data);
 
 void* pdict_get_value(pdict* self, char* key);
 
+key_value pdict_get(pdict *self, char *key);
+
 key_value_array pdict_get_all(pdict* self);
 
 void* pdict_remove(pdict* self, char* key);
 
-void
-pdict_remove_and_destroy(pdict* self, char* key, void(* data_destroyer)(void*));
+void pdict_remove_and_destroy(pdict *self, char *key, void(*data_destroyer)(void *));
 
 void pdict_iterator(pdict* self, void(* closure)(char*, void*));
 
