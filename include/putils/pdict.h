@@ -25,15 +25,15 @@
 
 typedef struct pdict pdict;
 
-typedef struct key_value key_value;
-struct key_value {
+typedef struct pmap pmap;
+struct pmap {
     void* value;
     char* key;
 };
 
-typedef struct key_value_array key_value_array;
-struct key_value_array {
-    key_value *array;
+typedef struct pmap_array pmap_array;
+struct pmap_array {
+    pmap *array;
     size_t count;
 };
 
@@ -43,9 +43,9 @@ void pdict_put(pdict* self, char* key, void* data);
 
 void* pdict_get_value(pdict* self, char* key);
 
-key_value pdict_get(pdict *self, char *key);
+pmap pdict_get(pdict *self, char *key);
 
-key_value_array pdict_get_all(pdict* self);
+pmap_array pdict_get_all(pdict *self);
 
 void* pdict_remove(pdict* self, char* key);
 

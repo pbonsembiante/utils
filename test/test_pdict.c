@@ -113,13 +113,26 @@ void test_get_ShouldGetAllValuesFromTheDict(void) {
     free_keys_data();
 }
 
-void test_get_ShouldGetAKeyValuePairFromTheDict(void) {
+void test_get_ShouldGetAllPmapsFromTheDict(void) {
     loadDict();
-    char *key_to_test = "C";
-    void *element = pdict_get_value(D, keys[2]);
-    key_value key_value = pdict_get(D, key_to_test);
-    TEST_ASSERT_TRUE(strcmp(key_to_test, key_value.key) == 0);
-    TEST_ASSERT_EQUAL_UINT(element, key_value.value);
+    for (size_t i = 0; i < DICT_DATA_LEN; ++i) {
+        char *key_to_test = keys[i];
+        void *element = pdict_get_value(D, keys[i]);
+        pmap pair = pdict_get(D, key_to_test);
+        TEST_ASSERT_TRUE(strcmp(key_to_test, pair.key) == 0);
+        TEST_ASSERT_EQUAL_UINT(element, pair.value);
+
+    }
+    free_keys_data();
+};
+
+void test_remove_ShouldRemoveAllElementsFromDict(void) {
+    loadDict();
+    for (int i = 0; i < DICT_DATA_LEN; i++) {
+        TEST_ASSERT_EQUAL_UINT(DICT_DATA_LEN - i, pdict_size(D));
+        pdict_remove(D, keys[i]);
+    }
+    free_keys_data();
 }
 
 int main(void) {
@@ -141,17 +154,15 @@ int main(void) {
     RUN_TEST(test_append_ShouldAddAnElementToAnEmptyDict);
 
     RUN_TEST(test_get_ShouldGetAllValuesFromTheDict);
-    RUN_TEST(test_get_ShouldGetAKeyValuePairFromTheDict);
+    RUN_TEST(test_get_ShouldGetAllPmapsFromTheDict);
 
-
+    RUN_TEST(test_remove_ShouldRemoveAllElementsFromDict);
     return UNITY_END();
 }
 
 /* Pending
-void_test_get_ShouldGetAllKeysValuesFromTheDict(){};
+
 test_plist based:
-void test_remove_ShouldRemoveAnElementFromDict(void) {}
-void test_remove_ShouldRemoveFirstElementFromDict(void) {}
-void test_remove_ShouldRemoveLastElementFromList(void) {}
+
 void test_removeDestroy_ShouldRemoveAndDestroyAnElement(void) {}
 */
