@@ -41,7 +41,7 @@ pdict_destroy_element(phashmap_node* element, void(* data_destroyer)(void*));
 
 static void internal_dictionary_clean_and_destroy_elements(pdict* self,
                                                            void(* data_destroyer)(
-                                                               void*));
+                                                                   void*));
 
 static char* pdict_strdup(char const* str);
 
@@ -190,7 +190,7 @@ static void pdict_resize(pdict* self, size_t new_max_size) {
 
 static void internal_dictionary_clean_and_destroy_elements(pdict* self,
                                                            void(* data_destroyer)(
-                                                               void*)) {
+                                                                   void*)) {
     for (size_t table_index = 0;
          table_index < self->table_max_size; table_index++) {
         phashmap_node* element = self->elements[table_index];
@@ -306,10 +306,10 @@ static char* pdict_strdup(char const* const str) {
     return s;
 }
 
-key_value pdict_get(pdict *self, char *key) {
-    struct key_value key_value;
+pmap pdict_get(pdict *self, char *key) {
+    struct pmap pair;
     phashmap_node *element = pdict_get_element(self, key);
-    key_value.key = element->key;
-    key_value.value = element->data;
-    return key_value;
+    pair.key = element->key;
+    pair.value = element->data;
+    return pair;
 }
