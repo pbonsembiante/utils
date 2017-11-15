@@ -51,7 +51,7 @@ void test_isEmpty_ShouldReturnTrueOnAnEmptyDict(void) {
 
 void test_size_SizeOfNewDictWithOneItemShouldBeOne(void) {
     char *_key = malloc(KEYS_LEN);
-    size_t* _data = 0;
+    size_t _data = 0;
     snprintf(_key, KEYS_LEN, "%s", "0_key");
     pdict_put(D, keys[0], &_data);
     TEST_ASSERT_EQUAL_UINT(pdict_size(D), 1);
@@ -79,7 +79,7 @@ void test_size_ShouldNotBeZeroAfterAddingElements(void) {
 
 void test_add_ShouldAddANewElement(void) {
     char *_key = malloc(KEYS_LEN);
-    size_t* _data = 99;
+    size_t _data = 99;
     snprintf(_key, KEYS_LEN, "%s", "99_key");
     TEST_ASSERT_TRUE(pdict_is_empty(D));
     pdict_put(D, _key, &_data);
@@ -90,9 +90,9 @@ void test_add_ShouldAddANewElement(void) {
 void test_append_ShouldAddAnElementToAnEmptyDict(void) {
     char* _key = malloc(KEYS_LEN);
     snprintf(_key, KEYS_LEN, "%s", "1_key");
-    size_t* _data = 1;
+    size_t _data = 1;
     TEST_ASSERT_TRUE(pdict_is_empty(D));
-    pdict_put(D, _key, _data);
+    pdict_put(D, _key, &_data);
     TEST_ASSERT_FALSE(pdict_is_empty(D));
     free(_key);
 }
