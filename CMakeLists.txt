@@ -3,6 +3,11 @@ project(PUtils)
 
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
+include(ExternalProject)
+
+find_package(Git REQUIRED)
 
 if(ENABLE_CPPCHECK)
 
