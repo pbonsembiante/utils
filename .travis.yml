@@ -8,14 +8,14 @@ matrix:
       addons:
         apt:
           sources: [ 'ubuntu-toolchain-r-test' ]
-          packages: [ 'gcc-7', 'cmake' ]
+          packages: [ 'gcc-7' ]
       env: [COMPILER=gcc-7, CMAKE_C_FLAGS_DEBUG="--verbose -std=c11 -Wall -Wextra -Wpedantic -Wchkp -Wuninitialized -Winit-self --coverage -O0", CMAKE_EXE_LINKER_FLAGS=-lgcov]
 
     - compiler: clang-3.9
       addons:
         apt:
           sources: [ 'ubuntu-toolchain-r-test']
-          packages: [ 'clang-3.9', 'cmake']
+          packages: [ 'clang-3.9']
       env: [COMPILER=clang-3.9, CMAKE_C_FLAGS_DEBUG="--verbose -std=c11 -Wall -Wextra -Wpedantic -Wchkp -Wuninitialized -Winit-self", CMAKE_EXE_LINKER_FLAGS=]
 
     - compiler: musl-gcc
@@ -34,10 +34,28 @@ install:
 after_success:
   - bash <(curl -s https://codecov.io/bash) -f '!*unity*' -F unittesting
 
+before_script:
+
+  # Build Folder
+  - mkdir build
+  - cd build
+
+  # Update / Install CMake
+  - |
+    if [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then
+      mkdir -p external/cmake
+      pushd external/cmake
+      wget https://cmake.org/files/v3.9/cmake-3.9.6-Linux-x86_64.sh
+      chmod +x cmake-*-Linux-x86_64.sh
+      ./cmake-*-Linux-x86_64.sh --exclude-subdir --skip-license
+      export PATH="${PWD}/bin:$PATH"
+      popd
+    else
+      if ! brew ls --version cmake &>/dev/null; then brew update; brew install cmake; fi
+    fi
+
 script:
-  - mkdir build && cd build
   - cmake -DCMAKE_C_COMPILER=$COMPILER -DCMAKE_BUILD_TYPE=Debug -DCMAKE_C_FLAGS_DEBUG="$CMAKE_C_FLAGS_DEBUG" -DCMAKE_EXE_LINKER_FLAGS=$CMAKE_EXE_LINKER_FLAGS ..
-  - make -j 4 VERBOSE=1
-  - cd test && ctest -j 4 -VV
-  - cd ../..
+  - make -j 4
+  - cd test && ctest -j 4
   
