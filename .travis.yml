@@ -61,5 +61,5 @@ script:
   - cmake -DENABLE_CPPCHECK=ON -DCMAKE_C_COMPILER=$COMPILER -DCMAKE_BUILD_TYPE=Debug -DCMAKE_C_FLAGS_DEBUG="$CMAKE_C_FLAGS_DEBUG" -DCMAKE_EXE_LINKER_FLAGS=$CMAKE_EXE_LINKER_FLAGS ..
   - make -j 4
   - make check
-  - cd test && ctest -j 4
+  - ctest -j 4
   - ctest -D NightlyMemoryCheck

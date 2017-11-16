@@ -1,5 +1,3 @@
-include(CTest)
-
 set(CTEST_MEMORYCHECK_COMMAND  valgrind)
 set(CTEST_MEMORYCHECK_COMMAND_OPTIONS  "${MEMORYCHECK_COMMAND_OPTIONS} --leak-check=full")
 set(CTEST_MEMORYCHECK_COMMAND_OPTIONS  "${MEMORYCHECK_COMMAND_OPTIONS} --track-fds=yes")
@@ -28,7 +26,6 @@ target_link_libraries(test_pstack putils_static unitylib)
 target_link_libraries(test_pqueue putils_static unitylib)
 target_link_libraries(test_pdict putils_static unitylib)
 
-enable_testing()
 add_test(TEST_PLIST test_plist)
 add_test(TEST_PSTACK test_pstack)
 add_test(TEST_PQUEUE test_pqueue)
