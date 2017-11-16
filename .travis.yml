@@ -9,7 +9,7 @@ matrix:
       addons:
         apt:
           sources: [ 'ubuntu-toolchain-r-test' ]
-          packages: [ 'gcc-7' ]
+          packages: [ 'gcc-7', 'valgrind' ]
       env: [COMPILER=gcc-7, CMAKE_C_FLAGS_DEBUG="-std=c11 -Wall -Wextra -Wpedantic -Wchkp -Wuninitialized -Winit-self --coverage -O0", CMAKE_EXE_LINKER_FLAGS=-lgcov]
 
     - compiler: clang-3.9
@@ -17,7 +17,7 @@ matrix:
       addons:
         apt:
           sources: [ 'ubuntu-toolchain-r-test']
-          packages: [ 'clang-3.9']
+          packages: [ 'clang-3.9', 'valgrind']
       env: [COMPILER=clang-3.9, CMAKE_C_FLAGS_DEBUG="-std=c11 -Wall -Wextra -Wpedantic -Wuninitialized -Winit-self", CMAKE_EXE_LINKER_FLAGS=]
 
     - compiler: musl-gcc
@@ -25,7 +25,7 @@ matrix:
       addons:
         apt:
           sources: [ 'ubuntu-toolchain-r-test']
-          packages: [ 'gcc-7', 'musl-tools', 'musl-dev' ]
+          packages: [ 'gcc-7', 'musl-tools', 'musl-dev', 'valgrind']
       env: [COMPILER=musl-gcc, CMAKE_C_FLAGS_DEBUG="-std=c11 -Wall -Wextra -Wpedantic -Wuninitialized -Winit-self -Wchkp", CMAKE_EXE_LINKER_FLAGS=]
 
 before_install:
