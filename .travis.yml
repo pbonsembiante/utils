@@ -62,4 +62,4 @@ script:
   - make -j 4
   - make check
   - ctest -j 4
-  - ctest -D NightlyMemoryCheck
+  - ctest -T memcheck
