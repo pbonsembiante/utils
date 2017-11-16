@@ -1,3 +1,5 @@
+include(CTest)
+
 set(UNITY_DIR
         ${CMAKE_SOURCE_DIR}/vendor/unity/src)
 

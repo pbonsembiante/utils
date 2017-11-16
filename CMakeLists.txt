@@ -6,7 +6,6 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 include(ExternalProject)
-include(CTest)
 
 find_package(Git REQUIRED)
 
@@ -31,7 +30,7 @@ if(ENABLE_CPPCHECK)
     )
 
     list(APPEND CPPCHECK_ARGS
-            --enable=warning,style,performance,portability,unusedFunction
+            --enable=warning,style,performance,portability
             --std=c11
             --verbose
             --error-exitcode=1
