@@ -6,6 +6,7 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 include(ExternalProject)
+include(CTest)
 
 find_package(Git REQUIRED)
 
