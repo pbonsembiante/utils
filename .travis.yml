@@ -4,41 +4,144 @@ language: c
 
 matrix:
   include:
+
+    #
+    # GCC 7 Build
+    #
+    - compiler: gcc-7
+
+      os: linux
+
+      addons:
+        apt:
+          sources: [ ubuntu-toolchain-r-test ]
+          packages: [ gcc-7, g++-7 ]
+
+      env: [COMPILER=gcc-7, CMAKE_C_FLAGS_DEBUG="-std=c11 -Wall -Wextra -Wpedantic -Wchkp -Wuninitialized -Winit-self --coverage -O0", CMAKE_EXE_LINKER_FLAGS=-lgcov]
+
+      script:
+        - cmake -DCMAKE_C_COMPILER=$COMPILER -DCMAKE_BUILD_TYPE=Debug -DCMAKE_C_FLAGS_DEBUG="$CMAKE_C_FLAGS_DEBUG" -DCMAKE_EXE_LINKER_FLAGS=$CMAKE_EXE_LINKER_FLAGS ..
+        - make -j 4
+        - ctest -j 4
+
+    #
+    # CLang 4.0 Build
+    #
+    - compiler: clang-4.0
+
+      os: linux
+
+      addons:
+        apt:
+          sources: [ ubuntu-toolchain-r-test , llvm-toolchain-trusty-4.0]
+          packages: [ gcc-7, g++-7, clang-4.0 ]
+
+      env: [COMPILER=clang-4.0, CMAKE_C_FLAGS_DEBUG="-std=c11 -Wall -Wextra -Wpedantic -Wchkp -Wuninitialized -Winit-self"]
+
+      script:
+        - cmake -DCMAKE_C_COMPILER=$COMPILER -DCMAKE_BUILD_TYPE=Debug -DCMAKE_C_FLAGS_DEBUG="$CMAKE_C_FLAGS_DEBUG" ..
+        - make -j 4
+        - ctest -j 4
+
+    #
+    # MUSL Build
+    #
+    - compiler: musl-gcc
+
+      os: linux
+
+      addons:
+        apt:
+          sources: [ ubuntu-toolchain-r-test ]
+          packages: [ gcc-7, g++-7, musl-tools, musl-dev ]
+
+      env: [COMPILER=musl-gcc, CMAKE_C_FLAGS_DEBUG="-std=c11 -Wall -Wextra -Wpedantic -Wchkp -Wuninitialized -Winit-self"]
+
+      script:
+        - cmake -DCMAKE_C_COMPILER=$COMPILER -DCMAKE_BUILD_TYPE=Debug -DCMAKE_C_FLAGS_DEBUG="$CMAKE_C_FLAGS_DEBUG" ..
+        - make -j 4
+        - ctest -j 4
+
+    #
+    # CppCheck Build
+    #
+    - compiler: gcc-7
+
+      os: linux
+
+      addons:
+        apt:
+          sources: [ ubuntu-toolchain-r-test ]
+          packages: [ gcc-7, g++-7 ]
+
+      env: [COMPILER=gcc-7, CMAKE_C_FLAGS_DEBUG="-std=c11 -Wall -Wextra -Wpedantic -Wchkp -Wuninitialized -Winit-self"]
+
+      script:
+        - cmake -DENABLE_CPPCHECK=ON -DCMAKE_C_COMPILER=$COMPILER -DCMAKE_BUILD_TYPE=Debug -DCMAKE_C_FLAGS_DEBUG="$CMAKE_C_FLAGS_DEBUG" ..
+        - make -j 4
+        - ctest -j 4
+
+    #
+    # Git Diff Build
+    #
+    - os: linux
+      script:
+        - |
+            if [[ -n $(git diff --check HEAD^) ]]; then
+              echo "You must remove whitespace before submitting a pull request"
+              echo ""
+              git diff --check HEAD^
+              exit -1
+            fi
+
+    #
+    # Codecov Build
+    #
     - compiler: gcc-7
       os: linux
       addons:
         apt:
-          sources: [ 'ubuntu-toolchain-r-test' ]
-          packages: [ 'gcc-7', 'valgrind' ]
-      env: [COMPILER=gcc-7, CMAKE_C_FLAGS_DEBUG="-std=c11 -Wall -Wextra -Wpedantic -Wchkp -Wuninitialized -Winit-self --coverage -O0", CMAKE_EXE_LINKER_FLAGS=-lgcov]
+          sources: [ ubuntu-toolchain-r-test ]
+          packages: [ gcc-7, g++-7 ]
 
-    - compiler: clang-3.9
+      env: [COMPILER=gcc-7, CMAKE_C_FLAGS_DEBUG="-std=c11 -Wall -Wextra -Wpedantic -Wchkp -Wuninitialized -Winit-self"]
+
+      script:
+        - cmake -DCMAKE_C_COMPILER=$COMPILER -DCMAKE_BUILD_TYPE=Debug -DCMAKE_C_FLAGS_DEBUG="$CMAKE_C_FLAGS_DEBUG" ..
+        - make -j 4
+        - ctest -j 4
+
+      after_success:
+        - bash <(curl -s https://codecov.io/bash) -f '!*unity*' -F unittesting
+
+    #
+    # Valgrind Build
+    #
+    - compiler: gcc-7
+
       os: linux
+
       addons:
         apt:
-          sources: [ 'ubuntu-toolchain-r-test']
-          packages: [ 'clang-3.9', 'valgrind']
-      env: [COMPILER=clang-3.9, CMAKE_C_FLAGS_DEBUG="-std=c11 -Wall -Wextra -Wpedantic -Wuninitialized -Winit-self", CMAKE_EXE_LINKER_FLAGS=]
+          sources: [ ubuntu-toolchain-r-test ]
+          packages: [ gcc-7, g++-7, valgrind ]
 
-    - compiler: musl-gcc
-      os: linux
-      addons:
-        apt:
-          sources: [ 'ubuntu-toolchain-r-test']
-          packages: [ 'gcc-7', 'musl-tools', 'musl-dev', 'valgrind']
-      env: [COMPILER=musl-gcc, CMAKE_C_FLAGS_DEBUG="-std=c11 -Wall -Wextra -Wpedantic -Wuninitialized -Winit-self -Wchkp", CMAKE_EXE_LINKER_FLAGS=]
+      env: [COMPILER=gcc-7, CMAKE_C_FLAGS_DEBUG="-std=c11 -Wall -Wextra -Wpedantic -Wchkp -Wuninitialized -Winit-self"]
+
+      script:
+        - cmake -DENABLE_CPPCHECK=ON -DCMAKE_C_COMPILER=$COMPILER -DCMAKE_BUILD_TYPE=Debug -DCMAKE_C_FLAGS_DEBUG="$CMAKE_C_FLAGS_DEBUG" ..
+        - make -j 4
+        - ctest -T memcheck
+
+
+
+
 
 before_install:
   - sudo apt-get update -qq
 
-install:
-  - sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-7 90 || echo "OK"
-
-after_success:
-  - bash <(curl -s https://codecov.io/bash) -f '!*unity*' -F unittesting
 
 before_script:
-
   # Build Folder
   - mkdir build
   - cd build
@@ -56,10 +159,3 @@ before_script:
     else
       if ! brew ls --version cmake &>/dev/null; then brew update; brew install cmake; fi
     fi
-
-script:
-  - cmake -DENABLE_CPPCHECK=ON -DCMAKE_C_COMPILER=$COMPILER -DCMAKE_BUILD_TYPE=Debug -DCMAKE_C_FLAGS_DEBUG="$CMAKE_C_FLAGS_DEBUG" -DCMAKE_EXE_LINKER_FLAGS=$CMAKE_EXE_LINKER_FLAGS ..
-  - make -j 4
-  - make check
-  - ctest -j 4
-  - ctest -T memcheck
