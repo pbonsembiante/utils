@@ -14,13 +14,19 @@ matrix:
 
       addons:
         apt:
-          sources: [ ubuntu-toolchain-r-test ]
-          packages: [ gcc-7, g++-7 ]
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - gcc-7
+            - g++-7
 
-      env: [COMPILER=gcc-7, CMAKE_C_FLAGS_DEBUG="-std=c11 -Wall -Wextra -Wpedantic -Wchkp -Wuninitialized -Winit-self --coverage -O0", CMAKE_EXE_LINKER_FLAGS=-lgcov]
+      env:
+        - TEST="GCC Build"
+        - COMPILER=gcc-7
+        - CMAKE_C_FLAGS_DEBUG="-std=c11 -Wall -Wextra -Wpedantic -Wchkp -Wuninitialized -Winit-self"
 
       script:
-        - cmake -DCMAKE_C_COMPILER=$COMPILER -DCMAKE_BUILD_TYPE=Debug -DCMAKE_C_FLAGS_DEBUG="$CMAKE_C_FLAGS_DEBUG" -DCMAKE_EXE_LINKER_FLAGS=$CMAKE_EXE_LINKER_FLAGS ..
+        - cmake -DCMAKE_C_COMPILER=$COMPILER -DCMAKE_BUILD_TYPE=Debug -DCMAKE_C_FLAGS_DEBUG="$CMAKE_C_FLAGS_DEBUG" ..
         - make -j 4
         - ctest -j 4
 
@@ -33,10 +39,18 @@ matrix:
 
       addons:
         apt:
-          sources: [ ubuntu-toolchain-r-test , llvm-toolchain-trusty-4.0]
-          packages: [ gcc-7, g++-7, clang-4.0 ]
+          sources:
+            - ubuntu-toolchain-r-test
+            - llvm-toolchain-trusty-4.0]
+          packages:
+            - gcc-7
+            - g++-7
+            - clang-4.0
 
-      env: [COMPILER=clang-4.0, CMAKE_C_FLAGS_DEBUG="-std=c11 -Wall -Wextra -Wpedantic -Wchkp -Wuninitialized -Winit-self"]
+      env:
+        - TEST="CLang Build"
+        - COMPILER=clang-4.0
+        - CMAKE_C_FLAGS_DEBUG="-std=c11 -Wall -Wextra -Wpedantic -Wchkp -Wuninitialized -Winit-self"
 
       script:
         - cmake -DCMAKE_C_COMPILER=$COMPILER -DCMAKE_BUILD_TYPE=Debug -DCMAKE_C_FLAGS_DEBUG="$CMAKE_C_FLAGS_DEBUG" ..
@@ -52,10 +66,17 @@ matrix:
 
       addons:
         apt:
-          sources: [ ubuntu-toolchain-r-test ]
-          packages: [ gcc-7, g++-7, musl-tools, musl-dev ]
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - gcc-7, g++-7
+            - musl-tools
+            - musl-dev
 
-      env: [COMPILER=musl-gcc, CMAKE_C_FLAGS_DEBUG="-std=c11 -Wall -Wextra -Wpedantic -Wchkp -Wuninitialized -Winit-self"]
+      env:
+        - TEST="MUSL Build"
+        - COMPILER=musl-gcc
+        - CMAKE_C_FLAGS_DEBUG="-std=c11 -Wall -Wextra -Wpedantic -Wuninitialized -Winit-self"
 
       script:
         - cmake -DCMAKE_C_COMPILER=$COMPILER -DCMAKE_BUILD_TYPE=Debug -DCMAKE_C_FLAGS_DEBUG="$CMAKE_C_FLAGS_DEBUG" ..
@@ -71,10 +92,16 @@ matrix:
 
       addons:
         apt:
-          sources: [ ubuntu-toolchain-r-test ]
-          packages: [ gcc-7, g++-7 ]
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - gcc-7
+            - g++-7
 
-      env: [COMPILER=gcc-7, CMAKE_C_FLAGS_DEBUG="-std=c11 -Wall -Wextra -Wpedantic -Wchkp -Wuninitialized -Winit-self"]
+      env:
+        - TEST="CppCheck Build"
+        - COMPILER=gcc-7
+        - CMAKE_C_FLAGS_DEBUG="-std=c11 -Wall -Wextra -Wpedantic -Wchkp -Wuninitialized -Winit-self"
 
       script:
         - cmake -DENABLE_CPPCHECK=ON -DCMAKE_C_COMPILER=$COMPILER -DCMAKE_BUILD_TYPE=Debug -DCMAKE_C_FLAGS_DEBUG="$CMAKE_C_FLAGS_DEBUG" ..
@@ -85,6 +112,8 @@ matrix:
     # Git Diff Build
     #
     - os: linux
+      env:
+        - TEST="Git Diff Build"
       script:
         - |
             if [[ -n $(git diff --check HEAD^) ]]; then
@@ -101,13 +130,20 @@ matrix:
       os: linux
       addons:
         apt:
-          sources: [ ubuntu-toolchain-r-test ]
-          packages: [ gcc-7, g++-7 ]
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - gcc-7
+            - g++-7
 
-      env: [COMPILER=gcc-7, CMAKE_C_FLAGS_DEBUG="-std=c11 -Wall -Wextra -Wpedantic -Wchkp -Wuninitialized -Winit-self"]
+      env:
+        - TEST="CodeCov Build"
+        - COMPILER=gcc-7
+        - CMAKE_C_FLAGS_DEBUG="-std=c11 -Wall -Wextra -Wpedantic -Wchkp -Wuninitialized -Winit-self --coverage -O0"
+        - CMAKE_EXE_LINKER_FLAGS=-lgcov
 
       script:
-        - cmake -DCMAKE_C_COMPILER=$COMPILER -DCMAKE_BUILD_TYPE=Debug -DCMAKE_C_FLAGS_DEBUG="$CMAKE_C_FLAGS_DEBUG" ..
+        - cmake -DCMAKE_C_COMPILER=$COMPILER -DCMAKE_BUILD_TYPE=Debug -DCMAKE_C_FLAGS_DEBUG="$CMAKE_C_FLAGS_DEBUG" -DCMAKE_EXE_LINKER_FLAGS=$CMAKE_EXE_LINKER_FLAGS ..
         - make -j 4
         - ctest -j 4
 
@@ -123,23 +159,24 @@ matrix:
 
       addons:
         apt:
-          sources: [ ubuntu-toolchain-r-test ]
-          packages: [ gcc-7, g++-7, valgrind ]
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - gcc-7
+            - g++-7
+            - valgrind
 
-      env: [COMPILER=gcc-7, CMAKE_C_FLAGS_DEBUG="-std=c11 -Wall -Wextra -Wpedantic -Wchkp -Wuninitialized -Winit-self"]
+      env:
+        - COMPILER=gcc-7
+        - CMAKE_C_FLAGS_DEBUG="-std=c11 -Wall -Wextra -Wpedantic -Wchkp -Wuninitialized -Winit-self"
 
       script:
-        - cmake -DENABLE_CPPCHECK=ON -DCMAKE_C_COMPILER=$COMPILER -DCMAKE_BUILD_TYPE=Debug -DCMAKE_C_FLAGS_DEBUG="$CMAKE_C_FLAGS_DEBUG" ..
+        - cmake -DCMAKE_C_COMPILER=$COMPILER -DCMAKE_BUILD_TYPE=Debug -DCMAKE_C_FLAGS_DEBUG="$CMAKE_C_FLAGS_DEBUG" ..
         - make -j 4
         - ctest -T memcheck
 
-
-
-
-
 before_install:
   - sudo apt-get update -qq
-
 
 before_script:
   # Build Folder
