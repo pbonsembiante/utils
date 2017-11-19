@@ -168,6 +168,7 @@ matrix:
             - valgrind
 
       env:
+        - TEST="Valgrind Build"
         - COMPILER=gcc-7
         - CMAKE_C_FLAGS_DEBUG="-std=c11 -Wall -Wextra -Wpedantic -Wchkp -Wuninitialized -Winit-self"
 
