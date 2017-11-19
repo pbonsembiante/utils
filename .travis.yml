@@ -41,7 +41,7 @@ matrix:
         apt:
           sources:
             - ubuntu-toolchain-r-test
-            - llvm-toolchain-trusty-4.0]
+            - llvm-toolchain-trusty-4.0
           packages:
             - gcc-7
             - g++-7
@@ -69,7 +69,8 @@ matrix:
           sources:
             - ubuntu-toolchain-r-test
           packages:
-            - gcc-7, g++-7
+            - gcc-7
+            - g++-7
             - musl-tools
             - musl-dev
 
