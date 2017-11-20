@@ -53,7 +53,7 @@ void test_size_SizeOfNewDictWithOneItemShouldBeOne(void) {
     char *_key = malloc(KEYS_LEN);
     size_t _data = 0;
     snprintf(_key, KEYS_LEN, "%s", "0_key");
-    pdict_put(D, keys[0], &_data);
+    pdict_put(D, _key, &_data);
     TEST_ASSERT_EQUAL_UINT(pdict_size(D), 1);
     free(_key);
 }
