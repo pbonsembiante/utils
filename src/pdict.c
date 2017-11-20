@@ -44,7 +44,7 @@ static char *pdict_strdup(char const *str);
 pdict *pdict_create() {
     pdict *self = calloc(1, sizeof(pdict));
     self->table_max_size = PDICT_INITIAL_SIZE;
-    self->elements = calloc(self->table_max_size, sizeof(phashmap_node));
+    self->elements = calloc(self->table_max_size, sizeof(phashmap_node *));
     self->table_current_size = 0;
     self->elements_count = 0;
     return self;
