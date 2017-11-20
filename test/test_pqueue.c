@@ -18,7 +18,7 @@
 #include "unity.h"
 #include <string.h>
 
-pqueue* Q = 0;
+pqueue *Q = 0;
 
 void setUp(void) {
     Q = pqueue_create();
@@ -40,7 +40,7 @@ void test_create_ShouldCreateAZeroSizeQueue(void) {
 
 void test_enqueue_ShouldAppendAnElementToTheQueue(void) {
     size_t prev_size = pqueue_size(Q);
-    char* test_string = calloc(11, sizeof(char));
+    char *test_string = calloc(11, sizeof(char));
 
     strncpy(test_string, "Test data!", 11);
 
@@ -52,7 +52,7 @@ void test_enqueue_ShouldAppendAnElementToTheQueue(void) {
 }
 
 void test_dequeue_ShouldRemoveAnElementFromTheQueue(void) {
-    char* test_string = calloc(11, sizeof(char));
+    char *test_string = calloc(11, sizeof(char));
     strncpy(test_string, "Test data!", 11);
 
     pqueue_enqueue(Q, test_string);
@@ -66,7 +66,7 @@ void test_dequeue_ShouldRemoveAnElementFromTheQueue(void) {
 }
 
 void test_enqueue_ShouldEnqueueNullElements(void) {
-    char* test_string = 0;
+    char *test_string = 0;
     size_t prev_size = pqueue_size(Q);
 
     pqueue_enqueue(Q, test_string);
@@ -102,12 +102,12 @@ void test_clean_ShouldEmptyTheQueue(void) {
 }
 
 void test_destroyAll_ShouldDestroyTheQueueAndEveryElementInIt(void) {
-    pqueue* queue = pqueue_create();
-    size_t* x = calloc(1, sizeof(size_t));
+    pqueue *queue = pqueue_create();
+    size_t *x = calloc(1, sizeof(size_t));
     *x = 99;
-    size_t* y = calloc(1, sizeof(size_t));
+    size_t *y = calloc(1, sizeof(size_t));
     *y = 99;
-    size_t* z = calloc(1, sizeof(size_t));
+    size_t *z = calloc(1, sizeof(size_t));
     *z = 99;
 
     pqueue_enqueue(queue, x);
@@ -118,11 +118,11 @@ void test_destroyAll_ShouldDestroyTheQueueAndEveryElementInIt(void) {
 }
 
 void test_cleanDestroy_ShouldDestroyTheQueueAndEveryElementInIt(void) {
-    size_t* x = calloc(1, sizeof(size_t));
+    size_t *x = calloc(1, sizeof(size_t));
     *x = 99;
-    size_t* y = calloc(1, sizeof(size_t));
+    size_t *y = calloc(1, sizeof(size_t));
     *y = 99;
-    size_t* z = calloc(1, sizeof(size_t));
+    size_t *z = calloc(1, sizeof(size_t));
     *z = 99;
 
     pqueue_enqueue(Q, x);

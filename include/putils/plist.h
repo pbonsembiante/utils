@@ -30,7 +30,7 @@
 #include "pnode.h"
 
 #ifndef plist_member_t
-#define plist_member_t void*
+    #define plist_member_t void*
 #endif
 
 /*!
@@ -50,7 +50,7 @@
  * void plist_sort(plist_list *self, bool (*comparator)(const void *, const void *));
  * ~~~~~~~~~~~~~~~
  */
-typedef bool (* plist_comparator)(const plist_member_t*, const plist_member_t*);
+typedef bool (* plist_comparator)(const plist_member_t *, const plist_member_t *);
 
 /*!
  * \typedef plist_evaluator
@@ -69,7 +69,7 @@ typedef bool (* plist_comparator)(const plist_member_t*, const plist_member_t*);
  * plist_list *plist_filter(plist_list *self, bool (*condition)(void *));
  * ~~~~~~~~~~~~~~~
  */
-typedef bool (* plist_evaluator)(const plist_member_t*);
+typedef bool (* plist_evaluator)(const plist_member_t *);
 
 /*!
  * \typedef plist_transformer
@@ -89,7 +89,7 @@ typedef bool (* plist_evaluator)(const plist_member_t*);
  * ~~~~~~~~~~~~~~~
  *
  */
-typedef plist_member_t* (* plist_transformer)(const plist_member_t*);
+typedef plist_member_t *(* plist_transformer)(const plist_member_t *);
 
 /*!
  * \typedef plist_destroyer
@@ -109,7 +109,7 @@ typedef plist_member_t* (* plist_transformer)(const plist_member_t*);
  * ~~~~~~~~~~~~~~~
  *
  */
-typedef void (* plist_destroyer)(void*);
+typedef void (* plist_destroyer)(void *);
 
 /*!
  * \typedef plist_closure
@@ -120,7 +120,7 @@ typedef void (* plist_destroyer)(void*);
  * I'll probably remove this... or adapt old code to use it... who knows.
  *
  */
-typedef void (* plist_closure)(void*);
+typedef void (* plist_closure)(void *);
 
 /*!
  * \typedef plist_list
@@ -160,7 +160,7 @@ typedef struct plist plist;
  * }
  * ~~~~~~~~~~~~~~~
  */
-plist* plist_create(void);
+plist *plist_create(void);
 
 /*!
  * \brief Frees and destroys the given list.
@@ -181,7 +181,7 @@ plist* plist_create(void);
  * ~~~~~~~~~~~~~~~
  *
  */
-void plist_destroy(plist* self);
+void plist_destroy(plist *self);
 
 /*!
  * \brief Frees and destroys the given list and internal data.
@@ -210,7 +210,7 @@ void plist_destroy(plist* self);
  * ~~~~~~~~~~~~~~~
  *
  */
-void plist_destroy_all(plist* self, plist_destroyer destroyer);
+void plist_destroy_all(plist *self, plist_destroyer destroyer);
 
 /*!
  * \brief Add the given data as a new node to the end of the list.
@@ -233,7 +233,7 @@ void plist_destroy_all(plist* self, plist_destroyer destroyer);
  * ~~~~~~~~~~~~~~~
  *
  */
-size_t plist_append(plist* self, plist_member_t* data);
+size_t plist_append(plist *self, plist_member_t *data);
 
 /*!
  * \brief Adds \data data at \index index position on the list.
@@ -260,7 +260,7 @@ size_t plist_append(plist* self, plist_member_t* data);
  * ~~~~~~~~~~~~~~~
  *
  */
-void plist_add(plist* self, size_t index, plist_member_t* data);
+void plist_add(plist *self, size_t index, plist_member_t *data);
 
 /*!
  * \brief Merges two lists.
@@ -291,7 +291,7 @@ void plist_add(plist* self, size_t index, plist_member_t* data);
  * ~~~~~~~~~~~~~~~
  *
  */
-void plist_merge(plist* self, plist* other);
+void plist_merge(plist *self, plist *other);
 
 /*!
  * \brief Gets the data of the index-th position of the given list.
@@ -306,7 +306,7 @@ void plist_merge(plist* self, plist* other);
  * empty, or there is no element at the given position, the function will return
  * null.
  */
-void* plist_get(plist* self, size_t index);
+void *plist_get(plist *self, size_t index);
 
 /*!
  * \brief Returns a list of the first \count n elements in the list.
@@ -326,7 +326,7 @@ void* plist_get(plist* self, size_t index);
  * If memory allocation fails, null is returned.
  *
  */
-plist* plist_get_elements(plist* self, size_t count);
+plist *plist_get_elements(plist *self, size_t count);
 
 /*!
  * \brief Returns a list of the first \count n elements in the list and removes
@@ -342,7 +342,7 @@ plist* plist_get_elements(plist* self, size_t count);
  * from the original list.
  *
  */
-plist* plist_get_removing_elements(plist* self, size_t count);
+plist *plist_get_removing_elements(plist *self, size_t count);
 
 /*!
  * \brief Creates a new list with the elements that match a given condition.
@@ -362,7 +362,7 @@ plist* plist_get_removing_elements(plist* self, size_t count);
  * not going to be empty.
  *
  */
-plist* plist_filter(plist* self, plist_evaluator condition);
+plist *plist_filter(plist *self, plist_evaluator condition);
 
 /*!
  * \brief Creates a new list with the elements of \self self mapped with \transformer transformer function.
@@ -376,7 +376,7 @@ plist* plist_filter(plist* self, plist_evaluator condition);
  * ran through \transformer transformer.
  *
  */
-plist* plist_map(plist* self, plist_transformer transformer);
+plist *plist_map(plist *self, plist_transformer transformer);
 
 /*!
  * \brief Replaces a data element of the list, with the new data provided.
@@ -393,7 +393,7 @@ plist* plist_map(plist* self, plist_transformer transformer);
  * Once the old element is replaced, the function will return a pointer to it.
  *
  */
-void* plist_replace(plist* self, size_t index, plist_member_t* data);
+void *plist_replace(plist *self, size_t index, plist_member_t *data);
 
 /*!
  * \brief Replaces a data element of the list, and deletes the replaced element.
@@ -410,8 +410,7 @@ void* plist_replace(plist* self, size_t index, plist_member_t* data);
  * Once the old element is replaced, the function will not return the removed
  * element but apply the \destroyer destroyer function to it.
  */
-void plist_replace_and_destroy(plist* self, size_t index, plist_member_t* data,
-                               plist_destroyer destroyer);
+void plist_replace_and_destroy(plist *self, size_t index, plist_member_t *data, plist_destroyer destroyer);
 
 /*!
  * \brief plist_remove
@@ -419,7 +418,7 @@ void plist_replace_and_destroy(plist* self, size_t index, plist_member_t* data,
  * \param index
  * \return
  */
-void* plist_remove(plist* self, size_t index);
+void *plist_remove(plist *self, size_t index);
 
 /*!
  * \brief plist_remove_and_destroy
@@ -428,7 +427,7 @@ void* plist_remove(plist* self, size_t index);
  * \param element_destroyer
  */
 void
-plist_remove_and_destroy(plist* self, size_t index, plist_destroyer destroyer);
+plist_remove_and_destroy(plist *self, size_t index, plist_destroyer destroyer);
 
 /*!
  * \brief plist_remove_selected
@@ -436,7 +435,7 @@ plist_remove_and_destroy(plist* self, size_t index, plist_destroyer destroyer);
  * \param condition
  * \return
  */
-plist_member_t* plist_remove_selected(plist* self, plist_evaluator condition);
+plist_member_t *plist_remove_selected(plist *self, plist_evaluator condition);
 
 /*!
  * \brief plist_remove_destroying_selected
@@ -444,28 +443,27 @@ plist_member_t* plist_remove_selected(plist* self, plist_evaluator condition);
  * \param condition
  * \param element_destroyer
  */
-void plist_remove_destroying_selected(plist* self, plist_evaluator condition,
-                                      plist_destroyer destroyer);
+void plist_remove_destroying_selected(plist *self, plist_evaluator condition, plist_destroyer destroyer);
 
 /*!
  * \brief plist_clean
  * \param self
  */
-void plist_clean(plist* self);
+void plist_clean(plist *self);
 
 /*!
  * \brief plist_clean_destroying_data
  * \param self
  * \param data_destroyer
  */
-void plist_clean_destroying_data(plist* self, plist_destroyer destroyer);
+void plist_clean_destroying_data(plist *self, plist_destroyer destroyer);
 
 /*!
  * \brief plist_iterate
  * \param self
  * \param closure
  */
-void plist_iterate(plist* self, plist_closure closure);
+void plist_iterate(plist *self, plist_closure closure);
 
 /*!
  * \brief plist_find
@@ -473,28 +471,28 @@ void plist_iterate(plist* self, plist_closure closure);
  * \param closure
  * \return
  */
-void* plist_find(plist* self, plist_evaluator condition, size_t* index);
+void *plist_find(plist *self, plist_evaluator condition, size_t *index);
 
 /*!
  * \brief plist_size
  * \param self
  * \return
  */
-size_t plist_size(plist* self);
+size_t plist_size(plist *self);
 
 /*!
  * \brief plist_isEmpty
  * \param self
  * \return
  */
-bool plist_is_empty(plist* self);
+bool plist_is_empty(plist *self);
 
 /*!
  * \brief plist_sort
  * \param self
  * \param comparator
  */
-void plist_sort(plist* self, plist_comparator comparator);
+void plist_sort(plist *self, plist_comparator comparator);
 
 /*!
  * \brief plist_count_matching
@@ -502,7 +500,7 @@ void plist_sort(plist* self, plist_comparator comparator);
  * \param condition
  * \return
  */
-size_t plist_count_matching(plist* self, plist_evaluator condition);
+size_t plist_count_matching(plist *self, plist_evaluator condition);
 
 /*!
  * \brief plist_any_match
@@ -510,7 +508,7 @@ size_t plist_count_matching(plist* self, plist_evaluator condition);
  * \param condition
  * \return
  */
-bool plist_any_match(plist* self, plist_evaluator condition);
+bool plist_any_match(plist *self, plist_evaluator condition);
 
 /*!
  * \brief plist_all_match
@@ -518,7 +516,7 @@ bool plist_any_match(plist* self, plist_evaluator condition);
  * \param condition
  * \return
  */
-bool plist_all_match(plist* self, plist_evaluator condition);
+bool plist_all_match(plist *self, plist_evaluator condition);
 
 /*!
  * \brief plist_prepend
@@ -526,7 +524,7 @@ bool plist_all_match(plist* self, plist_evaluator condition);
  * \param data
  * \return
  */
-size_t plist_prepend(plist* self, plist_member_t* data);
+size_t plist_prepend(plist *self, plist_member_t *data);
 
 /*
  * Handy macros

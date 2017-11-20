@@ -17,49 +17,49 @@
 #include "putils/plist.h"
 
 struct pqueue {
-    plist* list;
+    plist *list;
 };
 
-pqueue* pqueue_create() {
-    pqueue* q = calloc(1, sizeof(pqueue));
+pqueue *pqueue_create() {
+    pqueue *q = calloc(1, sizeof(pqueue));
     q->list = plist_create();
     return q;
 }
 
-size_t pqueue_enqueue(pqueue* self, void* data) {
+size_t pqueue_enqueue(pqueue *self, void *data) {
     return plist_append(self->list, data);
 }
 
-void* pqueue_dequeue(pqueue* self) {
+void *pqueue_dequeue(pqueue *self) {
     return plist_remove(self->list, 0);
 }
 
-void* pqueue_peek(pqueue* self) {
+void *pqueue_peek(pqueue *self) {
     return plist_get(self->list, 0);
 }
 
-size_t pqueue_size(pqueue* self) {
+size_t pqueue_size(pqueue *self) {
     return plist_size(self->list);
 }
 
-bool pqueue_is_empty(pqueue* self) {
+bool pqueue_is_empty(pqueue *self) {
     return plist_is_empty(self->list);
 }
 
-void pqueue_clean(pqueue* self) {
+void pqueue_clean(pqueue *self) {
     plist_clean(self->list);
 }
 
-void pqueue_clean_destroying_data(pqueue* self, plist_destroyer destroyer) {
+void pqueue_clean_destroying_data(pqueue *self, plist_destroyer destroyer) {
     plist_clean_destroying_data(self->list, destroyer);
 }
 
-void pqueue_destroy(pqueue* self) {
+void pqueue_destroy(pqueue *self) {
     plist_destroy(self->list);
     free(self);
 }
 
-void pqueue_destroy_all(pqueue* self, pqueue_destroyer destroyer) {
+void pqueue_destroy_all(pqueue *self, pqueue_destroyer destroyer) {
     plist_destroy_all(self->list, destroyer);
     free(self);
 }

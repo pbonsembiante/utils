@@ -20,15 +20,15 @@ void tearDown(void) {
 
 void loadDict(void) {
     keys = malloc(sizeof(char[DICT_DATA_LEN][KEYS_LEN]));
-    data = calloc(1, DICT_DATA_LEN*sizeof(size_t));
-    for( size_t i = 0; i < DICT_DATA_LEN; ++i) {
+    data = calloc(1, DICT_DATA_LEN * sizeof(size_t));
+    for ( size_t i = 0; i < DICT_DATA_LEN; ++i) {
         snprintf(keys[i], KEYS_LEN, "%c", (int) i + 65);
         data[i] = i + 1;
         pdict_put(D, keys[i], &data[i]);
     }
 }
 
-void free_keys_data(){
+void free_keys_data() {
     free(keys);
     free(data);
 }
@@ -88,7 +88,7 @@ void test_add_ShouldAddANewElement(void) {
 }
 
 void test_append_ShouldAddAnElementToAnEmptyDict(void) {
-    char* _key = malloc(KEYS_LEN);
+    char *_key = malloc(KEYS_LEN);
     snprintf(_key, KEYS_LEN, "%s", "1_key");
     size_t _data = 1;
     TEST_ASSERT_TRUE(pdict_is_empty(D));

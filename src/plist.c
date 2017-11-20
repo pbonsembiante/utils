@@ -18,41 +18,36 @@
 #include "putils/plist.h"
 
 struct plist {
-    plinked_node* head;
-    plinked_node* tail;
+    plinked_node *head;
+    plinked_node *tail;
     size_t elements_count;
 };
 
-static void plist_link_nodes(plinked_node* previous, plinked_node* next);
+static void plist_link_nodes(plinked_node *previous, plinked_node *next);
 
-static plinked_node* plist_create_node(plist_member_t*);
+static plinked_node *plist_create_node(plist_member_t *);
 
-static plinked_node* plist_get_node(plist* self, size_t index);
+static plinked_node *plist_get_node(plist *self, size_t index);
 
-static plinked_node*
-plist_find_node(plist* self, plist_evaluator condition, size_t* index);
+static plinked_node *plist_find_node(plist *self, plist_evaluator condition, size_t *index);
 
-static void
-plist_merge_sort(plinked_node** headReference, plist_comparator comparator);
+static void plist_merge_sort(plinked_node **headReference, plist_comparator comparator);
 
-static plinked_node* plist_sorted_merge(plinked_node* self, plinked_node* other,
-                                        plist_comparator comparator);
+static plinked_node *plist_sorted_merge(plinked_node *self, plinked_node *other, plist_comparator comparator);
 
-static void
-plist_front_back_split(plinked_node* source, plinked_node** frontRef,
-                       plinked_node** backRef);
+static void plist_front_back_split(plinked_node *source, plinked_node **frontRef, plinked_node **backRef);
 
-plist* plist_create(void) {
-    plist* list = calloc(1, sizeof(plist));
+plist *plist_create(void) {
+    plist *list = calloc(1, sizeof(plist));
     list->head = 0;
     list->tail = 0;
     list->elements_count = 0;
     return list;
 }
 
-size_t plist_append(plist* self, plist_member_t* data) {
-    plinked_node* new_element = plist_create_node(data);
-    plinked_node* last = self->tail;
+size_t plist_append(plist *self, plist_member_t *data) {
+    plinked_node *new_element = plist_create_node(data);
+    plinked_node *last = self->tail;
 
     if (self->elements_count == 0) {
         self->head = new_element;
@@ -65,8 +60,8 @@ size_t plist_append(plist* self, plist_member_t* data) {
     return self->elements_count;
 }
 
-void plist_merge(plist* self, plist* other) {
-    plinked_node* node = other->head;
+void plist_merge(plist *self, plist *other) {
+    plinked_node *node = other->head;
 
     while (node) {
         plist_append(self, node->data);
@@ -74,13 +69,13 @@ void plist_merge(plist* self, plist* other) {
     }
 }
 
-void* plist_get(plist* self, size_t index) {
-    plinked_node* element = plist_get_node(self, index);
+void *plist_get(plist *self, size_t index) {
+    plinked_node *element = plist_get_node(self, index);
     return element ? element->data : 0;
 }
 
-void plist_add(plist* self, size_t index, plist_member_t* data) {
-    plinked_node* new_element = 0;
+void plist_add(plist *self, size_t index, plist_member_t *data) {
+    plinked_node *new_element = 0;
 
     if (self->elements_count >= index) {
         new_element = plist_create_node(data);
@@ -93,8 +88,8 @@ void plist_add(plist* self, size_t index, plist_member_t* data) {
                 self->tail = new_element;
             }
         } else {
-            plinked_node* previous = 0;
-            plinked_node* next = 0;
+            plinked_node *previous = 0;
+            plinked_node *next = 0;
             previous = plist_get_node(self, index - 1);
             next = previous->next;
             plist_link_nodes(previous, new_element);
@@ -109,9 +104,9 @@ void plist_add(plist* self, size_t index, plist_member_t* data) {
     }
 }
 
-void* plist_replace(plist* self, size_t index, plist_member_t* data) {
-    void* old_data = 0;
-    plinked_node* element = plist_get_node(self, index);
+void *plist_replace(plist *self, size_t index, plist_member_t *data) {
+    void *old_data = 0;
+    plinked_node *element = plist_get_node(self, index);
 
     if (element) {
         old_data = element->data;
@@ -121,21 +116,21 @@ void* plist_replace(plist* self, size_t index, plist_member_t* data) {
     return old_data;
 }
 
-void plist_replace_and_destroy(plist* self, size_t index, plist_member_t* data,
+void plist_replace_and_destroy(plist *self, size_t index, plist_member_t *data,
                                plist_destroyer destroyer) {
-    void* old_data = plist_replace(self, index, data);
+    void *old_data = plist_replace(self, index, data);
     if (old_data && destroyer) {
         destroyer(old_data);
     }
 }
 
-void* plist_find(plist* self, plist_evaluator condition, size_t* index) {
-    plinked_node* element = plist_find_node(self, condition, index);
+void *plist_find(plist *self, plist_evaluator condition, size_t *index) {
+    plinked_node *element = plist_find_node(self, condition, index);
     return element ? element->data : 0;
 }
 
-void plist_iterate(plist* self, plist_closure closure) {
-    plinked_node* element = self->head;
+void plist_iterate(plist *self, plist_closure closure) {
+    plinked_node *element = self->head;
 
     while (element) {
         closure(element->data);
@@ -143,9 +138,9 @@ void plist_iterate(plist* self, plist_closure closure) {
     }
 }
 
-void* plist_remove(plist* self, size_t index) {
-    void* data = 0;
-    plinked_node* aux = 0;
+void *plist_remove(plist *self, size_t index) {
+    void *data = 0;
+    plinked_node *aux = 0;
 
     if (plist_is_empty(self)) {
         return 0;
@@ -160,7 +155,7 @@ void* plist_remove(plist* self, size_t index) {
             self->tail = 0;
         }
     } else {
-        plinked_node* previous = 0;
+        plinked_node *previous = 0;
         previous = plist_get_node(self, index - 1);
 
         if (!previous || !previous->next) {
@@ -182,44 +177,42 @@ void* plist_remove(plist* self, size_t index) {
     return data;
 }
 
-plist_member_t* plist_remove_selected(plist* self, plist_evaluator condition) {
+plist_member_t *plist_remove_selected(plist *self, plist_evaluator condition) {
     size_t index = 0;
-    plinked_node* element = plist_find_node(self, condition, &index);
+    plinked_node *element = plist_find_node(self, condition, &index);
     return element ? plist_remove(self, index) : 0;
 }
 
-void
-plist_remove_and_destroy(plist* self, size_t index, plist_destroyer destroyer) {
-    void* data = plist_remove(self, index);
+void plist_remove_and_destroy(plist *self, size_t index, plist_destroyer destroyer) {
+    void *data = plist_remove(self, index);
     if (data && destroyer) {
         destroyer(data);
     }
 }
 
-void plist_remove_destroying_selected(plist* self, plist_evaluator condition,
-                                      plist_destroyer destroyer) {
-    void* data = plist_remove_selected(self, condition);
+void plist_remove_destroying_selected(plist *self, plist_evaluator condition, plist_destroyer destroyer) {
+    void *data = plist_remove_selected(self, condition);
 
     if (data && destroyer) {
         destroyer(data);
     }
 }
 
-size_t plist_size(plist* self) {
+size_t plist_size(plist *self) {
     return self->elements_count;
 }
 
-bool plist_is_empty(plist* self) {
+bool plist_is_empty(plist *self) {
     return plist_size(self) == 0;
 }
 
-void plist_clean(plist* self) {
+void plist_clean(plist *self) {
     if (!self) {
         return;
     }
 
     while (self->head) {
-        plinked_node* element;
+        plinked_node *element;
         element = self->head;
         self->head = self->head->next;
         free(element);
@@ -229,28 +222,28 @@ void plist_clean(plist* self) {
     self->elements_count = 0;
 }
 
-void plist_clean_destroying_data(plist* self, plist_destroyer destroyer) {
+void plist_clean_destroying_data(plist *self, plist_destroyer destroyer) {
     plist_iterate(self, destroyer);
     plist_clean(self);
 }
 
-void plist_destroy(plist* self) {
+void plist_destroy(plist *self) {
     plist_clean(self);
     free(self);
 }
 
-void plist_destroy_all(plist* self, plist_destroyer destroyer) {
+void plist_destroy_all(plist *self, plist_destroyer destroyer) {
     plist_clean_destroying_data(self, destroyer);
     free(self);
 }
 
-plist* plist_get_elements(plist* self, size_t count) {
-    plist* sublist = plist_create();
+plist *plist_get_elements(plist *self, size_t count) {
+    plist *sublist = plist_create();
 
     if (!plist_is_empty(self)) {
         count = count > plist_size(self) ? plist_size(self) : count;
         for (size_t i = 0; i < count; ++i) {
-            void* data = plist_get(self, i);
+            void *data = plist_get(self, i);
             plist_append(sublist, data);
         }
     }
@@ -258,22 +251,22 @@ plist* plist_get_elements(plist* self, size_t count) {
     return sublist;
 }
 
-plist* plist_get_removing_elements(plist* self, size_t count) {
-    plist* sublist = plist_create();
+plist *plist_get_removing_elements(plist *self, size_t count) {
+    plist *sublist = plist_create();
 
     if (!plist_is_empty(self)) {
         count = count > plist_size(self) ? plist_size(self) : count;
         for (size_t i = 0; i < count; ++i) {
-            void* element = plist_remove(self, 0);
+            void *element = plist_remove(self, 0);
             plist_append(sublist, element);
         }
     }
     return sublist;
 }
 
-plist* plist_filter(plist* self, plist_evaluator condition) {
-    plist* filtered = plist_create();
-    plinked_node* element = self->head;
+plist *plist_filter(plist *self, plist_evaluator condition) {
+    plist *filtered = plist_create();
+    plinked_node *element = self->head;
 
     while (element) {
         if (condition(element->data)) {
@@ -286,9 +279,9 @@ plist* plist_filter(plist* self, plist_evaluator condition) {
     return filtered;
 }
 
-plist* plist_map(plist* self, plist_transformer transformer) {
-    plist* mapped = plist_create();
-    plinked_node* element = self->head;
+plist *plist_map(plist *self, plist_transformer transformer) {
+    plist *mapped = plist_create();
+    plinked_node *element = self->head;
 
     while (element) {
         plist_append(mapped, transformer(element->data));
@@ -298,30 +291,30 @@ plist* plist_map(plist* self, plist_transformer transformer) {
     return mapped;
 }
 
-void plist_sort(plist* self, plist_comparator comparator) {
+void plist_sort(plist *self, plist_comparator comparator) {
     plist_merge_sort(&self->head, comparator);
     if (self->head != 0 && self->head->next != 0) {
         self->tail = plist_get_node(self, self->elements_count - 2)->next;
     }
 }
 
-size_t plist_count_matching(plist* self, plist_evaluator condition) {
-    plist* satisfying = plist_filter(self, condition);
+size_t plist_count_matching(plist *self, plist_evaluator condition) {
+    plist *satisfying = plist_filter(self, condition);
     size_t result = satisfying->elements_count;
     plist_destroy(satisfying);
     return result;
 }
 
-bool plist_any_match(plist* self, plist_evaluator condition) {
+bool plist_any_match(plist *self, plist_evaluator condition) {
     return plist_count_matching(self, condition) > 0;
 }
 
-bool plist_all_match(plist* self, plist_evaluator condition) {
+bool plist_all_match(plist *self, plist_evaluator condition) {
     return plist_count_matching(self, condition) == self->elements_count;
 }
 
-size_t plist_prepend(plist* self, plist_member_t* data) {
-    plinked_node* new_element = plist_create_node(data);
+size_t plist_prepend(plist *self, plist_member_t *data) {
+    plinked_node *new_element = plist_create_node(data);
     new_element->next = self->head;
     self->head = new_element;
 
@@ -335,14 +328,14 @@ size_t plist_prepend(plist* self, plist_member_t* data) {
 
 /********* PRIVATE FUNCTIONS **************/
 
-static void plist_link_nodes(plinked_node* previous, plinked_node* next) {
+static void plist_link_nodes(plinked_node *previous, plinked_node *next) {
     if (previous) {
         previous->next = next;
     }
 }
 
-static plinked_node* plist_create_node(plist_member_t* data) {
-    plinked_node* element = calloc(1, sizeof(plinked_node));
+static plinked_node *plist_create_node(plist_member_t *data) {
+    plinked_node *element = calloc(1, sizeof(plinked_node));
 
     if (element) {
         element->data = data;
@@ -352,8 +345,8 @@ static plinked_node* plist_create_node(plist_member_t* data) {
     return element;
 }
 
-static plinked_node* plist_get_node(plist* self, size_t index) {
-    plinked_node* element = 0;
+static plinked_node *plist_get_node(plist *self, size_t index) {
+    plinked_node *element = 0;
     bool is_in_range = self->elements_count > index;
 
     if (is_in_range && (self->elements_count - 1) == index) {
@@ -372,9 +365,8 @@ static plinked_node* plist_get_node(plist* self, size_t index) {
     return element;
 }
 
-static plinked_node*
-plist_find_node(plist* self, plist_evaluator condition, size_t* index) {
-    plinked_node* element = self->head;
+static plinked_node *plist_find_node(plist *self, plist_evaluator condition, size_t *index) {
+    plinked_node *element = self->head;
     size_t position = 0;
 
     if (!element || self->elements_count == 0 || !condition) {
@@ -393,11 +385,10 @@ plist_find_node(plist* self, plist_evaluator condition, size_t* index) {
     return element;
 }
 
-static void
-plist_merge_sort(plinked_node** headReference, plist_comparator comparator) {
-    plinked_node* head = *headReference;
-    plinked_node* a;
-    plinked_node* b;
+static void plist_merge_sort(plinked_node **headReference, plist_comparator comparator) {
+    plinked_node *head = *headReference;
+    plinked_node *a;
+    plinked_node *b;
 
     if (head == 0 || head->next == 0) {
         return;
@@ -409,9 +400,9 @@ plist_merge_sort(plinked_node** headReference, plist_comparator comparator) {
     *headReference = plist_sorted_merge(a, b, comparator);
 }
 
-static plinked_node* plist_sorted_merge(plinked_node* self, plinked_node* other,
+static plinked_node *plist_sorted_merge(plinked_node *self, plinked_node *other,
                                         plist_comparator comparator) {
-    plinked_node* result = 0;
+    plinked_node *result = 0;
 
     /* Base cases */
     if (!self || !other) {
@@ -429,11 +420,9 @@ static plinked_node* plist_sorted_merge(plinked_node* self, plinked_node* other,
     return (result);
 }
 
-static void
-plist_front_back_split(plinked_node* source, plinked_node** frontRef,
-                       plinked_node** backRef) {
-    plinked_node* fast;
-    plinked_node* slow;
+static void plist_front_back_split(plinked_node *source, plinked_node **frontRef, plinked_node **backRef) {
+    plinked_node *fast;
+    plinked_node *slow;
 
     if (source == 0 || source->next == 0) {
         /* length < 2 cases */

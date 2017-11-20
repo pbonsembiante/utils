@@ -173,7 +173,7 @@ matrix:
         - CMAKE_C_FLAGS_DEBUG="-std=c11 -Wall -Wextra -Wpedantic -Wchkp -Wuninitialized -Winit-self"
 
       script:
-        - cmake -DCMAKE_C_COMPILER=$COMPILER -DCMAKE_BUILD_TYPE=Debug -DCMAKE_C_FLAGS_DEBUG="$CMAKE_C_FLAGS_DEBUG" ..
+        - cmake -DENABLE_MEMCHECK=ON -DCMAKE_C_COMPILER=$COMPILER -DCMAKE_BUILD_TYPE=Debug -DCMAKE_C_FLAGS_DEBUG="$CMAKE_C_FLAGS_DEBUG" ..
         - make -j 4
         - ctest -T memcheck
 

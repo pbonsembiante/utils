@@ -7,8 +7,8 @@
 
 #define DATA_ARRAY_LEN 10
 
-plist* L = 0;
-size_t* data = 0;
+plist *L = 0;
+size_t *data = 0;
 
 void setUp(void) {
     data = calloc(DATA_ARRAY_LEN, sizeof(plist_member_t));
@@ -20,26 +20,26 @@ void tearDown(void) {
     plist_destroy(L);
 }
 
-bool comp(const plist_member_t* a, const plist_member_t* b) {
-    const plist_member_t* _a = a;
-    const plist_member_t* _b = b;
+bool comp(const plist_member_t *a, const plist_member_t *b) {
+    const plist_member_t *_a = a;
+    const plist_member_t *_b = b;
     return *_a < *_b;
 }
 
-plist_member_t* mapper(const plist_member_t* _orig) {
-    const plist_member_t* orig = _orig;
-    plist_member_t* mapped = calloc(1, sizeof(plist_member_t));
+plist_member_t *mapper(const plist_member_t *_orig) {
+    const plist_member_t *orig = _orig;
+    plist_member_t *mapped = calloc(1, sizeof(plist_member_t));
     *mapped = *orig * 2;
     return mapped;
 }
 
-bool isEven(const plist_member_t* _val) {
-    const plist_member_t* number = _val;
+bool isEven(const plist_member_t *_val) {
+    const plist_member_t *number = _val;
     return (*number % 2) == 0;
 }
 
-bool is99(const plist_member_t* _val) {
-    const plist_member_t* number = _val;
+bool is99(const plist_member_t *_val) {
+    const plist_member_t *number = _val;
     return (*number == 99);
 }
 
@@ -136,7 +136,7 @@ void test_add_ShouldAddANewElementAndCheckIt(void) {
     }
 
     plist_append(L, data);
-    int* out = plist_get(L, 0);
+    int *out = plist_get(L, 0);
     TEST_ASSERT_EQUAL_PTR(data, out);
     TEST_ASSERT_EQUAL_UINT_ARRAY(data, out, DATA_ARRAY_LEN);
 }
@@ -165,7 +165,7 @@ void test_add_ShouldAddANewElementAtTheEndOfAList(void) {
 }
 
 void test_map_ShouldReturnATransformedList(void) {
-    plist* mapped = 0;
+    plist *mapped = 0;
 
     loadList();
 
@@ -180,7 +180,7 @@ void test_map_ShouldReturnATransformedList(void) {
 }
 
 void test_map_ShouldMapAnEmptyListAndReturnANewValidEmptyList() {
-    plist* mapped = 0;
+    plist *mapped = 0;
     mapped = plist_map(L, mapper);
     TEST_ASSERT_NOT_NULL(mapped);
     TEST_ASSERT_TRUE(plist_is_empty(mapped));
@@ -212,7 +212,7 @@ void test_clean_ShouldEmptyALoadedList() {
 }
 
 void test_filter_ShouldFilterOutAllEvenNumbersFromList(void) {
-    plist* filtered = 0;
+    plist *filtered = 0;
 
     loadList();
     filtered = plist_filter(L, isEven);
@@ -225,14 +225,14 @@ void test_filter_ShouldFilterOutAllEvenNumbersFromList(void) {
 }
 
 void test_filter_ShouldFilterAnEmptyListAndReturnAValidEmptyList(void) {
-    plist* filtered = plist_filter(L, isEven);
+    plist *filtered = plist_filter(L, isEven);
     TEST_ASSERT_NOT_NULL(filtered);
     TEST_ASSERT_TRUE(plist_size(filtered) == 0);
     plist_destroy(filtered);
 }
 
 void test_filter_ShouldFilterAListAndMatchAllItems(void) {
-    plist* filtered = 0;
+    plist *filtered = 0;
 
     for (size_t i = 0; i < DATA_ARRAY_LEN; ++i) {
         data[i] = (i + 1) * 2;
@@ -251,7 +251,7 @@ void test_filter_ShouldFilterAListAndMatchAllItems(void) {
 }
 
 void test_filter_ShouldFilterAListAndMatchNoneAndReturnAnEmptyList(void) {
-    plist* filtered = 0;
+    plist *filtered = 0;
 
     for (size_t i = 0; i < DATA_ARRAY_LEN; ++i) {
         data[i] = ((i + 1) * 2) - 1;
@@ -337,8 +337,8 @@ void test_get_ShouldGetTheTailElementFromTheList(void) {
 }
 
 void test_merge_ShouldMergeTwoLists(void) {
-    plist* temp = plist_create();
-    size_t* val = calloc(DATA_ARRAY_LEN, sizeof(size_t));
+    plist *temp = plist_create();
+    size_t *val = calloc(DATA_ARRAY_LEN, sizeof(size_t));
 
     loadList();
 
@@ -358,7 +358,7 @@ void test_merge_ShouldMergeTwoLists(void) {
 }
 
 void test_merge_ShouldMergeShouldHandleAnEmptyListAsSecondParameter(void) {
-    plist* temp = plist_create();
+    plist *temp = plist_create();
 
     loadList();
 
@@ -372,7 +372,7 @@ void test_merge_ShouldMergeShouldHandleAnEmptyListAsSecondParameter(void) {
 }
 
 void test_merge_ShouldMergeShouldHandleAnEmptyListAsFirstParameter(void) {
-    plist* temp = plist_create();
+    plist *temp = plist_create();
 
     loadList();
 
@@ -386,7 +386,7 @@ void test_merge_ShouldMergeShouldHandleAnEmptyListAsFirstParameter(void) {
 }
 
 void test_getElements_ShouldReturnANewEmptyList(void) {
-    plist* sublist = 0;
+    plist *sublist = 0;
 
     sublist = plist_get_elements(L, DATA_ARRAY_LEN / 2);
 
@@ -396,7 +396,7 @@ void test_getElements_ShouldReturnANewEmptyList(void) {
 }
 
 void test_getElements_ShouldReturnANewLoadedList(void) {
-    plist* sublist = 0;
+    plist *sublist = 0;
 
     loadList();
     sublist = plist_get_elements(L, DATA_ARRAY_LEN / 2);
@@ -408,7 +408,7 @@ void test_getElements_ShouldReturnANewLoadedList(void) {
 }
 
 void test_getRemoving_ShouldReturnAnEmptyList(void) {
-    plist* sublist = 0;
+    plist *sublist = 0;
 
     sublist = plist_get_removing_elements(L, DATA_ARRAY_LEN / 2);
 
@@ -418,7 +418,7 @@ void test_getRemoving_ShouldReturnAnEmptyList(void) {
 }
 
 void test_getRemoving_ShouldReturnAnNewLoadedListAndRemoveFromOriginal(void) {
-    plist* sublist = 0;
+    plist *sublist = 0;
 
     loadList();
     sublist = plist_get_removing_elements(L, DATA_ARRAY_LEN / 2);
@@ -508,7 +508,7 @@ void test_replace_ShouldReplaceANullElementInTheList(void) {
 
     loadList();
     plist_append(L, 0);
-    void* element = plist_replace(L, plist_size(L) - 1, &x);
+    void *element = plist_replace(L, plist_size(L) - 1, &x);
 
     TEST_ASSERT_EQUAL_UINT(x, PLIST_GET_UINT(L, plist_size(L) - 1));
     TEST_ASSERT_NULL(element);
@@ -516,13 +516,13 @@ void test_replace_ShouldReplaceANullElementInTheList(void) {
 
 void test_find_ShouldRetrieveTheDesiredItem(void) {
     loadList();
-    TEST_ASSERT_EQUAL_UINT(2, *((size_t*) plist_find(L, isEven, 0)));
+    TEST_ASSERT_EQUAL_UINT(2, *((size_t *) plist_find(L, isEven, 0)));
 }
 
 void test_find_ShouldRetrieveTheDesiredItemAndGetItsIndex(void) {
     size_t index = 0;
     loadList();
-    TEST_ASSERT_EQUAL_UINT(2, *((size_t*) plist_find(L, isEven, &index)));
+    TEST_ASSERT_EQUAL_UINT(2, *((size_t *) plist_find(L, isEven, &index)));
     TEST_ASSERT_EQUAL_UINT(1, index);
 }
 
@@ -540,7 +540,7 @@ void test_find_ShouldNotFindIfNotEvaluatorIsProvidedAndLoadedList(void) {
 }
 
 void test_removeDestroy_ShouldRemoveAndDestroyAnElement(void) {
-    size_t* x = calloc(1, sizeof(size_t));
+    size_t *x = calloc(1, sizeof(size_t));
     *x = 99;
     loadList();
 
@@ -561,14 +561,13 @@ void test_isEmpty_ShouldReturnFalseOnAnLoadedList(void) {
 
 void test_destroy_ShouldFreeTheList(void) {
     /* Do not use L since we cannot avoid tearDown */
-    plist* tmp = plist_create();
+    plist *tmp = plist_create();
     TEST_ASSERT_NOT_NULL(tmp);
     plist_destroy(tmp);
 }
 
-void
-test_replaceDestroy_ShouldReplaceAnElementFromTheListAndDestroyTheOldOne(void) {
-    size_t* x = calloc(1, sizeof(size_t));
+void test_replaceDestroy_ShouldReplaceAnElementFromTheListAndDestroyTheOldOne(void) {
+    size_t *x = calloc(1, sizeof(size_t));
     *x = 99;
     size_t y = 0;
 
@@ -579,10 +578,8 @@ test_replaceDestroy_ShouldReplaceAnElementFromTheListAndDestroyTheOldOne(void) {
     TEST_ASSERT_EQUAL_UINT(y, PLIST_GET_UINT(L, 0));
 }
 
-void
-test_replaceDestroy_ShouldReplaceAnElementFromTheListAndKeepTheOldOneIfNoDestructorFunction(
-    void) {
-    size_t* x = calloc(1, sizeof(size_t));
+void test_replaceDestroy_ShouldReplaceAnElementFromTheListAndKeepTheOldOneIfNoDestructorFunction(void) {
+    size_t *x = calloc(1, sizeof(size_t));
     *x = 99;
     size_t y = 0;
 
@@ -595,7 +592,7 @@ test_replaceDestroy_ShouldReplaceAnElementFromTheListAndKeepTheOldOneIfNoDestruc
 }
 
 void test_replaceDestroy_ShouldReplaceANullElementFromTheList(void) {
-    size_t* x = 0;
+    size_t *x = 0;
     size_t y = 99;
 
     plist_append(L, x);
@@ -610,17 +607,15 @@ void test_removeSelected_ShouldRemoveAParticularElementFromTheList(void) {
 
     TEST_ASSERT_EQUAL_UINT(DATA_ARRAY_LEN, plist_size(L));
 
-    size_t* x = plist_remove_selected(L, isEven);
+    size_t *x = plist_remove_selected(L, isEven);
 
     TEST_ASSERT_NOT_NULL(x);
     TEST_ASSERT_EQUAL_UINT(*x, data[1]);
     TEST_ASSERT_EQUAL_UINT(DATA_ARRAY_LEN - 1, plist_size(L));
 }
 
-void
-test_removeDestroyingSelected_ShouldRemoveAndDestroyAnElementSelectedFromTheList(
-    void) {
-    size_t* x = calloc(1, sizeof(size_t));
+void test_removeDestroyingSelected_ShouldRemoveAndDestroyAnElementSelectedFromTheList(void) {
+    size_t *x = calloc(1, sizeof(size_t));
     *x = 99;
 
     loadList();
@@ -674,10 +669,8 @@ int main(void) {
     RUN_TEST(test_anyMatch_ShouldFilterAListAndAtLeastOneShouldMatch);
     RUN_TEST(test_anyMatch_ShouldFilterAListAndNoElementShouldMatch);
 
-    RUN_TEST(
-        test_countMatch_ShouldCountAllEvenNumbersAndShouldBeGreaterThanZero);
-    RUN_TEST(
-        test_countMatch_ShouldCountEvenNumbersAndResultShouldBeHalfListSize);
+    RUN_TEST(test_countMatch_ShouldCountAllEvenNumbersAndShouldBeGreaterThanZero);
+    RUN_TEST(test_countMatch_ShouldCountEvenNumbersAndResultShouldBeHalfListSize);
     RUN_TEST(test_countMatch_ShouldCountEvenNumbersAndResultShouldBeZero);
 
     RUN_TEST(test_get_ShouldGetAllElementsFromTheList);
@@ -718,16 +711,13 @@ int main(void) {
 
     RUN_TEST(test_destroy_ShouldFreeTheList);
 
-    RUN_TEST(
-        test_replaceDestroy_ShouldReplaceAnElementFromTheListAndDestroyTheOldOne);
-    RUN_TEST(
-        test_replaceDestroy_ShouldReplaceAnElementFromTheListAndKeepTheOldOneIfNoDestructorFunction);
+    RUN_TEST(test_replaceDestroy_ShouldReplaceAnElementFromTheListAndDestroyTheOldOne);
+    RUN_TEST(test_replaceDestroy_ShouldReplaceAnElementFromTheListAndKeepTheOldOneIfNoDestructorFunction);
     RUN_TEST(test_replaceDestroy_ShouldReplaceANullElementFromTheList);
 
     RUN_TEST(test_removeSelected_ShouldRemoveAParticularElementFromTheList);
 
-    RUN_TEST(
-        test_removeDestroyingSelected_ShouldRemoveAndDestroyAnElementSelectedFromTheList);
+    RUN_TEST(test_removeDestroyingSelected_ShouldRemoveAndDestroyAnElementSelectedFromTheList);
 
     return UNITY_END();
 }

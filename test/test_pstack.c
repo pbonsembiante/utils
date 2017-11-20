@@ -18,7 +18,7 @@
 #include "unity.h"
 #include <string.h>
 
-pstack* S = 0;
+pstack *S = 0;
 
 void setUp(void) {
     S = pstack_create();
@@ -35,7 +35,7 @@ void test_create_ShouldCreateAnEmptyStack(void) {
 
 void test_push_ShouldPushAnElementToTheStack(void) {
     size_t prev_size = pstack_size(S);
-    char* test_string = calloc(11, sizeof(char));
+    char *test_string = calloc(11, sizeof(char));
 
     strncpy(test_string, "Test data!", 11);
     pstack_push(S, test_string);
@@ -46,8 +46,8 @@ void test_push_ShouldPushAnElementToTheStack(void) {
 }
 
 void test_pop_ShouldRemoveAnElementFromTheStack(void) {
-    char* test_string = calloc(11, sizeof(char));
-    char* popped = 0;
+    char *test_string = calloc(11, sizeof(char));
+    char *popped = 0;
     size_t prev_size = 0;
 
     strncpy(test_string, "Test data!", 11);
@@ -55,14 +55,14 @@ void test_pop_ShouldRemoveAnElementFromTheStack(void) {
     prev_size = pstack_size(S);
 
     popped = pstack_pop(S);
-    TEST_ASSERT_EQUAL_STRING((const char*) popped, test_string);
+    TEST_ASSERT_EQUAL_STRING((const char *) popped, test_string);
     TEST_ASSERT_EQUAL_UINT(prev_size - 1, pstack_size(S));
 
     free(test_string);
 }
 
 void test_push_ShouldPushNullElements(void) {
-    char* test_string = 0;
+    char *test_string = 0;
     size_t prev_size = pstack_size(S);
 
     pstack_push(S, test_string);
@@ -76,12 +76,12 @@ void test_pop_ShouldNotPopFromAnEmptyStack(void) {
 }
 
 void test_destroyAll_ShouldDestroyTheStackAndEveryElementInIt(void) {
-    pstack* stack = pstack_create();
-    size_t* x = calloc(1, sizeof(size_t));
+    pstack *stack = pstack_create();
+    size_t *x = calloc(1, sizeof(size_t));
     *x = 99;
-    size_t* y = calloc(1, sizeof(size_t));
+    size_t *y = calloc(1, sizeof(size_t));
     *y = 98;
-    size_t* z = calloc(1, sizeof(size_t));
+    size_t *z = calloc(1, sizeof(size_t));
     *z = 97;
 
     pstack_push(stack, x);

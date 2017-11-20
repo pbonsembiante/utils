@@ -36,6 +36,7 @@ Thumbs.db
 *.pro.user*
 *.pro
 *.pri
+*.orig
 
 # xemacs temporary files
 *.flc
