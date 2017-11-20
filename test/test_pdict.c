@@ -53,7 +53,7 @@ void test_size_SizeOfNewDictWithOneItemShouldBeOne(void) {
     char *_key = malloc(KEYS_LEN);
     size_t _data = 0;
     snprintf(_key, KEYS_LEN, "%s", "0_key");
-    pdict_put(D, keys[0], &_data);
+    pdict_put(D, _key, &_data);
     TEST_ASSERT_EQUAL_UINT(pdict_size(D), 1);
     free(_key);
 }
@@ -88,11 +88,11 @@ void test_add_ShouldAddANewElement(void) {
 }
 
 void test_append_ShouldAddAnElementToAnEmptyDict(void) {
-    char* _key = malloc(sizeof(char[1][KEYS_LEN]));
+    char* _key = malloc(KEYS_LEN);
     snprintf(_key, KEYS_LEN, "%s", "1_key");
     size_t _data = 1;
     TEST_ASSERT_TRUE(pdict_is_empty(D));
-    pdict_put(D, _key, _data);
+    pdict_put(D, _key, &_data);
     TEST_ASSERT_FALSE(pdict_is_empty(D));
     free(_key);
 }
@@ -124,7 +124,7 @@ void test_get_ShouldGetAllPmapsFromTheDict(void) {
 
     }
     free_keys_data();
-};
+}
 
 void test_remove_ShouldRemoveAllElementsFromDict(void) {
     loadDict();

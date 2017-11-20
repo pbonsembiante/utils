@@ -407,6 +407,7 @@ void test_getElements_ShouldReturnANewEmptyList(void) {
 
     TEST_ASSERT_NOT_NULL(sublist);
     TEST_ASSERT_TRUE(plist_is_empty(sublist));
+    plist_destroy(sublist);
 }
 
 void test_getElements_ShouldReturnANewLoadedList(void) {
@@ -418,6 +419,7 @@ void test_getElements_ShouldReturnANewLoadedList(void) {
     TEST_ASSERT_NOT_NULL(sublist);
     TEST_ASSERT_FALSE(plist_is_empty(sublist));
     TEST_ASSERT_EQUAL_UINT(DATA_ARRAY_LEN / 2, plist_size(sublist));
+    plist_destroy(sublist);
 }
 
 void test_getRemoving_ShouldReturnAnEmptyList(void) {
@@ -427,6 +429,7 @@ void test_getRemoving_ShouldReturnAnEmptyList(void) {
 
     TEST_ASSERT_NOT_NULL(sublist);
     TEST_ASSERT_TRUE(plist_is_empty(sublist));
+    plist_destroy(sublist);
 }
 
 void test_getRemoving_ShouldReturnAnNewLoadedListAndRemoveFromOriginal(void) {
@@ -439,6 +442,7 @@ void test_getRemoving_ShouldReturnAnNewLoadedListAndRemoveFromOriginal(void) {
     TEST_ASSERT_FALSE(plist_is_empty(sublist));
     TEST_ASSERT_EQUAL_UINT(DATA_ARRAY_LEN / 2, plist_size(sublist));
     TEST_ASSERT_EQUAL_UINT(DATA_ARRAY_LEN / 2, plist_size(L));
+    plist_destroy(sublist);
 }
 
 void test_remove_ShouldRemoveAnElementFromList(void) {
