@@ -146,7 +146,7 @@ void *plist_remove(plist *self, size_t index) {
         return 0;
     }
 
-    if (index == 0) {
+    if (index == 0 && self->head) {
         aux = self->head;
         data = aux->data;
         self->head = aux->next;
@@ -357,7 +357,7 @@ static plinked_node *plist_get_node(plist *self, size_t index) {
         size_t count = 0;
         element = self->head;
 
-        while (count++ < index) {
+        while (element && count++ < index) {
             element = element->next;
         }
     }
