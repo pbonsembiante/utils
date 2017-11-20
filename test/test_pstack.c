@@ -28,23 +28,6 @@ void tearDown(void) {
     pstack_destroy(S);
 }
 
-/*
- * See: https://stackoverflow.com/a/22637665/6194674
- * */
-int isFreed(void* p) {
-    void* q;
-    char p_addr[50];
-    char q_addr[50];
-
-    sprintf(p_addr, "%p", p);
-
-    q = malloc(1);
-    sprintf(q_addr, "%p", q);
-    free(q);
-
-    return !strncmp(q_addr, p_addr, 50);
-}
-
 void test_create_ShouldCreateAnEmptyStack(void) {
     TEST_ASSERT_NOT_NULL(S);
     TEST_ASSERT_EQUAL_UINT(true, pstack_is_empty(S));
@@ -106,7 +89,6 @@ void test_destroyAll_ShouldDestroyTheStackAndEveryElementInIt(void) {
     pstack_push(stack, z);
 
     pstack_destroy_all(stack, free);
-    TEST_ASSERT_TRUE(isFreed(stack));
 }
 
 void test_peek_ShouldRetrieveTheTopElementFromTheStackButNotPopIt(void) {

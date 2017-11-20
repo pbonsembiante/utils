@@ -10,21 +10,6 @@
 plist* L = 0;
 size_t* data = 0;
 
-/* See: https://stackoverflow.com/a/22637665/6194674*/
-int isFreed(void* p) {
-    void* q;
-    char p_addr[50];
-    char q_addr[50];
-
-    sprintf(p_addr, "%p", p);
-
-    q = malloc(1);
-    sprintf(q_addr, "%p", q);
-    free(q);
-
-    return !strncmp(q_addr, p_addr, 50);
-}
-
 void setUp(void) {
     data = calloc(DATA_ARRAY_LEN, sizeof(plist_member_t));
     L = plist_create();
@@ -563,7 +548,6 @@ void test_removeDestroy_ShouldRemoveAndDestroyAnElement(void) {
     plist_remove_and_destroy(L, plist_size(L) - 1, free);
 
     TEST_ASSERT_EQUAL_UINT(DATA_ARRAY_LEN, plist_size(L));
-    TEST_ASSERT_TRUE(isFreed(x));
 }
 
 void test_isEmpty_ShouldReturnTrueOnAnEmptyList(void) {
@@ -580,7 +564,6 @@ void test_destroy_ShouldFreeTheList(void) {
     plist* tmp = plist_create();
     TEST_ASSERT_NOT_NULL(tmp);
     plist_destroy(tmp);
-    TEST_ASSERT_TRUE(isFreed(tmp));
 }
 
 void
@@ -593,7 +576,6 @@ test_replaceDestroy_ShouldReplaceAnElementFromTheListAndDestroyTheOldOne(void) {
     plist_replace_and_destroy(L, 0, &y, free);
 
     TEST_ASSERT_EQUAL_UINT(1, plist_size(L));
-    TEST_ASSERT_TRUE(isFreed(x));
     TEST_ASSERT_EQUAL_UINT(y, PLIST_GET_UINT(L, 0));
 }
 
@@ -608,7 +590,6 @@ test_replaceDestroy_ShouldReplaceAnElementFromTheListAndKeepTheOldOneIfNoDestruc
     plist_replace_and_destroy(L, 0, &y, 0);
 
     TEST_ASSERT_EQUAL_UINT(1, plist_size(L));
-    TEST_ASSERT_FALSE(isFreed(x));
     TEST_ASSERT_EQUAL_UINT(y, PLIST_GET_UINT(L, 0));
     free(x);
 }
@@ -650,7 +631,6 @@ test_removeDestroyingSelected_ShouldRemoveAndDestroyAnElementSelectedFromTheList
     plist_remove_destroying_selected(L, is99, free);
 
     TEST_ASSERT_EQUAL_UINT(DATA_ARRAY_LEN, plist_size(L));
-    TEST_ASSERT_TRUE(isFreed(x));
 }
 
 int main(void) {

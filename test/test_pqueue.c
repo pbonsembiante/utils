@@ -28,23 +28,6 @@ void tearDown(void) {
     pqueue_destroy(Q);
 }
 
-/*
- * See: https://stackoverflow.com/a/22637665/6194674
- * */
-int isFreed(void* p) {
-    void* q;
-    char p_addr[50];
-    char q_addr[50];
-
-    sprintf(p_addr, "%p", p);
-
-    q = malloc(1);
-    sprintf(q_addr, "%p", q);
-    free(q);
-
-    return !strncmp(q_addr, p_addr, 50);
-}
-
 void test_create_ShouldCreateAnEmptyQueue(void) {
     TEST_ASSERT_NOT_NULL(Q);
     TEST_ASSERT_TRUE(pqueue_is_empty(Q));
@@ -132,7 +115,6 @@ void test_destroyAll_ShouldDestroyTheQueueAndEveryElementInIt(void) {
     pqueue_enqueue(queue, z);
 
     pqueue_destroy_all(queue, free);
-    TEST_ASSERT_TRUE(isFreed(queue));
 }
 
 void test_cleanDestroy_ShouldDestroyTheQueueAndEveryElementInIt(void) {
