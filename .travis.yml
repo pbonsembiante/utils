@@ -177,6 +177,39 @@ matrix:
         - make -j 4
         - ctest -T memcheck
 
+    #
+    # Astyle Build
+    #
+    - compiler: gcc-7
+
+      os: linux
+
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - gcc-7
+            - g++-7
+
+      env:
+        - TEST="Astyle Build"
+        - COMPILER=gcc-7
+        - CMAKE_C_FLAGS_DEBUG="-std=c11 -Wall -Wextra -Wpedantic -Wchkp -Wuninitialized -Winit-self"
+
+      script:
+        - cmake -DENABLE_ASTYLE=ON -DCMAKE_C_COMPILER=$COMPILER -DCMAKE_BUILD_TYPE=Debug -DCMAKE_C_FLAGS_DEBUG="$CMAKE_C_FLAGS_DEBUG" ..
+        - make -j 4
+        - make format
+        - |
+          if [[ -n $(git diff) ]]; then
+            echo "You must run make format before submitting a pull request"
+            echo ""
+            git diff
+            exit -1
+          fi
+
+
 before_install:
   - sudo apt-get update -qq
 
