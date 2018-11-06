@@ -1,7 +1,5 @@
-#ifndef _PNODE_H_
-#define _PNODE_H_
 /***************************************************************************
- * Copyright (C) 2016 - 2017 Patricio Bonsembiante. All rights reserved.
+ * Copyright (C) 2016 - 2018 Patricio Bonsembiante. All rights reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,6 +13,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ***************************************************************************/
+
+#ifndef _PNODE_H_
+#define _PNODE_H_
+
 #ifndef plist_member_t
     #define plist_member_t void
 #endif
