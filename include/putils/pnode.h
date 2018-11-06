@@ -18,7 +18,7 @@
 #define _PNODE_H_
 
 #ifndef plist_member_t
-    #define plist_member_t void
+    #define plist_member_t char
 #endif
 
 typedef struct plinked_node plinked_node;
