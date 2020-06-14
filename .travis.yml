@@ -6,8 +6,7 @@ before_install:
   - sudo apt-get update -qq
   - echo "End before install"
 
-before_script: &before_script_step
-  - echo "Start global before_script"
+before_script:
   # Build Folder
   - mkdir build
   - cd build
@@ -170,7 +169,23 @@ matrix:
         - CC_TEST_REPORTER_ID=709c190d97a1ec5988862a2a5b08a8ee3ad5f2798f488915f18c1c9c36fedbf5
 
       before_script:
-        - echo "Start step before_script"
+        # Build Folder
+        - mkdir build
+        - cd build
+
+        # Update / Install CMake
+        - |
+          if [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then
+            mkdir -p external/cmake
+            pushd external/cmake
+            wget https://cmake.org/files/v3.9/cmake-3.9.6-Linux-x86_64.sh
+            chmod +x cmake-*-Linux-x86_64.sh
+            ./cmake-*-Linux-x86_64.sh --exclude-subdir --skip-license
+            export PATH="${PWD}/bin:$PATH"
+            popd
+          else
+            if ! brew ls --version cmake &>/dev/null; then brew update; brew install cmake; fi
+          fi
         - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
         - chmod +x ./cc-test-reporter
         - ./cc-test-reporter before-build
