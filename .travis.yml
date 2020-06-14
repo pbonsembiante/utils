@@ -4,8 +4,10 @@ language: c
 
 before_install:
   - sudo apt-get update -qq
+  - echo "End before install"
 
 before_script: &before_script_step
+  - echo "Start global before_script"
   # Build Folder
   - mkdir build
   - cd build
@@ -168,6 +170,7 @@ matrix:
         - CC_TEST_REPORTER_ID=709c190d97a1ec5988862a2a5b08a8ee3ad5f2798f488915f18c1c9c36fedbf5
 
       before_script:
+        - echo "Start step before_script"
         - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
         - chmod +x ./cc-test-reporter
         - ./cc-test-reporter before-build
