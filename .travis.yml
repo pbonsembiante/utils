@@ -2,6 +2,28 @@ sudo: required
 dist: trusty
 language: c
 
+before_install:
+  - sudo apt-get update -qq
+
+before_script: &before_script
+  # Build Folder
+  - mkdir build
+  - cd build
+
+  # Update / Install CMake
+  - |
+    if [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then
+      mkdir -p external/cmake
+      pushd external/cmake
+      wget https://cmake.org/files/v3.9/cmake-3.9.6-Linux-x86_64.sh
+      chmod +x cmake-*-Linux-x86_64.sh
+      ./cmake-*-Linux-x86_64.sh --exclude-subdir --skip-license
+      export PATH="${PWD}/bin:$PATH"
+      popd
+    else
+      if ! brew ls --version cmake &>/dev/null; then brew update; brew install cmake; fi
+    fi
+
 matrix:
   include:
 
@@ -149,6 +171,7 @@ matrix:
         - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
         - chmod +x ./cc-test-reporter
         - ./cc-test-reporter before-build
+        <<: *before_script
 
       script:
         - cmake -DCMAKE_C_COMPILER=$COMPILER -DCMAKE_BUILD_TYPE=Debug -DCMAKE_C_FLAGS_DEBUG="$CMAKE_C_FLAGS_DEBUG" -DCMAKE_EXE_LINKER_FLAGS=$CMAKE_EXE_LINKER_FLAGS ..
@@ -216,26 +239,3 @@ matrix:
             git diff
             exit -1
           fi
-
-
-before_install:
-  - sudo apt-get update -qq
-
-before_script:
-  # Build Folder
-  - mkdir build
-  - cd build
-
-  # Update / Install CMake
-  - |
-    if [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then
-      mkdir -p external/cmake
-      pushd external/cmake
-      wget https://cmake.org/files/v3.9/cmake-3.9.6-Linux-x86_64.sh
-      chmod +x cmake-*-Linux-x86_64.sh
-      ./cmake-*-Linux-x86_64.sh --exclude-subdir --skip-license
-      export PATH="${PWD}/bin:$PATH"
-      popd
-    else
-      if ! brew ls --version cmake &>/dev/null; then brew update; brew install cmake; fi
-    fi
