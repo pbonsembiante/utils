@@ -139,10 +139,16 @@ matrix:
             - g++-7
 
       env:
-        - TEST="CodeCov Build"
+        - TEST="Code Coverage Build"
         - COMPILER=gcc-7
         - CMAKE_C_FLAGS_DEBUG="-std=c11 -Wall -Wextra -Wpedantic -Wchkp -Wuninitialized -Winit-self --coverage -O0"
         - CMAKE_EXE_LINKER_FLAGS=-lgcov
+        - CC_TEST_REPORTER_ID=709c190d97a1ec5988862a2a5b08a8ee3ad5f2798f488915f18c1c9c36fedbf5
+
+      before_script:
+        - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+        - chmod +x ./cc-test-reporter
+        - ./cc-test-reporter before-build
 
       script:
         - cmake -DCMAKE_C_COMPILER=$COMPILER -DCMAKE_BUILD_TYPE=Debug -DCMAKE_C_FLAGS_DEBUG="$CMAKE_C_FLAGS_DEBUG" -DCMAKE_EXE_LINKER_FLAGS=$CMAKE_EXE_LINKER_FLAGS ..
@@ -151,6 +157,7 @@ matrix:
 
       after_success:
         - bash <(curl -s https://codecov.io/bash) -f '!*unity*' -F unittesting
+        - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
 
     #
     # Valgrind Build
