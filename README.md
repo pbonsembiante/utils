@@ -7,7 +7,7 @@
 
 
 
-__Copyleft (c) 2016 - 2017 Phanatos Utils Library by Patricio Bonsembiante (Phanatos)__
+__Copyleft (c) 2016 - 2020 Phanatos Utils Library by Patricio Bonsembiante (Phanatos)__
 
 ## Synopsis
 
