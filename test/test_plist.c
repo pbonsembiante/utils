@@ -214,7 +214,7 @@ void test_append_ShouldAddAnElementToTheEndOfList(void) {
 void test_append_ShouldAddAnElementToAnEmptyList(void) {
     TEST_ASSERT_TRUE(plist_is_empty(L));
     plist_append(L, data);
-    TEST_ASSERT_FALSE(plist_is_empty(L))
+    TEST_ASSERT_FALSE(plist_is_empty(L));
 }
 
 
@@ -488,8 +488,7 @@ void test_prepend_ShouldAddAnElementToAnEmptyList(void) {
 
     TEST_ASSERT_TRUE(plist_is_empty(L));
     plist_prepend(L, &x);
-    TEST_ASSERT_FALSE(plist_is_empty(L))
-
+    TEST_ASSERT_FALSE(plist_is_empty(L));
 }
 
 void test_replace_ShouldReplaceAnElementInTheList(void) {
