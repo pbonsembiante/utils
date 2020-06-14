@@ -107,6 +107,7 @@ matrix:
       script:
         - cmake -DENABLE_CPPCHECK=ON -DCMAKE_C_COMPILER=$COMPILER -DCMAKE_BUILD_TYPE=Debug -DCMAKE_C_FLAGS_DEBUG="$CMAKE_C_FLAGS_DEBUG" ..
         - make -j 4
+        - make -j 4 check
         - ctest -j 4
 
     #
