@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright (C) 2016 - 2017 Patricio Bonsembiante. All rights reserved.
+ * Copyright (C) 2016 - 2020 Patricio Bonsembiante. All rights reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -280,20 +280,22 @@ plist *plist_filter(plist *self, plist_evaluator condition) {
 }
 
 plist *plist_map(plist *self, plist_transformer transformer) {
-    plist *mapped = plist_create();
-    plinked_node *element = self->head;
+    plist *mapped = 0;
+    if (transformer && self) {
+        mapped = plist_create();
+        plinked_node *element = self->head;
 
-    while (element) {
-        plist_append(mapped, transformer(element->data));
-        element = element->next;
+        while (element) {
+            plist_append(mapped, transformer(element->data));
+            element = element->next;
+        }
     }
-
     return mapped;
 }
 
 void plist_sort(plist *self, plist_comparator comparator) {
     plist_merge_sort(&self->head, comparator);
-    if (self->head != 0 && self->head->next != 0) {
+    if (self->head && self->head->next) {
         self->tail = plist_get_node(self, self->elements_count - 2)->next;
     }
 }

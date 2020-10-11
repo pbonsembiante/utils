@@ -1,13 +1,13 @@
 # Phanatos' Utils Library - PUtils 
 [![Code Quality](https://codeclimate.com/github/Phanatos-/utils/badges/gpa.svg)](https://codeclimate.com/github/Phanatos-/utils)
 [![Issue Count](https://codeclimate.com/github/Phanatos-/utils/badges/issue_count.svg)](https://codeclimate.com/github/Phanatos-/utils)
-[![Build Status](https://travis-ci.org/Phanatos-/utils.svg?branch=master)](https://travis-ci.org/Phanatos-/utils)
+[![Build Status](https://travis-ci.org/pbonsembiante/utils.svg?branch=master)](https://travis-ci.org/pbonsembiante/utils)
 [![Documentation](https://codedocs.xyz/Phanatos-/utils.svg)](https://codedocs.xyz/Phanatos-/utils/)
-[![Code Coverage](https://codecov.io/gh/Phanatos-/utils/branch/master/graph/badge.svg)](https://codecov.io/gh/Phanatos-/utils)
+[![Code Coverage](https://codecov.io/gh/pbonsembiante/utils/branch/master/graph/badge.svg)](https://codecov.io/gh/pbonsembiante/utils)
 
 
 
-__Copyleft (c) 2016 - 2017 Phanatos Utils Library by Patricio Bonsembiante (Phanatos)__
+__Copyleft (c) 2016 - 2020 Phanatos Utils Library by Patricio Bonsembiante (Phanatos)__
 
 ## Synopsis
 

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright (C) 2016 - 2017 Patricio Bonsembiante. All rights reserved.
+ * Copyright (C) 2016 - 2020 Patricio Bonsembiante. All rights reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -103,9 +103,8 @@ void pdict_remove_and_destroy(pdict *self, char *key, void(* data_destroyer)(voi
 }
 
 void pdict_iterator(pdict *self, void(* closure)(char *, void *)) {
-    for (size_t table_index = 0;
-         table_index < self->table_max_size; table_index++) {
-        phashmap_node *element = self->elements[table_index];
+    for (size_t index = 0; index < self->table_max_size; ++index) {
+        phashmap_node *element = self->elements[index];
 
         while (element != 0) {
             closure(element->key, element->data);
