@@ -87,6 +87,8 @@ Please, feel free to PR any improvements to it.
 
 ## Installation
 
+### CMake
+
 You need to download and install [CMake](https://cmake.org). For instructions on how to install/configure CMake you can refer to [CMake's Documentation](https://cmake.org/cmake/help/latest/).
 
 Once CMake is installed you have two choices:
@@ -105,6 +107,12 @@ If running from command line you should use:
 You can, and should, set compiler/linker flags to use in the build using -D. You can look at [Travis YML](./.travis.yml) for an example.
 
 If using it from an IDE, the steps and required configuration might vary widely from one IDE to the other and you should check the IDE's documentation related to CMake based projects.
+
+### Git
+
+As per `CMakeLists.txt` git is required: `find_package(Git REQUIRED)`
+
+You need to have git installed and its executable needs to be present in the PATH environmental variable. Otherwise you'll get an error like `Could NOT find Git (missing: GIT_EXECUTABLE)` when trying to load the project.
 
 ## Tests
 
