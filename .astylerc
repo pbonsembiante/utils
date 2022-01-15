@@ -1,5 +1,5 @@
 --style=google
---indent=spaces=4
+--indent=spaces=2
 --attach-namespaces
 --attach-classes
 --attach-inlines

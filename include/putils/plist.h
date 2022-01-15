@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright (C) 2016 - 2020 Patricio Bonsembiante. All rights reserved.
+ * Copyright (C) 2016 - 2022 Patricio Bonsembiante. All rights reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,9 +26,9 @@
  * library. No internal or implementation details are provided in this headers.
  *
  */
+#include "pnode.h"
 #include <stdbool.h>
 #include <stdlib.h>
-#include "pnode.h"
 
 /*!
  * \typedef plist_comparator
@@ -44,14 +44,17 @@
  *
  * over this:
  * ~~~~~~~~~~~~~~~{.c}
- * void plist_sort(plist_list *self, bool (*comparator)(const void *, const void *));
+ * void plist_sort(plist_list *self, bool (*comparator)(const void *, const void
+ * *));
  * ~~~~~~~~~~~~~~~
  */
-typedef bool (* plist_comparator)(const plist_member_t *, const plist_member_t *);
+typedef bool (*plist_comparator)(const plist_member_t *,
+                                 const plist_member_t *);
 
 /*!
  * \typedef plist_evaluator
- * \brief User-defined function type to use custom boolean evaluations on data elements.
+ * \brief User-defined function type to use custom boolean evaluations on data
+ * elements.
  *
  * __Detail:__
  *
@@ -66,11 +69,12 @@ typedef bool (* plist_comparator)(const plist_member_t *, const plist_member_t *
  * plist_list *plist_filter(plist_list *self, bool (*condition)(void *));
  * ~~~~~~~~~~~~~~~
  */
-typedef bool (* plist_evaluator)(const plist_member_t *);
+typedef bool (*plist_evaluator)(const plist_member_t *);
 
 /*!
  * \typedef plist_transformer
- * \brief User-defined function type to apply a modifier to all elements in the list.
+ * \brief User-defined function type to apply a modifier to all elements in the
+ * list.
  *
  * __Detail:__
  *
@@ -86,11 +90,12 @@ typedef bool (* plist_evaluator)(const plist_member_t *);
  * ~~~~~~~~~~~~~~~
  *
  */
-typedef plist_member_t *(* plist_transformer)(const plist_member_t *);
+typedef plist_member_t *(*plist_transformer)(const plist_member_t *);
 
 /*!
  * \typedef plist_destroyer
- * \brief User-defined function type to free data elements allocated in the list.
+ * \brief User-defined function type to free data elements allocated in the
+ * list.
  *
  * __Detail:__
  *
@@ -106,7 +111,7 @@ typedef plist_member_t *(* plist_transformer)(const plist_member_t *);
  * ~~~~~~~~~~~~~~~
  *
  */
-typedef void (* plist_destroyer)(void *);
+typedef void (*plist_destroyer)(void *);
 
 /*!
  * \typedef plist_closure
@@ -117,7 +122,7 @@ typedef void (* plist_destroyer)(void *);
  * I'll probably remove this... or adapt old code to use it... who knows.
  *
  */
-typedef void (* plist_closure)(void *);
+typedef void (*plist_closure)(void *);
 
 /*!
  * \typedef plist_list
@@ -151,8 +156,8 @@ typedef struct plist plist;
  * plist_list *L = plist_create();
  *
  * if(L) {
- *      //Now your list is ready to be used, destroy it when you're done with it.
- * } else {
+ *      //Now your list is ready to be used, destroy it when you're done with
+ * it. } else {
  *      //Ups, something went wrong!
  * }
  * ~~~~~~~~~~~~~~~
@@ -261,8 +266,8 @@ void plist_add(plist *self, size_t index, plist_member_t *data);
 
 /*!
  * \brief Merges two lists.
- * \param self: A pointer to the list that will receive the contents of the other.
- * \param other: A pointer to the list to be merged.
+ * \param self: A pointer to the list that will receive the contents of the
+ * other. \param other: A pointer to the list to be merged.
  *
  * __Detail:__
  *
@@ -309,8 +314,8 @@ void *plist_get(plist *self, size_t index);
  * \brief Returns a list of the first \count n elements in the list.
  * \param self: A pointer to a list object.
  * \param count: The amount of elements to retrieve.
- * \return: A pointer to a newly allocated list, containing \count count elements
- * from \self self.
+ * \return: A pointer to a newly allocated list, containing \count count
+ * elements from \self self.
  *
  * __Detail:__
  *
@@ -344,28 +349,30 @@ plist *plist_get_removing_elements(plist *self, size_t count);
 /*!
  * \brief Creates a new list with the elements that match a given condition.
  * \param self: A pointer to the list to filter.
- * \param condition: The condition that should be matched against to filter elements.
- * \return: A newly allocated list, containing the elements of \self self that
- * matched the \condition condition.
+ * \param condition: The condition that should be matched against to filter
+ * elements. \return: A newly allocated list, containing the elements of \self
+ * self that matched the \condition condition.
  *
  * __Detail:__
  *
  * This function returns a new list containing all the elements in \self self
  * that match the given \condition condition.
  *
- * If any element in \self self matches the condition, an empty list is returned.
- * To avoid this, [@ref plist_any_match] or [@ref plist_count_matching] can be
- * used, either to get how many items will the new list hold, or to know if it is
- * not going to be empty.
+ * If any element in \self self matches the condition, an empty list is
+ * returned. To avoid this, [@ref plist_any_match] or [@ref
+ * plist_count_matching] can be used, either to get how many items will the new
+ * list hold, or to know if it is not going to be empty.
  *
  */
 plist *plist_filter(plist *self, plist_evaluator condition);
 
 /*!
- * \brief Creates a new list with the elements of \self self mapped with \transformer transformer function.
- * \param self: A pointer to the list to transform.
- * \param transformer: A pointer to a function that will be applied to every element of the list.
- * \return A pointer to a newly allocated list containing all the elements in \self self ran through \transformer transformer.
+ * \brief Creates a new list with the elements of \self self mapped with
+ * \transformer transformer function. \param self: A pointer to the list to
+ * transform. \param transformer: A pointer to a function that will be applied
+ * to every element of the list. \return A pointer to a newly allocated list
+ * containing all the elements in \self self ran through \transformer
+ * transformer.
  *
  * __Detail:__
  *
@@ -407,7 +414,8 @@ void *plist_replace(plist *self, size_t index, plist_member_t *data);
  * Once the old element is replaced, the function will not return the removed
  * element but apply the \destroyer destroyer function to it.
  */
-void plist_replace_and_destroy(plist *self, size_t index, plist_member_t *data, plist_destroyer destroyer);
+void plist_replace_and_destroy(plist *self, size_t index, plist_member_t *data,
+                               plist_destroyer destroyer);
 
 /*!
  * \brief plist_remove
@@ -423,8 +431,8 @@ void *plist_remove(plist *self, size_t index);
  * \param index
  * \param element_destroyer
  */
-void
-plist_remove_and_destroy(plist *self, size_t index, plist_destroyer destroyer);
+void plist_remove_and_destroy(plist *self, size_t index,
+                              plist_destroyer destroyer);
 
 /*!
  * \brief plist_remove_selected
@@ -440,7 +448,8 @@ plist_member_t *plist_remove_selected(plist *self, plist_evaluator condition);
  * \param condition
  * \param element_destroyer
  */
-void plist_remove_destroying_selected(plist *self, plist_evaluator condition, plist_destroyer destroyer);
+void plist_remove_destroying_selected(plist *self, plist_evaluator condition,
+                                      plist_destroyer destroyer);
 
 /*!
  * \brief plist_clean
@@ -525,23 +534,22 @@ size_t plist_prepend(plist *self, plist_member_t *data);
 
 /*
  * Handy macros
-*/
+ */
 
-#define PLIST_GET_INT(L, i) *((int*) plist_get(L, i))
-#define PLIST_GET_PINT(L, i) ((int*) plist_get(L, i))
+#define PLIST_GET_INT(L, i) *((int *)plist_get(L, i))
+#define PLIST_GET_PINT(L, i) ((int *)plist_get(L, i))
 
-#define PLIST_GET_UINT(L, i) *((unsigned int*) plist_get(L, i))
-#define PLIST_GET_PUINT(L, i) ((unsigned int*) plist_get(L, i))
+#define PLIST_GET_UINT(L, i) *((unsigned int *)plist_get(L, i))
+#define PLIST_GET_PUINT(L, i) ((unsigned int *)plist_get(L, i))
 
-#define PLIST_GET_CHAR(L, i) *((char*) plist_get(L, i))
-#define PLIST_GET_UCHAR(L, i) *((unsigned char*) plist_get(L, i))
-#define PLIST_GET_PCHAR(L, i) ((char*) plist_get(L, i))
+#define PLIST_GET_CHAR(L, i) *((char *)plist_get(L, i))
+#define PLIST_GET_UCHAR(L, i) *((unsigned char *)plist_get(L, i))
+#define PLIST_GET_PCHAR(L, i) ((char *)plist_get(L, i))
 
-#define PLIST_GET_FLOAT(L, i) *((float*) plist_get(L, i))
-#define PLIST_GET_PFLOAT(L, i) ((float*) plist_get(L, i))
+#define PLIST_GET_FLOAT(L, i) *((float *)plist_get(L, i))
+#define PLIST_GET_PFLOAT(L, i) ((float *)plist_get(L, i))
 
-#define PLIST_GET_DOUBLE(L, i) *((double*) plist_get(L, i))
-#define PLIST_GET_PDOUBLE(L, i) ((double*) plist_get(L, i))
-
+#define PLIST_GET_DOUBLE(L, i) *((double *)plist_get(L, i))
+#define PLIST_GET_PDOUBLE(L, i) ((double *)plist_get(L, i))
 
 #endif /* _PLIST_H_ */

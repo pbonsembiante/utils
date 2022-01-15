@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright (C) 2016 - 2020 Patricio Bonsembiante. All rights reserved.
+ * Copyright (C) 2016 - 2022 Patricio Bonsembiante. All rights reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -45,7 +45,7 @@ typedef struct pstack pstack;
  *
  * __Detail:__
  */
-typedef void (* pstack_destroyer)(void *);
+typedef void (*pstack_destroyer)(void *);
 
 /*!
  * \brief pstack_create
@@ -105,21 +105,21 @@ void pstack_destroy_all(pstack *self, pstack_destroyer destroyer);
 
 /*
  * Handy macros
-*/
-#define PSTACK_PEEK_INT(Q) *((int*) pstack_peek(Q))
-#define PSTACK_PEEK_PINT(Q) ((int*) pstack_peek(Q))
+ */
+#define PSTACK_PEEK_INT(Q) *((int *)pstack_peek(Q))
+#define PSTACK_PEEK_PINT(Q) ((int *)pstack_peek(Q))
 
-#define PSTACK_PEEK_UINT(Q) *((unsigned int*) pstack_peek(Q))
-#define PSTACK_PEEK_PUINT(Q) ((unsigned int*) pstack_peek(Q))
+#define PSTACK_PEEK_UINT(Q) *((unsigned int *)pstack_peek(Q))
+#define PSTACK_PEEK_PUINT(Q) ((unsigned int *)pstack_peek(Q))
 
-#define PSTACK_PEEK_CHAR(Q) *((char*) pstack_peek(Q))
-#define PSTACK_PEEK_UCHAR(Q) *((unsigned char*) pstack_peek(Q))
-#define PSTACK_PEEK_PCHAR(Q) ((char*) pstack_peek(Q))
+#define PSTACK_PEEK_CHAR(Q) *((char *)pstack_peek(Q))
+#define PSTACK_PEEK_UCHAR(Q) *((unsigned char *)pstack_peek(Q))
+#define PSTACK_PEEK_PCHAR(Q) ((char *)pstack_peek(Q))
 
-#define PSTACK_PEEK_FLOAT(Q) *((float*) pstack_peek(Q))
-#define PSTACK_PEEK_PFLOAT(Q) ((float*) pstack_peek(Q))
+#define PSTACK_PEEK_FLOAT(Q) *((float *)pstack_peek(Q))
+#define PSTACK_PEEK_PFLOAT(Q) ((float *)pstack_peek(Q))
 
-#define PSTACK_PEEK_DOUBLE(Q) *((double*) pstack_peek(Q))
-#define PSTACK_PEEK_PDOUBLE(Q) ((double*) pstack_peek(Q))
+#define PSTACK_PEEK_DOUBLE(Q) *((double *)pstack_peek(Q))
+#define PSTACK_PEEK_PDOUBLE(Q) ((double *)pstack_peek(Q))
 
 #endif /* _PSTACK_H_ */

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright (C) 2016 - 2020 Patricio Bonsembiante. All rights reserved.
+ * Copyright (C) 2016 - 2022 Patricio Bonsembiante. All rights reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,14 +16,14 @@
 
 #include "putils/pexcept.h"
 
-volatile PEXCEPT_FRAME_T pexceptFrames[PEXCEPT_STACK_ID] = {{ .frame = 0 }};
+volatile PEXCEPT_FRAME_T pexceptFrames[PEXCEPT_STACK_ID] = {{.frame = 0}};
 
-void throw (PEXCEPT_T ExceptionID) {
-    unsigned int current = PEXCEPT_GET_ID;
+void throw (PEXCEPT_T e) {
+  unsigned int current = PEXCEPT_GET_ID;
 
-    pexceptFrames[current].exception = ExceptionID;
-    if (pexceptFrames[current].frame) {
-        longjmp(*pexceptFrames[current].frame, 1);
-    }
-    PEXCEPT_NO_CATCH_HANDLER(ExceptionID);
+  pexceptFrames[current].exception = e;
+  if (pexceptFrames[current].frame) {
+    longjmp(*pexceptFrames[current].frame, 1);
+  }
+  PEXCEPT_NO_CATCH_HANDLER(e);
 }

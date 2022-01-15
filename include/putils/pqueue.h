@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright (C) 2016 - 2020 Patricio Bonsembiante. All rights reserved.
+ * Copyright (C) 2016 - 2022 Patricio Bonsembiante. All rights reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,7 +37,7 @@
  */
 typedef struct pqueue pqueue;
 
-typedef void (* pqueue_destroyer)(void *);
+typedef void (*pqueue_destroyer)(void *);
 
 /*!
  * \brief pqueue_create
@@ -109,22 +109,22 @@ void pqueue_destroy_all(pqueue *self, pqueue_destroyer destroyer);
 
 /*
  * Handy macros
-*/
+ */
 
-#define PQUEUE_PEEK_INT(Q) *((int*) pqueue_peek(Q))
-#define PQUEUE_PEEK_PINT(Q) ((int*) pqueue_peek(Q))
+#define PQUEUE_PEEK_INT(Q) *((int *)pqueue_peek(Q))
+#define PQUEUE_PEEK_PINT(Q) ((int *)pqueue_peek(Q))
 
-#define PQUEUE_PEEK_UINT(Q) *((unsigned int*) pqueue_peek(Q))
-#define PQUEUE_PEEK_PUINT(Q) ((unsigned int*) pqueue_peek(Q))
+#define PQUEUE_PEEK_UINT(Q) *((unsigned int *)pqueue_peek(Q))
+#define PQUEUE_PEEK_PUINT(Q) ((unsigned int *)pqueue_peek(Q))
 
-#define PQUEUE_PEEK_CHAR(Q) *((char*) pqueue_peek(Q))
-#define PQUEUE_PEEK_UCHAR(Q) *((unsigned char*) pqueue_peek(Q))
-#define PQUEUE_PEEK_PCHAR(Q) ((char*) pqueue_peek(Q))
+#define PQUEUE_PEEK_CHAR(Q) *((char *)pqueue_peek(Q))
+#define PQUEUE_PEEK_UCHAR(Q) *((unsigned char *)pqueue_peek(Q))
+#define PQUEUE_PEEK_PCHAR(Q) ((char *)pqueue_peek(Q))
 
-#define PQUEUE_PEEK_FLOAT(Q) *((float*) pqueue_peek(Q))
-#define PQUEUE_PEEK_PFLOAT(Q) ((float*) pqueue_peek(Q))
+#define PQUEUE_PEEK_FLOAT(Q) *((float *)pqueue_peek(Q))
+#define PQUEUE_PEEK_PFLOAT(Q) ((float *)pqueue_peek(Q))
 
-#define PQUEUE_PEEK_DOUBLE(Q) *((double*) pqueue_peek(Q))
-#define PQUEUE_PEEK_PDOUBLE(Q) ((double*) pqueue_peek(Q))
+#define PQUEUE_PEEK_DOUBLE(Q) *((double *)pqueue_peek(Q))
+#define PQUEUE_PEEK_PDOUBLE(Q) ((double *)pqueue_peek(Q))
 
 #endif /* _PQUEUE_H_ */
