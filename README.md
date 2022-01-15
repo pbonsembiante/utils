@@ -7,7 +7,7 @@
 
 
 
-__Copyleft (c) 2016 - 2020 Phanatos Utils Library by Patricio Bonsembiante (Phanatos)__
+__Copyleft (c) 2016 - 2022 Phanatos Utils Library by Patricio Bonsembiante (Phanatos)__
 
 ## Synopsis
 
@@ -42,11 +42,14 @@ The best place to learn how to use the library are the [tests](/test), which sho
 
 To avoid namespace collisions with other libraries we use the prefix `p+(name)` where name is a name related to the main goal of the implementation, i.e:
 
-```
+```c
 /* PLIST */
+#include "putils/plist.h"
+#include "putils/pstack.h"
+
 ...
 plist *aList = plist_create();
-plist *otherList
+plist *otherList = plist_crete();
 /* some code here */
 plist_merge(aList, otherList);
 ...
@@ -60,8 +63,9 @@ pstack_push(stack, someValue);
 
 The only exception to this is the exception framework wich defines the `try`, `catch` and `throw` keywords.
 
-```
+```c
 /* PEXCEPT */
+#include "putils/pexcept.h"
 ...
 PEXCEPT_T e;
 try {
@@ -97,13 +101,13 @@ Once CMake is installed you have two choices:
    * Use it from your favorite IDE
 
 If running from command line you should use:
-
-      > git clone https://github.com/Phanatos-/utils.git
-      > cd utils
-      > mkdir build && cd build
-      > cmake ..
-      > make
-
+```bash
+git clone https://github.com/Phanatos-/utils.git
+cd utils
+mkdir build && cd build
+cmake ..
+make
+```
 You can, and should, set compiler/linker flags to use in the build using -D. You can look at [Travis YML](./.travis.yml) for an example.
 
 If using it from an IDE, the steps and required configuration might vary widely from one IDE to the other and you should check the IDE's documentation related to CMake based projects.
@@ -122,12 +126,13 @@ I'm currently writing the tests for the available code and will not write any ne
 
 You can run `ctest` moving to the test directory in your `build` directory:
 
-      > cd build/test
-      > ctest
-
+```bash
+cd build/test
+ctest
+```
 ## Contributors
 
-* [Phanatos](https://github.com/Phanatos-)
+* [Phanatos](https://github.com/pbonsembiante)
 * [Dipiert](https://github.com/Dipiert)
 
 ## License

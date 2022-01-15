@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright (C) 2016 - 2020 Patricio Bonsembiante. All rights reserved.
+ * Copyright (C) 2016 - 2022 Patricio Bonsembiante. All rights reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,20 +21,20 @@
 
 #include "pnode.h"
 #include <stdbool.h>
-
+#include <stdlib.h>
 
 typedef struct pdict pdict;
 
 typedef struct pmap pmap;
 struct pmap {
-    void *value;
-    char *key;
+  void *value;
+  char *key;
 };
 
 typedef struct pmap_array pmap_array;
 struct pmap_array {
-    pmap *array;
-    size_t count;
+  pmap *array;
+  size_t count;
 };
 
 pdict *pdict_create();
@@ -49,13 +49,14 @@ pmap_array pdict_get_all(pdict *self);
 
 void *pdict_remove(pdict *self, char *key);
 
-void pdict_remove_and_destroy(pdict *self, char *key, void(*data_destroyer)(void *));
+void pdict_remove_and_destroy(pdict *self, char *key,
+                              void (*data_destroyer)(void *));
 
-void pdict_iterator(pdict *self, void(* closure)(char *, void *));
+void pdict_iterator(pdict *self, void (*closure)(char *, void *));
 
 void pdict_clean(pdict *self);
 
-void pdict_clean_and_destroy_elements(pdict *self, void(* destroyer)(void *));
+void pdict_clean_and_destroy_elements(pdict *self, void (*destroyer)(void *));
 
 bool pdict_has_key(pdict *self, char *key);
 
@@ -65,6 +66,6 @@ size_t pdict_size(pdict *self);
 
 void pdict_destroy(pdict *self);
 
-void pdict_destroy_and_destroy_elements(pdict *self, void(* destroyer)(void *));
+void pdict_destroy_all(pdict *self, void (*destroyer)(void *));
 
 #endif /* _DICTIONARY_H_ */

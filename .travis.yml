@@ -23,10 +23,9 @@ matrix:
       env:
         - TEST="GCC Build"
         - COMPILER=gcc-7
-        - CMAKE_C_FLAGS_DEBUG="-std=c11 -Wall -Wextra -Wpedantic -Wchkp -Wuninitialized -Winit-self"
 
       script:
-        - cmake -DCMAKE_C_COMPILER=$COMPILER -DCMAKE_BUILD_TYPE=Debug -DCMAKE_C_FLAGS_DEBUG="$CMAKE_C_FLAGS_DEBUG" ..
+        - cmake -DCMAKE_C_COMPILER=$COMPILER -DCMAKE_BUILD_TYPE=Release ..
         - make -j 4
         - ctest -j 4
 
@@ -50,10 +49,9 @@ matrix:
       env:
         - TEST="CLang Build"
         - COMPILER=clang-4.0
-        - CMAKE_C_FLAGS_DEBUG="-std=c11 -Wall -Wextra -Wpedantic -Wchkp -Wuninitialized -Winit-self"
 
       script:
-        - cmake -DCMAKE_C_COMPILER=$COMPILER -DCMAKE_BUILD_TYPE=Debug -DCMAKE_C_FLAGS_DEBUG="$CMAKE_C_FLAGS_DEBUG" ..
+        - cmake -DCMAKE_C_COMPILER=$COMPILER -DCMAKE_BUILD_TYPE=Release ..
         - make -j 4
         - ctest -j 4
 
@@ -77,10 +75,9 @@ matrix:
       env:
         - TEST="MUSL Build"
         - COMPILER=musl-gcc
-        - CMAKE_C_FLAGS_DEBUG="-std=c11 -Wall -Wextra -Wpedantic -Wuninitialized -Winit-self"
 
       script:
-        - cmake -DCMAKE_C_COMPILER=$COMPILER -DCMAKE_BUILD_TYPE=Debug -DCMAKE_C_FLAGS_DEBUG="$CMAKE_C_FLAGS_DEBUG" ..
+        - cmake -DCMAKE_C_COMPILER=$COMPILER -DCMAKE_BUILD_TYPE=Release ..
         - make -j 4
         - ctest -j 4
 
@@ -102,10 +99,9 @@ matrix:
       env:
         - TEST="CppCheck Build"
         - COMPILER=gcc-7
-        - CMAKE_C_FLAGS_DEBUG="-std=c11 -Wall -Wextra -Wpedantic -Wchkp -Wuninitialized -Winit-self"
 
       script:
-        - cmake -DENABLE_CPPCHECK=ON -DCMAKE_C_COMPILER=$COMPILER -DCMAKE_BUILD_TYPE=Debug -DCMAKE_C_FLAGS_DEBUG="$CMAKE_C_FLAGS_DEBUG" ..
+        - cmake -DENABLE_CPPCHECK=ON -DCMAKE_C_COMPILER=$COMPILER -DCMAKE_BUILD_TYPE=Release ..
         - make -j 4
         - make -j 4 check
         - ctest -j 4
@@ -148,6 +144,7 @@ matrix:
         - cmake -DCMAKE_C_COMPILER=$COMPILER -DCMAKE_BUILD_TYPE=Debug -DCMAKE_C_FLAGS_DEBUG="$CMAKE_C_FLAGS_DEBUG" -DCMAKE_EXE_LINKER_FLAGS=$CMAKE_EXE_LINKER_FLAGS ..
         - make -j 4
         - ctest -j 4
+        - cmake --build . --target ContinuousCoverage
 
       after_success:
         - bash <(curl -s https://codecov.io/bash) -f '!*unity*' -F unittesting
@@ -171,10 +168,9 @@ matrix:
       env:
         - TEST="Valgrind Build"
         - COMPILER=gcc-7
-        - CMAKE_C_FLAGS_DEBUG="-std=c11 -Wall -Wextra -Wpedantic -Wchkp -Wuninitialized -Winit-self"
 
       script:
-        - cmake -DENABLE_MEMCHECK=ON -DCMAKE_C_COMPILER=$COMPILER -DCMAKE_BUILD_TYPE=Debug -DCMAKE_C_FLAGS_DEBUG="$CMAKE_C_FLAGS_DEBUG" ..
+        - cmake -DENABLE_MEMCHECK=ON -DCMAKE_C_COMPILER=$COMPILER -DCMAKE_BUILD_TYPE=Release ..
         - make -j 4
         - ctest -T memcheck
 
@@ -196,15 +192,14 @@ matrix:
       env:
         - TEST="Astyle Build"
         - COMPILER=gcc-7
-        - CMAKE_C_FLAGS_DEBUG="-std=c11 -Wall -Wextra -Wpedantic -Wchkp -Wuninitialized -Winit-self"
 
       script:
-        - cmake -DENABLE_ASTYLE=ON -DCMAKE_C_COMPILER=$COMPILER -DCMAKE_BUILD_TYPE=Debug -DCMAKE_C_FLAGS_DEBUG="$CMAKE_C_FLAGS_DEBUG" ..
+        - cmake -DENABLE_ASTYLE=ON -DCMAKE_C_COMPILER=$COMPILER -DCMAKE_BUILD_TYPE=Release ..
         - make -j 4
         - make format
         - |
           if [[ -n $(git diff) ]]; then
-            echo "You must run make format before submitting a pull request"
+            echo "You must run `make format` before submitting a pull request"
             echo ""
             git diff
             exit -1

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright (C) 2016 - 2020 Patricio Bonsembiante. All rights reserved.
+ * Copyright (C) 2016 - 2022 Patricio Bonsembiante. All rights reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,28 +18,28 @@
 #define _PNODE_H_
 
 #ifndef plist_member_t
-    #define plist_member_t char
+  #define plist_member_t char
 #endif
 
 typedef struct plinked_node plinked_node;
 struct plinked_node {
-    plist_member_t *data;
-    struct plinked_node *next;
+  plist_member_t *data;
+  struct plinked_node *next;
 };
 
 typedef struct pdouble_linked_node pdouble_linked_node;
 struct pdouble_linked_node {
-    void *data;
-    struct pdouble_linked_node *previous;
-    struct pdouble_linked_node *next;
+  void *data;
+  struct pdouble_linked_node *previous;
+  struct pdouble_linked_node *next;
 };
 
 typedef struct phashmap_node phashmap_node;
 struct phashmap_node {
-    char *key;
-    unsigned int hashcode;
-    void *data;
-    struct phashmap_node *next;
+  char *key;
+  unsigned int hashcode;
+  void *data;
+  struct phashmap_node *next;
 };
 
 #endif /* _PNODE_H_ */
