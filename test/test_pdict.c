@@ -30,14 +30,18 @@ void setUp(void) { D = pdict_create(); }
 
 void tearDown(void) { pdict_destroy(D); }
 
-void loadDict(void) {
-  keys = malloc(sizeof(char[DICT_DATA_LEN][KEYS_LEN]));
-  data = calloc(1, DICT_DATA_LEN * sizeof(size_t));
-  for (size_t i = 0; i < DICT_DATA_LEN; ++i) {
-    snprintf(keys[i], KEYS_LEN, "%c", (int)i + 65);
-    data[i] = i + 1;
-    pdict_put(D, keys[i], &data[i]);
-  }
+void putIntoDict(size_t items_count) {
+    keys = malloc(sizeof(char[items_count][KEYS_LEN]));
+    data = calloc(1, items_count * sizeof(size_t));
+    for (size_t i = 0; i < items_count; ++i) {
+        snprintf(keys[i], KEYS_LEN, "%c", (int)i + 65);
+        data[i] = i + 1;
+        pdict_put(D, keys[i], &data[i]);
+    }
+}
+
+void fillDict(void) {
+    putIntoDict(DICT_DATA_LEN);
 }
 
 void free_keys_data() {
@@ -69,22 +73,28 @@ void test_size_SizeOfNewDictWithOneItemShouldBeOne(void) {
 }
 
 void test_size_ShouldBeEqualToTheNumberOfAddedElements(void) {
-  loadDict();
+  fillDict();
   TEST_ASSERT_EQUAL_UINT(pdict_size(D), DICT_DATA_LEN);
   free_keys_data();
 }
 
 void test_size_ShouldBeZeroForACleanDict(void) {
-  loadDict();
+  fillDict();
   pdict_clean(D);
   TEST_ASSERT_EQUAL_UINT(pdict_size(D), 0);
   free_keys_data();
 }
 
 void test_size_ShouldNotBeZeroAfterAddingElements(void) {
-  loadDict();
+  fillDict();
   TEST_ASSERT_TRUE(pdict_size(D) != 0);
   free_keys_data();
+}
+
+void test_size_FullDictShouldBeResized(void) {
+    putIntoDict(PDICT_INITIAL_SIZE);
+    TEST_ASSERT_EQUAL_UINT(pdict_size(D), PDICT_INITIAL_SIZE);
+    free_keys_data();
 }
 
 void test_add_ShouldAddANewElement(void) {
@@ -108,13 +118,13 @@ void test_append_ShouldAddAnElementToAnEmptyDict(void) {
 }
 
 void test_isEmpty_ShouldReturnFalseOnALoadedDict(void) {
-  loadDict();
+  fillDict();
   TEST_ASSERT_FALSE(pdict_is_empty(D));
   free_keys_data();
 }
 
 void test_get_ShouldGetAllValuesFromTheDict(void) {
-  loadDict();
+  fillDict();
   for (size_t i = 0; i < DICT_DATA_LEN - 1; ++i) {
     void *element = pdict_get_value(D, keys[i]);
     TEST_ASSERT_NOT_NULL(element);
@@ -124,7 +134,7 @@ void test_get_ShouldGetAllValuesFromTheDict(void) {
 }
 
 void test_get_ShouldGetAllPmapsFromTheDict(void) {
-  loadDict();
+  fillDict();
   for (size_t i = 0; i < DICT_DATA_LEN; ++i) {
     char *key_to_test = keys[i];
     void *element = pdict_get_value(D, keys[i]);
@@ -136,7 +146,7 @@ void test_get_ShouldGetAllPmapsFromTheDict(void) {
 }
 
 void test_remove_ShouldRemoveAllElementsFromDict(void) {
-  loadDict();
+  fillDict();
   for (int i = 0; i < DICT_DATA_LEN; i++) {
     TEST_ASSERT_EQUAL_UINT(DICT_DATA_LEN - i, pdict_size(D));
     pdict_remove(D, keys[i]);
@@ -154,6 +164,7 @@ int main(void) {
   RUN_TEST(test_size_SizeOfNewDictWithOneItemShouldBeOne);
   RUN_TEST(test_size_ShouldBeZeroForACleanDict);
   RUN_TEST(test_size_ShouldNotBeZeroAfterAddingElements);
+  RUN_TEST(test_size_FullDictShouldBeResized);
 
   RUN_TEST(test_isEmpty_ShouldReturnTrueOnAnEmptyDict);
   RUN_TEST(test_isEmpty_ShouldReturnFalseOnALoadedDict);
