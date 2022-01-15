@@ -44,12 +44,14 @@ void pqueue_clean_destroying_data(pqueue *self, plist_destroyer destroyer) {
   plist_clean_destroying_data(self->list, destroyer);
 }
 
-void pqueue_destroy(pqueue *self) {
-  plist_destroy(self->list);
-  free(self);
+void pqueue_destroy(pqueue **self) {
+  plist_destroy(&(*self)->list);
+  if (*self) free(*self);
+  *self = 0;
 }
 
-void pqueue_destroy_all(pqueue *self, pqueue_destroyer destroyer) {
-  plist_destroy_all(self->list, destroyer);
-  free(self);
+void pqueue_destroy_all(pqueue **self, pqueue_destroyer destroyer) {
+  plist_destroy_all(&(*self)->list, destroyer);
+  if (*self) free(*self);
+  *self = 0;
 }

@@ -98,14 +98,14 @@ void pqueue_clean_destroying_data(pqueue *self, pqueue_destroyer destroyer);
  * \brief pqueue_destroy
  * \param self
  */
-void pqueue_destroy(pqueue *self);
+void pqueue_destroy(pqueue **self);
 
 /*!
  * \brief pqueue_destroy_all
  * \param self
  * \param destroyer
  */
-void pqueue_destroy_all(pqueue *self, pqueue_destroyer destroyer);
+void pqueue_destroy_all(pqueue **self, pqueue_destroyer destroyer);
 
 /*
  * Handy macros

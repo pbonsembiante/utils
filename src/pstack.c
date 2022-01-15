@@ -39,12 +39,14 @@ size_t pstack_size(pstack *self) { return plist_size(self->list); }
 
 bool pstack_is_empty(pstack *self) { return plist_size(self->list) == 0; }
 
-void pstack_destroy(pstack *self) {
-  plist_destroy(self->list);
-  free(self);
+void pstack_destroy(pstack **self) {
+  plist_destroy(&(*self)->list);
+  if (*self) free(*self);
+  *self = 0;
 }
 
-void pstack_destroy_all(pstack *self, pstack_destroyer destroyer) {
-  plist_destroy_all(self->list, destroyer);
-  free(self);
+void pstack_destroy_all(pstack **self, pstack_destroyer destroyer) {
+  plist_destroy_all(&(*self)->list, destroyer);
+  if (*self) free(*self);
+  *self = 0;
 }

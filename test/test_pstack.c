@@ -22,7 +22,7 @@ pstack *S = 0;
 
 void setUp(void) { S = pstack_create(); }
 
-void tearDown(void) { pstack_destroy(S); }
+void tearDown(void) { pstack_destroy(&S); }
 
 void test_create_ShouldCreateAnEmptyStack(void) {
   TEST_ASSERT_NOT_NULL(S);
@@ -43,14 +43,12 @@ void test_push_ShouldPushAnElementToTheStack(void) {
 
 void test_pop_ShouldRemoveAnElementFromTheStack(void) {
   char *test_string = calloc(11, sizeof(char));
-  char *popped = 0;
-  size_t prev_size = 0;
 
   strncpy(test_string, "Test data!", 11);
   pstack_push(S, test_string);
-  prev_size = pstack_size(S);
 
-  popped = pstack_pop(S);
+  size_t prev_size = pstack_size(S);
+  char *popped = pstack_pop(S);
   TEST_ASSERT_EQUAL_STRING((const char *)popped, test_string);
   TEST_ASSERT_EQUAL_UINT(prev_size - 1, pstack_size(S));
 
@@ -84,7 +82,7 @@ void test_destroyAll_ShouldDestroyTheStackAndEveryElementInIt(void) {
   pstack_push(stack, y);
   pstack_push(stack, z);
 
-  pstack_destroy_all(stack, free);
+  pstack_destroy_all(&stack, free);
 }
 
 void test_peek_ShouldRetrieveTheTopElementFromTheStackButNotPopIt(void) {

@@ -183,7 +183,7 @@ plist *plist_create(void);
  * ~~~~~~~~~~~~~~~
  *
  */
-void plist_destroy(plist *self);
+void plist_destroy(plist **self);
 
 /*!
  * \brief Frees and destroys the given list and internal data.
@@ -212,7 +212,7 @@ void plist_destroy(plist *self);
  * ~~~~~~~~~~~~~~~
  *
  */
-void plist_destroy_all(plist *self, plist_destroyer destroyer);
+void plist_destroy_all(plist **self, plist_destroyer destroyer);
 
 /*!
  * \brief Add the given data as a new node to the end of the list.

@@ -94,14 +94,14 @@ bool pstack_is_empty(pstack *self);
  * \param self
  * \return
  */
-void pstack_destroy(pstack *self);
+void pstack_destroy(pstack **self);
 
 /*!
  * \brief pqueue_destroy_all
  * \param self
  * \param destroyer
  */
-void pstack_destroy_all(pstack *self, pstack_destroyer destroyer);
+void pstack_destroy_all(pstack **self, pstack_destroyer destroyer);
 
 /*
  * Handy macros

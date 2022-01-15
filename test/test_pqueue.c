@@ -22,7 +22,7 @@ pqueue *Q = 0;
 
 void setUp(void) { Q = pqueue_create(); }
 
-void tearDown(void) { pqueue_destroy(Q); }
+void tearDown(void) { pqueue_destroy(&Q); }
 
 void test_create_ShouldCreateAnEmptyQueue(void) {
   TEST_ASSERT_NOT_NULL(Q);
@@ -110,7 +110,7 @@ void test_destroyAll_ShouldDestroyTheQueueAndEveryElementInIt(void) {
   pqueue_enqueue(queue, y);
   pqueue_enqueue(queue, z);
 
-  pqueue_destroy_all(queue, free);
+  pqueue_destroy_all(&queue, free);
 }
 
 void test_cleanDestroy_ShouldDestroyTheQueueAndEveryElementInIt(void) {
