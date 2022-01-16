@@ -603,8 +603,7 @@ void test_isEmpty_ShouldReturnFalseOnAnLoadedList(void) {
 void test_destroy_ShouldNotFailOnANullList(void) {
   plist *p = 0;
   plist_destroy(&p);
-  /* Explicitly pass the test as if we got here, we are done*/
-  TEST_PASS();
+  TEST_ASSERT_NULL(p);
 }
 
 void test_destroy_ShouldFreeTheList(void) {
