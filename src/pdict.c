@@ -36,11 +36,10 @@ static phashmap_node *pdict_get_element(pdict *self, char *key);
 
 static void *pdict_remove_element(pdict *self, char *key);
 
-static void pdict_destroy_element(phashmap_node *element,
-                                  pdict_destroyer);
+static void pdict_destroy_element(phashmap_node *element, pdict_destroyer destroyer);
 
 static void
-internal_dictionary_clean_and_destroy_elements(pdict *self, pdict_destroyer);
+internal_dictionary_clean_and_destroy_elements(pdict *self, pdict_destroyer destroyer);
 
 static char *pdict_strdup(char const *str);
 
