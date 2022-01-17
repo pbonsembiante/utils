@@ -36,12 +36,10 @@ static phashmap_node *pdict_get_element(pdict *self, char *key);
 
 static void *pdict_remove_element(pdict *self, char *key);
 
-static void pdict_destroy_element(phashmap_node *element,
-                                  void (*data_destroyer)(void *));
+static void pdict_destroy_element(phashmap_node *element, pdict_destroyer destroyer);
 
 static void
-internal_dictionary_clean_and_destroy_elements(pdict *self,
-    void (*data_destroyer)(void *));
+internal_dictionary_clean_and_destroy_elements(pdict *self, pdict_destroyer destroyer);
 
 static char *pdict_strdup(char const *str);
 
@@ -96,17 +94,16 @@ void *pdict_remove(pdict *self, char *key) {
   return data;
 }
 
-void pdict_remove_and_destroy(pdict *self, char *key,
-                              void (*data_destroyer)(void *)) {
+void pdict_remove_and_destroy(pdict *self, char *key, pdict_destroyer destroyer) {
   void *data = pdict_remove_element(self, key);
 
   if (data != 0) {
     self->elements_count--;
-    data_destroyer(data);
+    destroyer(data);
   }
 }
 
-void pdict_iterator(pdict *self, void (*closure)(char *, void *)) {
+void pdict_iterator(pdict *self, pdict_closure closure) {
   for (size_t index = 0; index < self->table_max_size; ++index) {
     phashmap_node *element = self->elements[index];
 
@@ -121,7 +118,7 @@ void pdict_clean(pdict *self) {
   internal_dictionary_clean_and_destroy_elements(self, 0);
 }
 
-void pdict_clean_and_destroy_elements(pdict *self, void (*destroyer)(void *)) {
+void pdict_clean_and_destroy_elements(pdict *self, pdict_destroyer destroyer) {
   internal_dictionary_clean_and_destroy_elements(self, destroyer);
 }
 
@@ -139,7 +136,7 @@ void pdict_destroy(pdict *self) {
   free(self);
 }
 
-void pdict_destroy_all(pdict *self, void (*destroyer)(void *)) {
+void pdict_destroy_all(pdict *self, pdict_destroyer destroyer) {
   pdict_clean_and_destroy_elements(self, destroyer);
   free(self->elements);
   free(self);
@@ -183,8 +180,7 @@ static void pdict_resize(pdict *self, size_t new_max_size) {
 }
 
 static void
-internal_dictionary_clean_and_destroy_elements(pdict *self,
-    void (*data_destroyer)(void *)) {
+internal_dictionary_clean_and_destroy_elements(pdict *self, pdict_destroyer destroyer) {
   for (size_t table_index = 0; table_index < self->table_max_size;
        table_index++) {
 
@@ -193,7 +189,7 @@ internal_dictionary_clean_and_destroy_elements(pdict *self,
 
     while (element != 0) {
       next_element = element->next;
-      pdict_destroy_element(element, data_destroyer);
+      pdict_destroy_element(element, destroyer);
       element = next_element;
     }
 
@@ -271,9 +267,9 @@ static void *pdict_remove_element(pdict *self, char *key) {
 }
 
 static void pdict_destroy_element(phashmap_node *element,
-                                  void (*data_destroyer)(void *)) {
-  if (data_destroyer != 0) {
-    data_destroyer(element->data);
+                                  pdict_destroyer destroyer) {
+  if (destroyer != 0) {
+    destroyer(element->data);
   }
 
   free(element->key);
