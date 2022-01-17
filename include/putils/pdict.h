@@ -37,6 +37,10 @@ struct pmap_array {
   size_t count;
 };
 
+typedef void (*pdict_destroyer)(void *data);
+
+typedef void (*pdict_closure)(char *, void *);
+
 pdict *pdict_create();
 
 void pdict_put(pdict *self, char *key, void *data);
