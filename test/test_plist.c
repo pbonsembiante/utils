@@ -16,18 +16,16 @@
 
 #include <string.h>
 
-#define plist_member_t size_t
-
 #include "putils/plist.h"
 #include "unity.h"
 
 #define DATA_ARRAY_LEN 10
 
-plist *L = 0;
-size_t *data = 0;
+static plist *L = 0;
+static size_t *data = 0;
 
 void setUp(void) {
-  data = calloc(DATA_ARRAY_LEN, sizeof(plist_member_t));
+  data = calloc(DATA_ARRAY_LEN, sizeof(void *));
   L = plist_create();
 }
 
@@ -36,26 +34,30 @@ void tearDown(void) {
   plist_destroy(&L);
 }
 
-bool helper_comparator(const plist_member_t *a, const plist_member_t *b) {
-  return *a < *b;
+bool helper_comparator(const void *a, const void *b) {
+  const size_t *_a = a;
+  const size_t *_b = b;
+  return *_a < *_b;
 }
 
-plist_member_t *helper_mapper(const plist_member_t *_orig) {
-  plist_member_t *mapped = calloc(1, sizeof(plist_member_t));
-  *mapped = *_orig * 2;
+void *helper_mapper(const void *_orig) {
+  size_t *mapped = calloc(1, sizeof(size_t *));
+  *mapped = *(size_t *)_orig * 2;
   return mapped;
 }
 
-bool helper_is_even(const plist_member_t *_val) {
+bool helper_is_even(const void *val) {
+  const size_t *_val = val;
   return (*_val % 2) == 0;
 }
 
-bool helper_is_99(const plist_member_t *_val) {
+bool helper_is_99(const void *val) {
+  const size_t *_val = val;
   return *_val == 99;
 }
 
 void helper_load_list(plist *list) {
-  for (plist_member_t i = 0; i < DATA_ARRAY_LEN; ++i) {
+  for (size_t i = 0; i < DATA_ARRAY_LEN; ++i) {
     data[i] = i + 1;
     plist_append(list, &data[i]);
   }
@@ -490,7 +492,7 @@ void test_remove_ShouldRemoveAllElementsFromList(void) {
 
   TEST_ASSERT_EQUAL_UINT(DATA_ARRAY_LEN, plist_size(L));
   for (size_t i = 0; i < DATA_ARRAY_LEN; ++i) {
-    plist_member_t *value = plist_remove(L, 0);
+    size_t *value = plist_remove(L, 0);
     TEST_ASSERT_EQUAL_UINT(i + 1, *value);
   }
 

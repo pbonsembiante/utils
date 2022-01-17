@@ -17,13 +17,9 @@
 #ifndef _PNODE_H_
 #define _PNODE_H_
 
-#ifndef plist_member_t
-  #define plist_member_t char
-#endif
-
 typedef struct plinked_node plinked_node;
 struct plinked_node {
-  plist_member_t *data;
+  void *data;
   struct plinked_node *next;
 };
 

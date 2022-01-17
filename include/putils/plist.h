@@ -48,8 +48,7 @@
  * *));
  * ~~~~~~~~~~~~~~~
  */
-typedef bool (*plist_comparator)(const plist_member_t *,
-                                 const plist_member_t *);
+typedef bool (*plist_comparator)(const void *first, const void *second);
 
 /*!
  * \typedef plist_evaluator
@@ -69,7 +68,7 @@ typedef bool (*plist_comparator)(const plist_member_t *,
  * plist_list *plist_filter(plist_list *self, bool (*condition)(void *));
  * ~~~~~~~~~~~~~~~
  */
-typedef bool (*plist_evaluator)(const plist_member_t *);
+typedef bool (*plist_evaluator)(const void *data);
 
 /*!
  * \typedef plist_transformer
@@ -90,7 +89,7 @@ typedef bool (*plist_evaluator)(const plist_member_t *);
  * ~~~~~~~~~~~~~~~
  *
  */
-typedef plist_member_t *(*plist_transformer)(const plist_member_t *);
+typedef void *(*plist_transformer)(const void *data);
 
 /*!
  * \typedef plist_destroyer
@@ -111,7 +110,7 @@ typedef plist_member_t *(*plist_transformer)(const plist_member_t *);
  * ~~~~~~~~~~~~~~~
  *
  */
-typedef void (*plist_destroyer)(void *);
+typedef void (*plist_destroyer)(void *data);
 
 /*!
  * \typedef plist_closure
@@ -122,7 +121,7 @@ typedef void (*plist_destroyer)(void *);
  * I'll probably remove this... or adapt old code to use it... who knows.
  *
  */
-typedef void (*plist_closure)(void *);
+typedef void (*plist_closure)(void *data);
 
 /*!
  * \typedef plist_list
@@ -235,7 +234,7 @@ void plist_destroy_all(plist **self, plist_destroyer destroyer);
  * ~~~~~~~~~~~~~~~
  *
  */
-size_t plist_append(plist *self, plist_member_t *data);
+size_t plist_append(plist *self, void *data);
 
 /*!
  * \brief Adds \data data at \index index position on the list.
@@ -262,7 +261,7 @@ size_t plist_append(plist *self, plist_member_t *data);
  * ~~~~~~~~~~~~~~~
  *
  */
-void plist_add(plist *self, size_t index, plist_member_t *data);
+void plist_add(plist *self, size_t index, void *data);
 
 /*!
  * \brief Merges two lists.
@@ -397,7 +396,7 @@ plist *plist_map(plist *self, plist_transformer transformer);
  * Once the old element is replaced, the function will return a pointer to it.
  *
  */
-void *plist_replace(plist *self, size_t index, plist_member_t *data);
+void *plist_replace(plist *self, size_t index, void *data);
 
 /*!
  * \brief Replaces a data element of the list, and deletes the replaced element.
@@ -414,7 +413,7 @@ void *plist_replace(plist *self, size_t index, plist_member_t *data);
  * Once the old element is replaced, the function will not return the removed
  * element but apply the \destroyer destroyer function to it.
  */
-void plist_replace_and_destroy(plist *self, size_t index, plist_member_t *data,
+void plist_replace_and_destroy(plist *self, size_t index, void *data,
                                plist_destroyer destroyer);
 
 /*!
@@ -440,7 +439,7 @@ void plist_remove_and_destroy(plist *self, size_t index,
  * \param condition
  * \return
  */
-plist_member_t *plist_remove_selected(plist *self, plist_evaluator condition);
+void *plist_remove_selected(plist *self, plist_evaluator condition);
 
 /*!
  * \brief plist_remove_destroying_selected
@@ -530,7 +529,7 @@ bool plist_all_match(plist *self, plist_evaluator condition);
  * \param data
  * \return
  */
-size_t plist_prepend(plist *self, plist_member_t *data);
+size_t plist_prepend(plist *self, void *data);
 
 /*
  * Handy macros
