@@ -70,7 +70,7 @@ extern volatile PEXCEPT_FRAME_T pexceptFrames[];
 
 /* *INDENT-OFF* */
 #define try                                                                    \
-  {                                                                            \
+{                                                                              \
     jmp_buf *PrevFrame, NewFrame;                                              \
     unsigned int current = PEXCEPT_GET_ID;                                     \
     PrevFrame = pexceptFrames[current].frame;                                  \
@@ -80,11 +80,11 @@ extern volatile PEXCEPT_FRAME_T pexceptFrames[];
     if (setjmp(NewFrame) == 0) {                                               \
       if (1)
 
-#define catch (e)                                                              \
-    else {                                                                     \
-    }                                                                          \
-    pexceptFrames[current].exception = PEXCEPT_NONE;                           \
-    PEXCEPT_HOOK_SUCCESS_TRY;                                                  \
+#define catch(e)                                                               \
+      else {                                                                   \
+      }                                                                        \
+      pexceptFrames[current].exception = PEXCEPT_NONE;                         \
+      PEXCEPT_HOOK_SUCCESS_TRY;                                                \
     }                                                                          \
     else {                                                                     \
       (e) = pexceptFrames[current].exception;                                  \
