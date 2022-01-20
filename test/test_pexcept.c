@@ -21,8 +21,8 @@ void setUp(void) { }
 
 void tearDown(void) { }
 
-static PEXCEPT_T _throw_an_exception(void) {
-  return 666;
+static void _throw_an_exception(void) {
+  throw(666);
 }
 
 void test_try_ShouldBeAbleToStopAtAnyPoint(void) {
@@ -38,7 +38,7 @@ void test_try_ShouldBeAbleToStopAtAnyPoint(void) {
 void test_catch_ShouldCatchExceptionsInNestedFrames(void) {
   PEXCEPT_T e;
   try {
-    e = _throw_an_exception();
+    _throw_an_exception();
   } catch (e) {
     TEST_ASSERT_EQUAL_UINT(e, 666);
   }
