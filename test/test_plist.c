@@ -25,7 +25,7 @@ static plist *L = 0;
 static size_t *data = 0;
 
 void setUp(void) {
-  data = calloc(DATA_ARRAY_LEN, sizeof(void *));
+  data = calloc(DATA_ARRAY_LEN, sizeof(size_t));
   L = plist_create();
 }
 
@@ -41,7 +41,7 @@ bool helper_comparator(const void *a, const void *b) {
 }
 
 void *helper_mapper(const void *_orig) {
-  size_t *mapped = calloc(1, sizeof(size_t *));
+  size_t *mapped = calloc(1, sizeof(size_t));
   *mapped = *(size_t *)_orig * 2;
   return mapped;
 }

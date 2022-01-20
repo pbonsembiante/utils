@@ -25,15 +25,15 @@
 
 typedef struct pdict pdict;
 
-typedef struct pmap pmap;
-struct pmap {
+typedef struct pdict_entry pdict_entry;
+struct pdict_entry {
   void *value;
   char *key;
 };
 
-typedef struct pmap_array pmap_array;
-struct pmap_array {
-  pmap *array;
+typedef struct pdict_entries pdict_entries;
+struct pdict_entries {
+  pdict_entry *entries;
   size_t count;
 };
 
@@ -47,20 +47,19 @@ void pdict_put(pdict *self, char *key, void *data);
 
 void *pdict_get_value(pdict *self, char *key);
 
-pmap pdict_get(pdict *self, char *key);
+pdict_entry pdict_get(pdict *self, char *key);
 
-pmap_array pdict_get_all(pdict *self);
+pdict_entries pdict_get_all(pdict *self);
 
 void *pdict_remove(pdict *self, char *key);
 
-void pdict_remove_and_destroy(pdict *self, char *key,
-                              void (*data_destroyer)(void *));
+void pdict_remove_and_destroy(pdict *self, char *key, pdict_destroyer destroyer);
 
-void pdict_iterator(pdict *self, void (*closure)(char *, void *));
+void pdict_iterate(pdict *self, pdict_closure closure);
 
 void pdict_clean(pdict *self);
 
-void pdict_clean_and_destroy_elements(pdict *self, void (*destroyer)(void *));
+void pdict_clean_and_destroy_elements(pdict *self, pdict_destroyer destroyer);
 
 bool pdict_has_key(pdict *self, char *key);
 
@@ -70,6 +69,6 @@ size_t pdict_size(pdict *self);
 
 void pdict_destroy(pdict *self);
 
-void pdict_destroy_all(pdict *self, void (*destroyer)(void *));
+void pdict_destroy_all(pdict *self, pdict_destroyer destroyer);
 
 #endif /* _DICTIONARY_H_ */
