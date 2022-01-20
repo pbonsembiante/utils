@@ -62,8 +62,8 @@ extern "C" {
 
 typedef struct PEXCEPT_FRAME_T PEXCEPT_FRAME_T;
 struct PEXCEPT_FRAME_T {
-  jmp_buf *frame;
-  PEXCEPT_T volatile exception;
+    jmp_buf *frame;
+    PEXCEPT_T volatile exception;
 };
 
 extern volatile PEXCEPT_FRAME_T pexceptFrames[];
@@ -97,15 +97,15 @@ extern volatile PEXCEPT_FRAME_T pexceptFrames[];
     if (pexceptFrames[PEXCEPT_GET_ID].exception != PEXCEPT_NONE)
 
 /*!
- * \brief Throw
+ * \brief throw
  * \param e
  */
 void throw(PEXCEPT_T e);
 
 /*!
- * \brief ExitTry
+ * \brief exit_try
  */
-#define ExitTry() Throw(PEXCEPT_NONE)
+#define exit_try() throw(PEXCEPT_NONE)
 
 #ifdef __cplusplus
 } // extern "C"
