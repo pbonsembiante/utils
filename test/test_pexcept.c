@@ -22,50 +22,50 @@ void setUp(void) { }
 void tearDown(void) { }
 
 static PEXCEPT_T _throw_an_exception(void) {
-    return 666;
+  return 666;
 }
 
 void test_try_ShouldBeAbleToStopAtAnyPoint(void) {
-    PEXCEPT_T e;
-    try {
-        exit_try();
-        TEST_FAIL_MESSAGE("This point should be not reached due to use of exit_try()");
-    } catch (e) {
-        TEST_FAIL_MESSAGE("This point should be not reached due to use of exit_try()");
-    }
+  PEXCEPT_T e;
+  try {
+    exit_try();
+    TEST_FAIL_MESSAGE("This point should be not reached due to use of exit_try()");
+  } catch (e) {
+    TEST_FAIL_MESSAGE("This point should be not reached due to use of exit_try()");
+  }
 }
 
 void test_catch_ShouldCatchExceptionsInNestedFrames(void) {
-    PEXCEPT_T e;
-    try {
-        e = _throw_an_exception();
-    } catch (e) {
-        TEST_ASSERT_EQUAL_UINT(e, 666);
-    }
+  PEXCEPT_T e;
+  try {
+    e = _throw_an_exception();
+  } catch (e) {
+    TEST_ASSERT_EQUAL_UINT(e, 666);
+  }
 }
 
 void test_catch_ShouldCatchThrewException(void) {
-    PEXCEPT_T e;
-    try {
-        throw (666);
-    } catch (e) {
-        TEST_ASSERT_EQUAL_UINT(e, 666);
-    }
+  PEXCEPT_T e;
+  try {
+    throw (666);
+  } catch (e) {
+    TEST_ASSERT_EQUAL_UINT(e, 666);
+  }
 }
 
 void test_catch_ShouldNotRunWhenThereIsNoException(void) {
-    PEXCEPT_T e;
-    try {;}
-    catch (e) {
-        TEST_FAIL_MESSAGE("Catch shouldn't be executed when exceptions weren't raised");
-    }
+  PEXCEPT_T e;
+  try {;}
+  catch (e) {
+    TEST_FAIL_MESSAGE("Catch shouldn't be executed when exceptions weren't raised");
+  }
 }
 
 int main(void) {
-    UNITY_BEGIN();
-    RUN_TEST(test_catch_ShouldCatchThrewException);
-    RUN_TEST(test_catch_ShouldNotRunWhenThereIsNoException);
-    RUN_TEST(test_try_ShouldBeAbleToStopAtAnyPoint);
-    RUN_TEST(test_catch_ShouldCatchExceptionsInNestedFrames);
-    return UNITY_END();
+  UNITY_BEGIN();
+  RUN_TEST(test_catch_ShouldCatchThrewException);
+  RUN_TEST(test_catch_ShouldNotRunWhenThereIsNoException);
+  RUN_TEST(test_try_ShouldBeAbleToStopAtAnyPoint);
+  RUN_TEST(test_catch_ShouldCatchExceptionsInNestedFrames);
+  return UNITY_END();
 }
