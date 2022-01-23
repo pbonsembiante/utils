@@ -31,10 +31,11 @@ void setUp(void) { D = pdict_create(); }
 void tearDown(void) { pdict_destroy(D); }
 
 void putIntoDict(size_t items_count) {
-  keys = malloc(sizeof(char[items_count][KEYS_LEN]));
-  data = calloc(1, items_count * sizeof(size_t));
+  keys = calloc(items_count, sizeof(char[KEYS_LEN]));
+  data = calloc(items_count, sizeof(size_t));
+
   for (size_t i = 0; i < items_count; ++i) {
-    snprintf(keys[i], KEYS_LEN, "%c", (int)i + 65);
+    snprintf(keys[i], KEYS_LEN, "%c", (int) i + 65);
     data[i] = i + 1;
     pdict_put(D, keys[i], &data[i]);
   }
@@ -133,16 +134,39 @@ void test_get_ShouldGetAllValuesFromTheDict(void) {
   free_keys_data();
 }
 
-void test_get_ShouldGetAllPmapsFromTheDict(void) {
+void test_get_ShouldGetAllEntriesFromTheDictOneByOne(void) {
   fillDict();
   for (size_t i = 0; i < DICT_DATA_LEN; ++i) {
     char *key_to_test = keys[i];
     void *element = pdict_get_value(D, keys[i]);
-    pmap pair = pdict_get(D, key_to_test);
+    pdict_entry pair = pdict_get(D, key_to_test);
     TEST_ASSERT_TRUE(strcmp(key_to_test, pair.key) == 0);
     TEST_ASSERT_EQUAL_UINT(element, pair.value);
   }
   free_keys_data();
+}
+
+void test_getAll_ShouldGetAllEntriesFromTheDict(void) {
+  fillDict();
+
+  pdict_entries entries = pdict_get_all(D);
+
+  TEST_ASSERT_EQUAL_UINT(pdict_size(D), entries.count);
+
+  for (size_t i = 0; i < entries.count; ++i) {
+    size_t *value = pdict_get_value(D, entries.entries[i].key);
+    TEST_ASSERT_EQUAL(value, entries.entries[i].value);
+  }
+
+  free(entries.entries);
+  free_keys_data();
+}
+
+void test_getAll_ShouldNotErrorWithANullDict(void) {
+  pdict_entries entries = pdict_get_all(0);
+
+  TEST_ASSERT_NULL(entries.entries);
+  TEST_ASSERT_EQUAL_UINT(0, entries.count);
 }
 
 void test_remove_ShouldRemoveAllElementsFromDict(void) {
@@ -174,7 +198,9 @@ int main(void) {
   RUN_TEST(test_append_ShouldAddAnElementToAnEmptyDict);
 
   RUN_TEST(test_get_ShouldGetAllValuesFromTheDict);
-  RUN_TEST(test_get_ShouldGetAllPmapsFromTheDict);
+  RUN_TEST(test_get_ShouldGetAllEntriesFromTheDictOneByOne);
+  RUN_TEST(test_getAll_ShouldGetAllEntriesFromTheDict);
+  RUN_TEST(test_getAll_ShouldNotErrorWithANullDict);
 
   RUN_TEST(test_remove_ShouldRemoveAllElementsFromDict);
   return UNITY_END();

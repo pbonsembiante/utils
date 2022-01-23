@@ -17,25 +17,28 @@
 #ifndef _PNODE_H_
 #define _PNODE_H_
 
-typedef struct plinked_node plinked_node;
-struct plinked_node {
+#include <stdlib.h>
+
+typedef struct plist_node plist_node;
+struct plist_node {
   void *data;
-  struct plinked_node *next;
+  struct plist_node *next;
 };
 
-typedef struct pdouble_linked_node pdouble_linked_node;
-struct pdouble_linked_node {
+typedef struct plist_double_node plist_double_node;
+struct plist_double_node {
   void *data;
-  struct pdouble_linked_node *previous;
-  struct pdouble_linked_node *next;
+  struct plist_double_node *previous;
+  struct plist_double_node *next;
 };
 
-typedef struct phashmap_node phashmap_node;
-struct phashmap_node {
+typedef struct pdict_node pdict_node;
+struct pdict_node {
   char *key;
+  size_t key_len;
   unsigned int hashcode;
   void *data;
-  struct phashmap_node *next;
+  struct pdict_node *next;
 };
 
 #endif /* _PNODE_H_ */
