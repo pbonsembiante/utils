@@ -17,12 +17,32 @@
 #include "unity.h"
 #include "putils/pexcept.h"
 
-void setUp(void) { }
+PEXCEPT_T uncaught_exception;
+short status;
 
-void tearDown(void) { }
+void setUp(void) {}
+
+void tearDown(void) {}
 
 static void _throw_an_exception(void) {
-  throw(666);
+  throw (666);
+}
+
+void test_hook_HooksShouldWorkWhenThereIsAnException(void) {
+  PEXCEPT_T e;
+  try {
+    _throw_an_exception();
+    TEST_ASSERT_EQUAL_UINT(SUCCESS_TRY, status);
+    TEST_ASSERT_EQUAL_UINT(BEFORE_CATCH, status);
+  } catch (e) {}
+}
+
+void test_hook_HooksShouldWorkWhenThereIsNoException(void) {
+  PEXCEPT_T e;
+  try {
+    TEST_ASSERT_EQUAL_UINT(START_TRY, status);
+  } catch (e) {}
+  TEST_ASSERT_EQUAL_UINT(AFTER_TRY, status);
 }
 
 void test_try_ShouldBeAbleToStopAtAnyPoint(void) {
@@ -33,6 +53,11 @@ void test_try_ShouldBeAbleToStopAtAnyPoint(void) {
   } catch (e) {
     TEST_FAIL_MESSAGE("This point should be not reached due to use of exit_try()");
   }
+}
+
+void test_catch_ADefaultCatchHandlerCanBeDefined(void) {
+  _throw_an_exception();
+  TEST_ASSERT_EQUAL_INT(666, uncaught_exception);
 }
 
 void test_catch_ShouldCatchExceptionsInNestedFrames(void) {
@@ -55,7 +80,7 @@ void test_catch_ShouldCatchThrewException(void) {
 
 void test_catch_ShouldNotRunWhenThereIsNoException(void) {
   PEXCEPT_T e;
-  try {;}
+  try {}
   catch (e) {
     TEST_FAIL_MESSAGE("Catch shouldn't be executed when exceptions weren't raised");
   }
@@ -67,5 +92,8 @@ int main(void) {
   RUN_TEST(test_catch_ShouldNotRunWhenThereIsNoException);
   RUN_TEST(test_try_ShouldBeAbleToStopAtAnyPoint);
   RUN_TEST(test_catch_ShouldCatchExceptionsInNestedFrames);
+  RUN_TEST(test_catch_ADefaultCatchHandlerCanBeDefined);
+  RUN_TEST(test_hook_HooksShouldWorkWhenThereIsNoException);
+  RUN_TEST(test_hook_HooksShouldWorkWhenThereIsAnException);
   return UNITY_END();
 }
