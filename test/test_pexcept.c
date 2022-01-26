@@ -28,23 +28,6 @@ static void _throw_an_exception(void) {
   throw (666);
 }
 
-void test_hook_HooksShouldWorkWhenThereIsAnException(void) {
-  PEXCEPT_T e;
-  try {
-    _throw_an_exception();
-    TEST_ASSERT_EQUAL_UINT(SUCCESS_TRY, status);
-    TEST_ASSERT_EQUAL_UINT(BEFORE_CATCH, status);
-  } catch (e) {}
-}
-
-void test_hook_HooksShouldWorkWhenThereIsNoException(void) {
-  PEXCEPT_T e;
-  try {
-    TEST_ASSERT_EQUAL_UINT(START_TRY, status);
-  } catch (e) {}
-  TEST_ASSERT_EQUAL_UINT(AFTER_TRY, status);
-}
-
 void test_try_ShouldBeAbleToStopAtAnyPoint(void) {
   PEXCEPT_T e;
   try {
@@ -53,11 +36,6 @@ void test_try_ShouldBeAbleToStopAtAnyPoint(void) {
   } catch (e) {
     TEST_FAIL_MESSAGE("This point should be not reached due to use of exit_try()");
   }
-}
-
-void test_catch_ADefaultCatchHandlerCanBeDefined(void) {
-  _throw_an_exception();
-  TEST_ASSERT_EQUAL_INT(666, uncaught_exception);
 }
 
 void test_catch_ShouldCatchExceptionsInNestedFrames(void) {
@@ -92,8 +70,5 @@ int main(void) {
   RUN_TEST(test_catch_ShouldNotRunWhenThereIsNoException);
   RUN_TEST(test_try_ShouldBeAbleToStopAtAnyPoint);
   RUN_TEST(test_catch_ShouldCatchExceptionsInNestedFrames);
-  RUN_TEST(test_catch_ADefaultCatchHandlerCanBeDefined);
-  RUN_TEST(test_hook_HooksShouldWorkWhenThereIsNoException);
-  RUN_TEST(test_hook_HooksShouldWorkWhenThereIsAnException);
   return UNITY_END();
 }
