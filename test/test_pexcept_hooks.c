@@ -1,8 +1,8 @@
 #include "unity.h"
 #include "putils/pexcept.h"
 
-PEXCEPT_T uncaught_exception;
-short status;
+PEXCEPT_T uncaught_exception = PEXCEPT_NONE;
+short status = NOTHING_HAPPENED;
 
 void setUp(void) {}
 

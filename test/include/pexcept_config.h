@@ -8,10 +8,9 @@
 
 extern PEXCEPT_T uncaught_exception;
 extern short status;
-enum statuses {BEFORE_TRY, SUCCESS_TRY, AFTER_TRY, BEFORE_CATCH};
+enum status_t {NOTHING_HAPPENED, BEFORE_TRY, SUCCESS_TRY, AFTER_TRY, BEFORE_CATCH};
 
 #ifndef PEXCEPT_NO_CATCH_HANDLER
-#include <stdio.h>
 #define PEXCEPT_NO_CATCH_HANDLER(e) uncaught_exception = e;
 #endif
 
