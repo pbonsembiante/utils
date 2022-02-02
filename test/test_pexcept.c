@@ -17,9 +17,6 @@
 #include "unity.h"
 #include "putils/pexcept.h"
 
-PEXCEPT_T uncaught_exception;
-short status;
-
 void setUp(void) {}
 
 void tearDown(void) {}
