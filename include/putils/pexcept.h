@@ -24,7 +24,7 @@ extern "C" {
 #endif
 
 #ifdef PEXCEPT_USE_CONFIG_FILE
-#include "pexceptConfig.h"
+#include "pexcept_config.h"
 #endif
 
 #ifndef PEXCEPT_NONE
@@ -44,11 +44,11 @@ extern "C" {
 #endif
 
 #ifndef PEXCEPT_NO_CATCH_HANDLER
-#define PEXCEPT_NO_CATCH_HANDLER(id)
+#define PEXCEPT_NO_CATCH_HANDLER(e)
 #endif
 
-#ifndef PEXCEPT_HOOK_START_TRY
-#define PEXCEPT_HOOK_START_TRY
+#ifndef PEXCEPT_HOOK_BEFORE_TRY
+#define PEXCEPT_HOOK_BEFORE_TRY
 #endif
 #ifndef PEXCEPT_HOOK_SUCCESS_TRY
 #define PEXCEPT_HOOK_SUCCESS_TRY
@@ -56,8 +56,8 @@ extern "C" {
 #ifndef PEXCEPT_HOOK_AFTER_TRY
 #define PEXCEPT_HOOK_AFTER_TRY
 #endif
-#ifndef PEXCEPT_HOOK_START_CATCH
-#define PEXCEPT_HOOK_START_CATCH
+#ifndef PEXCEPT_HOOK_BEFORE_CATCH
+#define PEXCEPT_HOOK_BEFORE_CATCH
 #endif
 
 typedef struct PEXCEPT_FRAME_T PEXCEPT_FRAME_T;
@@ -76,20 +76,19 @@ extern volatile PEXCEPT_FRAME_T pexceptFrames[];
     PrevFrame = pexceptFrames[current].frame;                                  \
     pexceptFrames[current].frame = (jmp_buf *)(&NewFrame);                     \
     pexceptFrames[current].exception = PEXCEPT_NONE;                           \
-    PEXCEPT_HOOK_START_TRY;                                                    \
+    PEXCEPT_HOOK_BEFORE_TRY;                                                   \
     if (setjmp(NewFrame) == 0) {                                               \
       if (1)
 
 #define catch(e)                                                               \
-      else {                                                                   \
-      }                                                                        \
+      else { }                                                                 \
       pexceptFrames[current].exception = PEXCEPT_NONE;                         \
       PEXCEPT_HOOK_SUCCESS_TRY;                                                \
     }                                                                          \
     else {                                                                     \
       (e) = pexceptFrames[current].exception;                                  \
       (void)(e);                                                               \
-      PEXCEPT_HOOK_START_CATCH;                                                \
+      PEXCEPT_HOOK_BEFORE_CATCH;                                               \
     }                                                                          \
     pexceptFrames[current].frame = PrevFrame;                                  \
     PEXCEPT_HOOK_AFTER_TRY;                                                    \
@@ -97,15 +96,15 @@ extern volatile PEXCEPT_FRAME_T pexceptFrames[];
     if (pexceptFrames[PEXCEPT_GET_ID].exception != PEXCEPT_NONE)
 
 /*!
- * \brief Throw
+ * \brief throw
  * \param e
  */
 void throw(PEXCEPT_T e);
 
 /*!
- * \brief ExitTry
+ * \brief exit_try
  */
-#define ExitTry() Throw(PEXCEPT_NONE)
+#define exit_try() throw(PEXCEPT_NONE)
 
 #ifdef __cplusplus
 } // extern "C"
